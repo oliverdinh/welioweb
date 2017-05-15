@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "LocalStorage";
+}
+<a id="setData1">Set data1</a>
+<a id="setData2">Set data2</a>
+<a id="getData1">Get data1</a>
+<a id="getData2">Get data2</a>
+<a id="removeData1">Remove data1</a>
+<a id="removeData2">Remove data2</a>
+<a id="clearData">Clear Data</a>
+@section scripts
+{
+    <script src="~/static/js/ndlongLocalStorage.js"></script>
+    <script>
+        
+        $('#setData1').click(function () {
+            var data = [];
+            var convert = {};
+            convert.Name = "Nguyễn Đức Long";
+            convert.Time = new Date();
+            convert.Content = "I love you ok";
+            data.push(convert);
+            LocalStorage.SaveData("setData2", data);
+        });
+        $('#setData2').click(function () {
+            var convert = {
+                Name: "ND Long",
+                Time: new Date(),
+                Content: "This is content"
+            };
+            var data = LocalStorage.GetData("setData2");
+            data.push(convert);
+            LocalStorage.SaveData("setData2", data);
+        });
+        $('#getData1').click(function () {
+            var data1 = LocalStorage.GetData("fa4981b7-ac6e-11e6-b569-238b768b5bba");
+            console.log(data1);
+        });
+        $('#getData2').click(function () {
+            var data1 = LocalStorage.GetData("setData2");
+            console.log(data1);
+        });
+        $('#removeData1').click(function () {
+            LocalStorage.RemoveData("setData1");
+        });
+        $('#removeData2').click(function () {
+            LocalStorage.RemoveData("setData2");
+        });
+
+        $('#clearData').click(function () {
+            LocalStorage.ClearAllData();
+        });
+    </script>
+}
+

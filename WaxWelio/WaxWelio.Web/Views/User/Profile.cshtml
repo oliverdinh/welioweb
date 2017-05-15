@@ -1,0 +1,197 @@
+﻿@using WaxWelio.Common.Enum
+@using WaxWelio.Entities.Models
+@model UserModel
+@{
+    ViewBag.Title = "User Profile";
+    DoctorInfoModel doctorInfor = Array.Find(Model.ClinicUsers, x => x.Clinic.ClinicId == ViewBag.clinicId);
+}
+
+<div class="row fill">
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 fill padding-0 scroll-y">
+        <div class="overlay-div-single" id="div-Overlay" style="display: none;">
+            <div class="div-over"></div>
+            <img src="~/static/images/loading.gif" style="width: 64px" />
+        </div>
+        <div class="header-action-body">
+            <span class="btn-header-action"><a href="/User/Index" class="action-link"><i class="fa fa-angle-left right-5px" aria-hidden="true"></i>All users</a></span>
+            @if (doctorInfor.ClinicUserActived == (int)Status.Enabled)
+            {
+                <span class="btn-header-action"><a href="/User/Edit/@Model.DoctorId" class="action-link"><i class="fa fa-pencil right-5px" aria-hidden="true"></i>Edit</a></span>
+            }
+            else if (doctorInfor.ClinicUserActived == (int)Status.Disabled)
+            {
+                <span class="btn-header-action hide-mob" id="btn-resend-invite"><span class="pointer"><i class="fa fa-envelope-o right-5px" aria-hidden="true"></i>Re-send invite</span></span>
+            }
+            @if (doctorInfor.ClinicUserActived == (int)Status.Closed)
+            {
+                <span class="btn-header-action"><a href="javascript:;" data-status="1" data-doctor-id="@Model.DoctorId" class="action-link j-change-status"><i class="fa fa-sign-in right-5px" aria-hidden="true"></i><span>Re-open account</span></a></span>
+            }
+            else
+            {
+                <span class="btn-header-action"><a href="javascript:;" data-status="-1" data-doctor-id="@Model.DoctorId" class="action-link j-change-status"><i class="fa fa-trash right-5px" aria-hidden="true"></i><span>Close account</span></a></span>
+            }
+            
+        </div>
+        <div class="content-body content-body-padding">
+            <div class="padding-top-30">
+                <img src="@Model.DoctorAvatar" class="img-circle img-avatar"/>
+            </div>
+            <div class="padding-bot-1">
+                <h2>
+                    <b>@Model.FullName</b>
+                </h2>
+            </div>
+            <div class="padding-bot-1">
+                <small class="label-details">User Type</small>
+                <div>@ObjectDescription.DescriptionAttr((UserType) doctorInfor.UserType)</div>
+            </div>
+            <div class="padding-bot-1">
+                <small class="label-details">Access</small>
+                <div>@ObjectDescription.DescriptionAttr((UserRole) doctorInfor.AccessType)</div>
+            </div>
+            <div class="padding-bot-1">
+                <small class="label-details">Email</small>
+                <div>@Model.Email</div>
+            </div>
+            <div class="padding-bot-1">
+                <small class="label-details">Account Status</small>
+                <div class="account-status">@ObjectDescription.DescriptionAttr((Status)doctorInfor.ClinicUserActived)</div>
+            </div>
+            <input type="hidden" id="email" value="@Model.Email" />
+            <input type="hidden" id="clinicId" value="@doctorInfor.Clinic.ClinicId" />
+            <input type="hidden" id="isUnconfirmed" value="@((doctorInfor.ClinicUserActived == (int)Status.Disabled) ? 1 : 0)" />
+        </div>
+    </div>
+
+</div>
+@section scripts
+{
+    <script>
+        $('.j-change-status').on('click', function () {
+            var email = $("#email").val();
+            var clinicId = $("#clinicId").val();
+            var isUnconfirmed = $("#isUnconfirmed").val();
+            var status = $(this).attr('data-status');
+            var doctorId = $(this).attr('data-doctor-id');
+            $('#div-Overlay').show();
+            var confirmClose = true;
+            if (status == -1) {
+                confirmClose = confirm('Are you sure you want to close this account.');
+            }
+            if (confirmClose) {
+                $.ajax({
+                    url: '@Url.Action("CheckUpcomingAppointmentsOfDoctor", "User")',
+                    type: "POST",
+                    data: {
+                        doctorId: doctorId,
+                        clinicId: clinicId,
+                        status: status
+                    },
+                    success: function (data) {
+                        if (data.Key) {
+                            changeStatusUser(email, clinicId, status, doctorId, isUnconfirmed)
+                        } else {
+                            var ok = confirm(data.Value);
+                            if (ok) {
+                                changeStatusUser(email, clinicId, status, doctorId, isUnconfirmed)
+                            } else {
+                                $('#div-Overlay').hide();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        function changeStatusUser(email, clinicId, status, doctorId, isUnconfirmed) {
+            var isUnconfirmed = $('#isUnconfirmed').val();
+            $.ajax({
+                url: '@Url.Action("ChangeStatusUser", "User")',
+                type: "POST",
+                data: {
+                    email: email,
+                    clinicId: clinicId,
+                    status: status,
+                    doctorId: doctorId,
+                    isUnconfirmed: isUnconfirmed
+                },
+                success: function (data) {
+                    if (data.Key) {
+                        $('.j-change-status').find('i').removeClass(status == 1 ? 'fa-sign-in' : 'fa-trash').addClass(status == 1 ? 'fa-trash' : 'fa-sign-in')
+                        $('.j-change-status').find('span').html(status == 1 ? 'Close account' : 'Re-open account');
+                        $('.j-change-status').attr('data-status', status == 1 ? -1 : 1);
+                        $('.account-status').text(status == 1 ? (isUnconfirmed == 1 ? 'Unconfirmed' : 'Active') : 'Closed');
+                        $('#div-Overlay').hide();
+                        if (status == 1) $('.edit').show();
+                        else $('.edit').hide();
+                        alert(data.Value.Message);
+                        if (data.Value.IsOtherAccount == 0) {
+                            window.location.href = '@Url.Action("SignOut","User")';
+                        }
+                    } else {
+                        $('#div-Overlay').hide();
+                        alert(data.Value);
+                    }
+                },
+                error: function () {
+                    window.location.href = '@Url.Action("SignOut","User")';
+                }
+            });
+        }
+
+        $('#btn-reset-pass').click(function() {
+            var ok = confirm('Are you sure you want to reset the password?');
+            if (ok) {
+                $('#div-Overlay').show();
+                $.ajax({
+                    url: '@Url.Action("ForgotPassword","User")?email=@Model.Email',
+                    type: "GET",
+                    success: function(data) {
+                        if (data.Key === true) {
+                            $('#div-Overlay').hide();
+                            alert("An email has been sent to @Model.Email with instructions to reset the password.");
+                        } else {
+                            $('#div-Overlay').hide();
+                            alert(data.Value);
+                        }
+                    },
+                    error: function() {
+                        window.location.href = '@Url.Action("SignOut","User")';
+                    }
+                });
+
+            }
+        });
+
+
+
+        $('#btn-resend-invite')
+            .click(function() {
+                var ok = confirm('Are you sure you want to re-send this invite?');
+                var baseUrl = document.location.origin;
+                if (ok) {
+                    $('#div-Overlay').show();
+                    $.ajax({
+                        url: baseUrl + "/Clinic/ResendInviteEmail?userId=" + '@Model.DoctorId' + "&clinicId=" + '@doctorInfor.Clinic.ClinicId',
+                        type: 'GET',
+                        success: function(data) {
+                            if (data.Key) {
+                                // resend email complete
+                                $('#div-Overlay').hide();
+                                alert('An email has been sent to this user inviting them to WELIO');
+                            } else {
+                                alert(data.Value);
+                            }
+                        },
+                        error: function(jqXhr, textStatus, errorThrown) {
+                            console.log(errorThrown);
+                            $('#div-Overlay').hide();
+                            window.location.href = '@Url.Action("SignOut","User")';
+                        }
+                    });
+                }
+            });
+    </script>
+
+}

@@ -1,0 +1,58 @@
+﻿
+@{
+    Layout = null;
+    TempData["login365"] = "true";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login Skype For Business</title>
+</head>
+<body>
+<div>
+    <script src="~/static/js/jquery-3.1.1.min.js"></script>
+    <script src="//swx.cdn.skype.com/shared/v/1.2.15/SkypeBootstrap.min.js"></script>
+    <script>
+        var baseUrl = window.location.origin;
+        // redirect to Org ID if there is no token in the URL
+        if (!location.hash) {
+            location.assign('https://login.windows.net/common/oauth2/authorize?response_type=token' +
+                '&client_id=2bd937f8-d693-4e38-8718-2f53deed2dff' +
+                '&redirect_uri=' + location.href +
+                '&resource=https://webdir.online.lync.com');
+        }
+
+        // show the UI if the user has signed in
+        if (/^#access_token=/.test(location.hash)) {
+            $.ajax({
+                url: window.baseUrl + "/Home/SaveToken?token=" + getHashValue("access_token"),
+                type: "GET",
+                success: function (data) {
+                    if (data.Key) {
+                        location.assign(baseUrl);
+                    } else {
+                        alert(data.Value);
+                        location.assign("https://login.windows.net/common/oauth2/logout?post_logout_redirect_uri=" + baseUrl);
+                    }
+
+                }
+            });
+            //location.assign(baseUrl + '/User/SignIn');
+        }
+        var hasError = /^#error=/.test(location.hash);
+        if (hasError) {
+            alert("The Microsoft account that you're using does not have permission to access Welio.");
+            location.href = baseUrl;
+        }
+
+        function getHashValue(key) {
+            var matches = location.hash.match(new RegExp(key + '=([^&]*)'));
+            return matches ? matches[1] : null;
+        }
+    </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "Send Email Office 365";
+    var email = ViewBag.Email;
+    var email365 = ViewBag.Email365;
+    var firstname = ViewBag.FirstName;
+    var hospitalId = ViewBag.HospitalId;
+    var id = ViewBag.id;
+}
+<div class="row fill">
+    <div class="overlay-div-single" id="divOverlay" style="display: none;">
+        <div class="div-over"></div>
+        <img src="~/static/images/loading.gif" style="width: 64px" />
+    </div>
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 padding-left-0 fill scroll-y">
+        @using (Html.BeginForm("SendAccountOffice365", "User", FormMethod.Post, new { id = "form_edit_365", enctype = "multipart/form-data", @class = "content-body-padding" }))
+        {
+            <input type="hidden" name="email" value="@email" />
+            <input type="hidden" name="email365" value="@email365" />
+            <input type="hidden" name="firstname" value="@firstname" />
+            <div class="grid">
+                <div class="header-action-body show-mob"></div>
+                <div class="row col-sm-12 col-xs-12 content-body">
+                    <h2>Send Email Account Office 365</h2>
+                </div>
+                <div class="row col-sm-12 col-xs-12 padding-0 padding-bot-1">
+                    <div class="col-lg-4 col-sm-6 col-xs-6 padding-right-0">
+                        <div class="col-lg-12 col-sm-12 col-xs-12 padding-0">
+                            <small class="label-details">Office 365</small>
+                            <input disabled class="custom-select" value="@email365"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-sm-12 col-xs-12 padding-0 padding-bot-1">
+                    <div class="col-lg-4 col-sm-6 col-xs-6 padding-right-0">
+                        <div class="col-lg-12 col-sm-12 col-xs-12 padding-0">
+                            <small class="label-details">Enter password</small>
+                            <input class="custom-select" id="password365" name="password365" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row padding-top-2 padding-bot-2 col-sm-12 col-xs-12 padding-0">
+                    <div class="col-lg-6 col-sm-6 col-xs-6 padding-right-0">
+                        <div class="col-lg-3 col-sm-6 col-xs-6 padding-left-0">
+                            <button type="button" id="btn-save" class="custom-btn action-btn">Send</button>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-xs-6 padding-right-0">
+                            <button type="button" id="btn-cancel" class="custom-btn action-btn cancel-btn">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+@section scripts{
+    <script>
+        $("#form_edit_365").validate({
+            rules: {
+                "password365": {
+                    required: true
+                }
+            },
+            messages: {
+                "password365": {
+                    required: "The password is required."
+                }
+            }
+        });
+
+        $('#btn-save').click(function () {
+            var password365 = $('#password365').val();
+            if (password365 != '') {
+
+                var email = '@email';
+                var email365 ='@email365';
+                var firstname = '@firstname';
+                
+                $('#divOverlay').show();
+                $.ajax({
+                    url: '@Url.Action("SendAccountOffice365", "User")',
+                    type: "POST",
+                    async: false,
+                    data: {
+                        email: email,
+                        email365: email365,
+                        firstname: firstname,
+                        password365: password365
+                    },
+                    success: function(data) {
+                        if (data === true) {
+                            $('#divOverlay').hide();
+                            alert("The Office 365 account has been successfully sent.");
+                            window.location.href = '@Url.Action("Details", "User", new { id, hospitalId })';
+                        } else {
+                            $('#divOverlay').hide();
+                            alert(data.Value);
+                        }
+                    },
+                    error: function() {
+                        window.location.href = '@Url.Action("SignOut","User")';
+                    }
+                });
+            } else {
+                $("#form_edit_365").submit();
+            }
+        });
+        $('#btn-cancel').click(function () {
+            window.location.href = '@Url.Action("Details", "User", new { id, hospitalId })';
+            return false;
+        });
+    </script>
+}
+

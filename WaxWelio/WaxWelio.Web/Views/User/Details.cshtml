@@ -1,0 +1,361 @@
+﻿@using WaxWelio.Common.Enum
+@using WaxWelio.Entities.Models
+@model UserModel
+@{
+    ViewBag.Title = "User Details";
+    var hospital = (DoctorInfoModel) ViewBag.hospital;
+}
+
+<div class="row fill">
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 fill padding-0 scroll-y">
+        <div class="overlay-div-single" id="div-Overlay" style="display: none;">
+            <div class="div-over"></div>
+            <img src="~/static/images/loading.gif" style="width: 64px"/>
+        </div>
+        <div class="header-action-body">
+            <span class="btn-header-action"><a href="/User/ClinicUsers" class = "action-link"><i class="fa fa-angle-left right-5px" aria-hidden="true"></i>All users</a></span>
+            @{ var editHide = ""; }
+            @if (Model.Actived != 1)
+            {
+                editHide = "style=display:none";
+            }
+
+            <span @editHide class="btn-header-action edit"><a href="/User/EditDetails?id=@Model.DoctorId&hospitalId=@hospital.Clinic.ClinicId" class="action-link"><i class="fa fa-pencil right-5px" aria-hidden="true"></i>Edit</a></span>
+
+            @if (!string.IsNullOrEmpty(Model.Office365))
+            {
+                <span @editHide class="btn-header-action edit send-mail"><a href="/User/SendEmailOffice365?email=@Model.Email&email365=@Model.Office365&firstname=@Model.FirstName&hospitalId=@hospital.Clinic.ClinicId&id=@Model.DoctorId" class="action-link"><i class="fa fa-envelope right-5px" aria-hidden="true"></i>Send Email</a></span>
+            }
+            @if (Model.Actived == 0)
+            {
+                <span class="btn-header-action"><a href="javascript:;" data-status="1" data-clinicId="@hospital.Clinic.ClinicId" data-doctor-id="@Model.DoctorId" class="action-link j-change-status"><i class="fa fa-sign-in right-5px" aria-hidden="true"></i><span>Active</span></a></span>
+            }
+            else
+            {
+                @*<span class="btn-header-action"><a href="javascript:;" data-status="0" data-clinicId="@hospital.Clinic.ClinicId" data-doctor-id="@Model.DoctorId" class="action-link j-change-status"><i class="fa fa-trash right-5px" aria-hidden="true"></i><span>Block</span></a></span>*@
+            }
+            @*@if (hospital.Status == 1)
+            {
+                <span class="btn-header-action hide-mob" id="btn-reset-pass"><span class="pointer"><i class="fa fa-lock right-5px" aria-hidden="true"></i>Reset password</span></span>
+            }
+            else if (hospital.Status == 0)
+            {
+                <span class="btn-header-action hide-mob" id="btn-resend-invite"><span class="pointer"><i class="fa fa-envelope-o right-5px" aria-hidden="true"></i>Re-send invite</span></span>
+            }
+            @if (hospital.Status == -1)
+            {
+                <span class="btn-header-action pointer" id="btn-reopen-account"><i class="fa fa-sign-in right-5px" aria-hidden="true"></i>Re-open account</span>
+            }
+            else
+            {
+                <span class="btn-header-action" id="btn-close-account"><i class="fa fa-trash right-5px" aria-hidden="true"></i>Close account</span>
+            }*@
+        </div>
+        <div class="content-body content-body-padding">
+            <div class="padding-top-30">
+                @if (string.IsNullOrEmpty(Model.DoctorAvatar))
+                {
+                    <img src="~/static/images/user.png" class="img-circle img-avatar" />
+                }
+                else
+                {
+                    <img src="@Model.DoctorAvatar" class="img-circle img-avatar" />
+                }
+            </div>
+            <div class="padding-bot-1">
+                <h2>
+                    <b>@Enum.Parse(typeof(Title), Model.TitleUser).DescriptionAttr() @Model.FullName</b>
+                    <p style="font-size: 16px; font-weight: bold">
+                        @{
+                            if (Model.ClinicUsers.Any())
+                            {
+                                <span>(@hospital.Clinic.ClinicName)</span>
+                            }
+                        }
+                    </p>
+                </h2>
+            </div>
+            <div class="padding-bot-1">
+                <small class="label-details">User Type</small>
+                <div class="value-details">
+                    @if (Model.ClinicUsers.Any())
+                    {
+                        @(((UserType) hospital.UserType).DescriptionAttr())
+                    }
+                </div>
+            </div>
+            <div class="padding-bot-1">
+                <small class="label-details">Access</small>
+                <div class="value-details">
+                    @if (Model.ClinicUsers.Any())
+                    {
+                        @(((UserRole) hospital.AccessType).DescriptionAttr())
+                    }
+                </div>
+
+            </div>
+            <div class="padding-bot-1">
+                <small class="label-details">Email</small>
+                <div class="value-details">@Model.Email</div>
+            </div>
+            <div class="padding-bot-1">
+                <div><small class="label-details">Office 365 Email</small></div>
+                <span class="value-details">@(string.IsNullOrEmpty(Model.Office365) ? "Has not updated yet" : Model.Office365)</span>
+                <span class="edit"><a alt="Update Office 365" href="/User/UpdateOffice365?doctorId=@Model.DoctorId&hospitalId=@hospital.Clinic.ClinicId&email365=@Model.Office365"><i class="fa fa-pencil"></i></a></span>
+            </div>
+            <div class="padding-bot-1">
+                <small class="label-details">Account Status</small>
+                <div class="value-details account-status">@(((Status) hospital.ClinicUserActived).DescriptionAttr())</div>
+            </div>
+            <div class="padding-bot-1" style="padding-bottom: 50px;">
+                @if (Model.ClinicUsers.Any())
+                {
+                    <small class="label-details">Clinics</small>
+                    var clinic = Model.ClinicUsers.FirstOrDefault(x => x.Clinic.ClinicId == hospital.Clinic.ClinicId);
+                    <div class="value-details">
+                        @if (clinic != null)
+                        {
+                            @clinic.Clinic.ClinicName
+                        }
+                    </div>
+                    foreach (var item in Model.ClinicUsers)
+                    {
+                        if (hospital.Clinic.ClinicId != item.Clinic.ClinicId)
+                        {
+                            <div class="value-details">
+                                @item.Clinic.ClinicName
+                                <a style="margin-left: 10px" href="/User/Details?id=@Model.DoctorId&hospitalId=@item.Clinic.ClinicId">
+                                    <i class="fa fa-external-link" id="clickme" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+            <input type="hidden" id="email" value="@Model.Email"/>
+            <input type="hidden" id="clinicId" value="@hospital.Clinic.ClinicId" />
+            <input type="hidden" id="isUnconfirmed" value="@((hospital.ClinicUserActived == (int)Status.Disabled) ? 1 : 0)" />
+        </div>
+    </div>
+
+</div>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('.j-change-status').on('click', function () {
+                var status = $(this).attr('data-status');
+                var doctorId = $(this).attr('data-doctor-id');
+                var clinicId = $(this).attr('data-clinicId');
+                $('#div-Overlay').show();
+                $.ajax({
+                    url: '@Url.Action("ActiveUser", "User")',
+                    type: "POST",
+                    data: {
+                        doctorId: doctorId,
+                        status: status,
+                        clinicId: clinicId
+                    },
+                    success: function (data) {
+                        if (data.Key) {
+                            $('.j-change-status').remove();
+                            //$('.j-change-status').find('i').removeClass(status == 1 ? 'fa-sign-in' : 'fa-trash').addClass(status == 1 ? 'fa-trash' : 'fa-sign-in')
+                            //$('.j-change-status').find('span').html(status == 1 ? 'Block' : 'Active');
+                            //$('.j-change-status').attr('data-status', status == 1 ? 0 : 1);
+                            //$('.account-status').text(status == 1 ? 'Active' : 'Unconfirmed');
+                            //$('.account-status').text('Active');
+                            $('#div-Overlay').hide();
+                            if (status == 1) $('.edit').show();
+                            else $('.edit').hide();
+                        } else {
+                            alert(data.Value);
+                        }
+                        $('#div-Overlay').hide();
+                    }
+                });
+            });
+            @*$('.j-change-status').on('click', function () {
+                var email = $("#email").val();
+                var clinicId = $("#clinicId").val();
+                var isUnconfirmed = $("#isUnconfirmed").val();
+                var status = $(this).attr('data-status');
+                var doctorId = $(this).attr('data-doctor-id');
+                $('#div-Overlay').show();
+                $.ajax({
+                    url: '@Url.Action("CheckUpcomingAppointmentsOfDoctor", "User")',
+                    type: "POST",
+                    data: {
+                        doctorId: doctorId,
+                        clinicId: clinicId,
+                        status: status
+                    },
+                    success: function (data) {
+                        if (data.Key) {
+                            changeStatusUser(email, clinicId, status, doctorId, isUnconfirmed)
+                        } else {
+                            var ok = confirm(data.Value);
+                            if (ok) {
+                                changeStatusUser(email, clinicId, status, doctorId, isUnconfirmed)
+                            } else {
+                                $('#div-Overlay').hide();
+                            }
+                        }
+                    }
+                });
+            });*@
+
+            @*function changeStatusUser(email, clinicId, status, doctorId, isUnconfirmed) {
+                $.ajax({
+                    url: '@Url.Action("ChangeStatusUser", "User")',
+                    type: "POST",
+                    data: {
+                        email: email,
+                        clinicId: clinicId,
+                        status: status,
+                        doctorId: doctorId,
+                        isUnconfirmed: isUnconfirmed
+                    },
+                    success: function (data) {
+                        if (data.Key) {
+                            $('.j-change-status').find('i').removeClass(status == 1 ? 'fa-sign-in' : 'fa-trash').addClass(status == 1 ? 'fa-trash' : 'fa-sign-in')
+                            $('.j-change-status').find('span').html(status == 1 ? 'Close account' : 'Re-open account');
+                            $('.j-change-status').attr('data-status', status == 1 ? -1 : 1);
+                            $('.account-status').text(status == 1 ? 'Active' : 'Closed');
+                            $('#div-Overlay').hide();
+                            if (status == 1) $('.edit').show();
+                            else $('.edit').hide();
+                            alert(data.Value);
+                        } else {
+                            $('#div-Overlay').hide();
+                            alert(data.Value);
+                        }
+                    },
+                    error: function () {
+                        window.location.href = '@Url.Action("SignOut","User")';
+                    }
+                });
+            }*@
+
+            $('#btn-reset-pass')
+                .click(function() {
+                    var ok = confirm('Are you sure you want to reset the password?');
+                    if (ok) {
+                        $('#div-Overlay').show();
+                        $.ajax({
+                            url: '@Url.Action("ForgotPassword", "User")?email=@Model.Email',
+                            type: "GET",
+                            success: function(data) {
+                                if (data.Key === true) {
+                                    $('#div-Overlay').hide();
+                                    alert("An email has been sent to @Model.Email with instructions to reset the password.");
+                                } else {
+                                    $('#div-Overlay').hide();
+                                    alert(data.Value);
+                                }
+                            },
+                            error: function() {
+                                window.location.href = '@Url.Action("SignOut","User")';
+                            }
+                        });
+
+                    }
+                });
+
+            $('#btn-close-account')
+                .click(function() {
+                    var userType = '@ViewBag.userType';
+                    var appointmentCount = 0;@*@Model.AppointmentCount;*@
+                    var ok;
+                    if (userType == 2) {
+                        if (appointmentCount == 0) {
+                            ok = confirm('Are you sure you want to close this account?');
+                        } else {
+                            ok = confirm('This doctor have ' + appointmentCount + ' upcoming appointments with this clinic. If you close this account, these appointments will be cancelled and the patients will be notifed.');
+                        }
+                    } else {
+                        ok = confirm('Are you sure you want to close this account?');
+                    }
+                    if (ok) {
+                        $('#div-Overlay').show();
+                        $.ajax({
+                            url:
+                                '@Url.Action("CloseUnconfirmAccount", "User")?userId=@Model.Id&hospitalId=@(hospital.Clinic.ClinicId)',
+                            type: "GET",
+                            success: function(data) {
+                                if (data.Key === true) {
+                                    $('#div-Overlay').hide();
+                                    window.href.location = window.location.href = "../User/Details?id=" +
+                                        '@Model.Id' +
+                                        "&hospitalId=" +
+                                        '@(hospital.Clinic.ClinicId)';
+                                } else {
+                                    $('#div-Overlay').hide();
+                                    alert(data.Value);
+                                }
+                            },
+                            error: function() {
+                                window.location.href = '@Url.Action("SignOut","User")';
+                            }
+                        });
+                    }
+                });
+
+            $('#btn-reopen-account')
+                .click(function() {
+                    var ok = confirm('Are you sure you want to re-open this account?');
+                    if (ok) {
+                        $('#div-Overlay').show();
+                        $.ajax({
+                            url: '@Url.Action("ReopenAccount", "User")?userId=@Model.DoctorId&hospitalId=@(hospital.Clinic.ClinicId)',
+                            type: "GET",
+                            success: function(data) {
+                                if (data.Key === true) {
+                                    $('#div-Overlay').hide();
+                                    alert("The account has been re-opened and the user has been notified.");
+                                    window.href.location = window.location.href = "../User/Details?id=" +
+                                        '@Model.Id' +
+                                        "&hospitalId=" +
+                                        '@(hospital.Clinic.ClinicId)';
+                                } else {
+                                    $('#div-Overlay').hide();
+                                    alert(data.Value);
+                                }
+                            },
+                            error: function() {
+                                window.location.href = '@Url.Action("SignOut","User")';
+                            }
+                        });
+                    }
+                });
+
+            $('#btn-resend-invite')
+                .click(function() {
+                    var ok = confirm('Are you sure you want to re-send this invite?');
+                    var baseUrl = document.location.origin;
+                    if (ok) {
+                        $('#div-Overlay').show();
+                        $.ajax({
+                            //url: baseUrl + "/Clinic/ResendEmail",
+                            url: '@Url.Action("ResendInviteEmail", "Clinic")?userId=@Model.Id&hospitalId=@(hospital.Clinic.ClinicId)',
+                            type: 'POST',
+                            data: { email: '@Model.Email' },
+                            success: function(data) {
+                                if (data.success) {
+                                    // resend email complete
+                                    $('#div-Overlay').hide();
+                                    alert('An email has been sent to this user inviting them to WELIO');
+                                }
+                            },
+                            error: function(jqXhr, textStatus, errorThrown) {
+                                console.log(errorThrown);
+                                $('#div-Overlay').hide();
+                                window.location.href = '@Url.Action("SignOut","User")';
+                            }
+                        });
+                    }
+                });
+        });
+    </script>
+
+}

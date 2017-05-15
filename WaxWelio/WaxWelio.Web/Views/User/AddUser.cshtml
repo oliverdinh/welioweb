@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "AddUser";
+}
+<div class="row fill">
+    <div class="col-md-2 fill">@Html.Partial("_MenuList")</div>
+    <div class="col-md-10 fill">
+        <div class="grid">
+            <div class="row">
+                <h2>User details</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-6 padding-0">
+                    <div class="col-md-6 padding-left-0">
+                        <label>First name</label>
+                        <input class="custom-select" value="Rosie" />
+                    </div>
+                    <div class="col-md-6 padding-right-0">
+                        <label>Last name</label>
+                        <input class="custom-select" value="Carver" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 padding-0">
+                    <div class="col-md-6 padding-left-0">
+                        <label>User Type</label>
+                        <select class="signup-input">
+                            <option selected>Practice manager</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 padding-right-0">
+                        <label>Access</label>
+                        <select class="signup-input">
+                            <option selected>Administrator</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 padding-0">
+                    <label>Email</label>
+                    <input class="signup-input" value="rosiec@surry" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 padding-0">
+                    <div class="col-md-6 padding-left-0">
+                        <label>Phone</label>
+                        <input class="signup-input" value="0439 445566" />
+                    </div>
+                    <div class="col-md-6 padding-right-0">
+                        <label>AHRPA</label>
+                        <input class="signup-input" value="02 5555 6666" />
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top:2em">
+                <div class="col-md-6 padding-0">
+                    <div class="col-md-3 padding-left-0">
+                        <button class="custom-btn action-btn">Save</button>
+                    </div>
+                    <div class="col-md-3 padding-right-0">
+                        <button class="custom-btn action-btn">Cancel</button>
+                    </div>
+                    <div class="col-md-6 padding-right-0" style="text-align:right;font-size:20px;height:2em;line-height:2em">
+                        <i class="fa fa-trash right-5px" aria-hidden="true"></i>Delete
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

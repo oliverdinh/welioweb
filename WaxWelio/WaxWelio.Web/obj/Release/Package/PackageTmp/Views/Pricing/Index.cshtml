@@ -1,0 +1,39 @@
+﻿@model IEnumerable<WaxWelio.Entities.Models.PriceModel>
+@{
+    ViewBag.Title = "Pricing";
+}
+
+<div class="row fill">
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 fill padding-0 scroll-y">
+        <div class="header-action-body">
+            <a id="edit-price" href="@Url.Action("Edit", "Pricing")" class="action-link"><i class="fa fa-pencil right-5px" aria-hidden="true"></i>Edit</a>
+        </div>
+        <div class="content-header-title content-body">
+            <h2>Pricing</h2>
+        </div>
+        <div class="col-lg-12 padding-0">
+            <table id="table-price" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Duration</th>
+                        <th>Patient fee</th>
+                        <th>Welio fee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr style="cursor:default">
+                            <td>@(item.Duration)m</td>
+                            <td>$@item.PatientFee</td>
+                            <td>$@item.WelioFee</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+

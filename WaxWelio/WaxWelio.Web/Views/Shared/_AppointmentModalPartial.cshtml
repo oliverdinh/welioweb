@@ -1,0 +1,577 @@
+﻿@using Newtonsoft.Json
+@using WaxWelio.Common.Config
+@using WaxWelio.Common.Object
+@{
+    if (ViewBag.ListDoctor == null)
+    {
+
+        ViewBag.ListDoctor = new SelectList(new List<KeyValueResult>());
+    }
+    if (ViewBag.ListPrices == null)
+    {
+        ViewBag.ListPrices = new SelectList(new List<KeyValueResult>());
+    }
+}
+<script src="~/static/js/date.js"></script>
+<!--modal create appointment-->
+<div class="modal fade" id="createAppointmentModal" tabindex="-1" role="dialog" aria-labelledby="Create Appointment" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="overlay-div-single" id="addAppointmentOverlay" style="display: none;">
+            <div class="div-over"></div>
+            <img src="~/static/images/loading.gif" style="width: 64px" />
+        </div>
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #a8a9ad; color: white">
+                <h4 id="modal-appointment-title" class="modal-title text-center">Add appointment</h4>
+                <button id="btn-close-add-app" type="button" style="color: white; opacity: 1; margin-top: -25px" class="close" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <button id="btn-add-appointment-back" type="button" style="display: none"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div id="div-modal-add-appointment" style="display: none">
+                        <div class="col-lg-6 col-sm-12 col-xs-12 padding-0">
+                            <input type="hidden" name="isNewPatient" id="isNewPatient" value="false"/>
+                            <input type="hidden" name="isCarer" id="isCarer" value="false" />
+                            <input type="hidden" name="patientId" id="patientId" />
+                            <div class="col-lg-12 col-sm-12 col-xs-12">
+                                <b>Patient / Carer</b>
+                                <span id="sp-account-holder" style="display: none">(Account holder)</span>
+                            </div>
+                            <div class="col-lg-12 col-sm-12 col-xs-12 padding-top-1">
+                                <div class="col-lg-6 col-sm-6 col-xs-6 padding-left-0">
+                                    <small>Firstname</small>
+                                    <input id="input-add-appointment-first-name" class="custom-select" value="" disabled />
+                                    <span id="firstName-valid" class="validate-small"></span>
+                                </div>
+                                <div class="col-lg-6 col-sm-6 col-xs-6 padding-right-0">
+                                    <small>Surname</small>
+                                    <input id="input-add-appointment-sur-name" class="custom-select" value="" disabled />
+                                    <span id="lastName-valid" class="validate-small"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-sm-12 col-xs-12 padding-top-1">
+                                <small>Email</small>
+                                <input id="input-add-appointment-email" class="custom-select" value="" disabled />
+                                <span id="email-valid" class="validate-small"></span>
+                            </div>
+                            <div class="col-lg-12 col-sm-12 col-xs-12 padding-top-1">
+                                <small>Phone number</small>
+                                <input id="input-add-appointment-phone" class="custom-select" value="" disabled />
+                            </div>
+                            <div class="col-lg-12 col-sm-12 col-xs-12 padding-top-1">
+                                <div id="lb-carer">
+                                    <input id="cb-carer" type="checkbox" />
+                                    Patient is another family member
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-sm-12 col-xs-12 padding-top-1">
+                                <div class="col-lg-6 col-sm-6 col-xs-6 padding-left-0">
+                                    <small>Patient First name</small>
+                                    <input id="add-appointment-patient-fn" class="custom-select" disabled />
+                                    <span id="other-first-valid" class="validate-small"></span>
+                                </div>
+                                <div class="col-lg-6 col-sm-6 col-xs-6 padding-right-0">
+                                    <small>Patient Surname</small>
+                                    <input id="add-appointment-patient-sn" class="custom-select" disabled />
+                                    <span id="other-last-valid" class="validate-small"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-xs-12 padding-0">
+                            <div class="col-lg-12 col-sm-12 col-xs-12 padding-top-1">
+                                <b>Appointment</b>
+                            </div>
+                            <div class="col-lg-12 col-sm-12 col-xs-12 padding-top-1">
+                                <small>Doctor</small>
+                                @Html.DropDownList("ListDoctor", null, new { @class = "custom-select" })
+                            </div>
+                            <div class="col-lg-12 col-sm-12 col-xs-12 padding-top-1">
+                                <div class="col-lg-6 col-sm-6 col-xs-6 padding-left-0">
+                                    <small>Date</small>
+                                    <input id="datepicker-new-appointmet" class="custom-select" />
+                                </div>
+                                <div class="col-lg-6 col-sm-6 col-xs-6 padding-right-0">
+                                    <small>Time</small>
+                                    <input id="timepicker-new-appointmet" class="custom-select" />
+                                    <span id="other-last-valid" class="validate-small"></span>
+                                    <span class="fa fa-sort-desc form-control-feedback" style="padding-top: 26px; margin-right: -6px;"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-sm-12 col-xs-12 padding-top-1">
+                                <div class="col-lg-6 col-sm-6 col-xs-6 padding-left-0">
+                                    <small>Duration (m)</small>
+                                    @Html.DropDownList("ListPrices", null, new { @class = "custom-select", @name = "ListPrice", @id = "ListPrice" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-sm-12 col-xs-12 padding-top-16">
+                            <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4 padding-left-0" style="display: flex">
+                                <div id="btn-cancel-appointment">
+                                    <span><i class="fa fa-trash" style="font-size: 18px; line-height: 45px;" aria-hidden="true"></i></span>
+                                    <span>Cancel this appointment</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-4 padding-right-0">
+                                <button type="button" id="btn-cancel" class="custom-btn action-btn cancel-btn">Cancel</button>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-4 padding-right-0">
+                                <button id="btnCreateAppointment" class="custom-btn action-btn" type="button">Save</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="div-search-appointment">
+                        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-8 col-lg-offset-3 col-md-offset-2 col-xs-offset-2 padding-top-3">
+                            <input id="input-search-appointment" type="tel" class="custom-select text-center" placeholder="Patient phone number" maxlength="15" />
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-xs-8 col-lg-offset-3 col-md-offset-2 col-xs-offset-2 padding-top-3 padding-bot-3">
+                            <div class="col-lg-6 col-xs-6 col-lg-offset-3 col-xs-offset-3 padding-0">
+                                <button id="btn-create-new-appointment" class="custom-btn action-btn action-link">Continue</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    Date.prototype.addHours = function (h) {
+        this.setHours(this.getHours() + h);
+        return this;
+    }
+    var qClose = false;
+    $('#datepicker-new-appointmet').datetimepicker({
+        format: 'DD MMM YYYY',
+        minDate: new Date().setHours(0,0,0,0),
+        defaultDate: new Date()
+    });
+    $('#timepicker-new-appointmet').datetimepicker({
+        format: 'HH:mm',
+        //minDate: new Date(),
+        defaultDate: new Date()
+    });
+    $('#datepicker-new-appointmet').on('dp.change', function (e) {
+        var dateStr = $(this).val();
+        var dateNow = new Date();
+        var dateNowStr = dateNow.toString("dd MMM yyyy");
+        if (dateStr == dateNowStr) {
+            var newTime = new Date();
+            $('#timepicker-new-appointmet').val(newTime.toString("HH:mm"));
+        }
+    });
+    $('#timepicker-new-appointmet').on('dp.change', function (e) {
+        var dateStr = $('#datepicker-new-appointmet').val();
+        var timeStr = $(this).val();
+        var date = new Date(dateStr + ' ' + timeStr);
+        var dateNow = new Date();
+        if (date.getTime() > dateNow.getTime()) {
+            $('a[data-action=decrementHours]').unbind('click');
+            $('a[data-action=decrementMinutes]').unbind('click');
+            $('span[data-action=showHours]').unbind('click');
+            $('span[data-action=showMinutes]').unbind('click');
+        } else {
+            $('span[data-action=showHours]').click(function () { return false; });
+            $('span[data-action=showMinutes]').click(function () { return false; });
+            $('a[data-action=decrementHours]').click(function () { return false; });
+            $('a[data-action=decrementMinutes]').click(function () { return false; });
+        }
+    });
+
+    var isRunning = false;
+
+    function fillAppointment(data) {
+        $('#datepicker-new-appointmet').data("DateTimePicker").date(new Date());
+        var newTime = new Date();
+        $('#timepicker-new-appointmet').val(newTime.toString("HH:mm"));
+        isRunning = false;
+        qClose = true;
+        $('#email-valid, #firstName-valid, #lastName-valid, #other-first-valid, #other-last-valid').text('');
+        $('#cb-carer').prop('checked', false);
+        $('#add-appointment-patient-fn, #add-appointment-patient-sn').val('');
+        if (data === null) {
+            $('#input-add-appointment-first-name, #input-add-appointment-sur-name, #input-add-appointment-email, #patientId, #add-appointment-patient-fn, #add-appointment-patient-sn').val('');
+            $('#add-appointment-patient-fn, #add-appointment-patient-sn').prop('disabled', true);
+            $('#isNewPatient').val(true);
+        } else {
+            console.log(data);
+            $('#input-add-appointment-first-name').val(data.FirstName);
+            $('#input-add-appointment-sur-name').val(data.LastName);
+            $('#input-add-appointment-email').val(data.Email);
+            $('#patientId').val(data.PatientId);
+            $('#add-appointment-patient-fn, #add-appointment-patient-sn').prop('disabled', true);
+            $('#isNewPatient').val(false);
+        }
+    }
+
+    $('#cb-carer').on('change', function () {
+        $('#add-appointment-patient-fn, #add-appointment-patient-sn').prop('disabled', !$('#cb-carer').is(':checked'));
+        if (!$('#cb-carer').is(':checked')) {
+            $('#add-appointment-patient-fn').val("");
+            $('#add-appointment-patient-sn').val("");
+            $('#isCarer').val(false);
+        } else {
+            $('#isCarer').val(true);
+        }
+    });
+
+    var regex =
+        /^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){8,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i;
+    function searchPatientByPhone() {
+        var phone = $('#input-search-appointment').val();
+        if (!phone.match(regex)) {
+            alert("Please enter a valid phone number");
+        } else {
+            $('#addAppointmentOverlay').show();
+            $.ajax({
+                url: "/Appointment/GetPatientByPhone?phone=" + encodeURIComponent(phone),
+                type: "GET",
+                success: function (data, textStatus, jqXhr) {
+                    console.log(data);
+                    $('#btn-cancel-appointment').hide();
+                    $('#sp-account-holder').hide();
+                    $('#div-search-appointment').hide();
+                    $('#div-modal-add-appointment').show();
+                    $('#btn-add-appointment-back').show();
+                    $('#input-add-appointment-phone').val(phone);
+                    if (data.Key === true) {
+                        $('#input-add-appointment-first-name, #input-add-appointment-sur-name, #input-add-appointment-email').prop('disabled', true);
+                        fillAppointment(data.Value);
+                    } else {
+                        
+                        if (data.Value === 'FAILURE_SESSION_INVALID' || data.Value === 'Invalid Session') {
+                            window.location.href = baseUrl;
+                        }
+                        $('#input-add-appointment-first-name, #input-add-appointment-sur-name, #input-add-appointment-email').prop('disabled', false);
+                        fillAppointment(null);
+                    }
+                    $('#addAppointmentOverlay').hide();
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                    $('#addAppointmentOverlay').hide();
+                    window.location.href = '@Url.Action("SignOut","User")';
+                }
+            });
+        }
+    }
+
+    $('#btn-create-new-appointment').click(function () {
+        searchPatientByPhone();
+    });
+
+    $('#input-search-appointment').keypress(function (event) {
+        var keycode = event.which;
+        if (keycode === 13) {
+            searchPatientByPhone();
+        }
+    });
+
+    $('#btn-cancel-appointment').click(function () {
+        var ok = confirm("Are you sure you want to cancel this appointment?");
+        if (ok) {
+            $('#addAppointmentOverlay').show();
+            $.ajax({
+                url: '@Url.Action("CancelAppointment", "Appointment")',
+                type: "POST",
+                data: {
+                    AppointmentId: appointmentId,
+                    DoctorName: $('#ListDoctor option[value="' + selectedApp.DoctorId + '"]').text(),
+                    ExpectedStartDateTime: selectedApp.ExpectedStartDateTime,
+                    PatientFirstName: selectedApp.FirstName,
+                    PatientLastName: selectedApp.LastName,
+                    PatientPhone: selectedApp.Phone,
+                    PatientEmail: selectedApp.Email
+                },
+                success: function (data) {
+                    $('#createAppointmentModal').modal('hide');
+                    if (data.Key === true) {
+                        alert(data.Value);
+                        table.fnDraw();
+                        $('#createAppointmentModal').modal('hide');
+                        $('.j-close-sidebar').trigger("click");
+                    } else {
+                        alert(data.Value);
+                        table.fnDraw();
+                        $('#addAppointmentOverlay').hide();
+                    }
+                },
+                error: function (e) {
+                    $('#addAppointmentOverlay').hide();
+                    window.location.href = '@Url.Action("SignOut","User")';
+                }
+            });
+        }
+    });
+
+    $('#btn-add-appointment-back').click(function () {
+        qClose = false;
+        isUpdate = false;
+        $('#input-search-appointment').val('');
+        $('#patientId').val('');
+        $('#div-search-appointment').show();
+        $('#div-modal-add-appointment').hide();
+        $('#btn-add-appointment-back').hide();
+    });
+
+    $('#btn-new-appointment-header').click(function () {
+        if (isLogin) {
+            isUpdate = false;
+            $('#createAppointmentModal').on('show.bs.modal', function () {
+                $('#input-search-appointment').val('');
+                $('#patientId').val('');
+                $('#div-modal-add-appointment').hide();
+                $('#div-search-appointment').show();
+                $('#modal-appointment-title').html("Add appointment");
+                $('#btn-add-appointment-back').hide();
+            });
+        } else {
+            var isConfirm = confirm('You need to sign in with Microsoft Office 365 to use this feature. Do you want to sign in?');
+            if (isConfirm) {
+                location.assign("https://login.windows.net/common/oauth2/authorize?response_type=token&client_id=2bd937f8-d693-4e38-8718-2f53deed2dff&redirect_uri=" + baseUrl + "/SkypeForBusiness/Login&resource=https://webdir.online.lync.com");
+            }
+            $('#div-modal-add-appointment').hide();
+            $('#createAppointmentModal').modal("hide");
+        }
+        qClose = false;
+    });
+    var uriMeeting = "";
+    var urlJoin = "";
+    function createMeeting(planName) {
+        var meeting = client.conversationsManager.createMeeting();
+        meeting.subject(planName);
+        meeting.accessLevel("Everyone");
+
+        meeting.onlineMeetingUri.get().then(function (uri) {
+            uriMeeting = uri;
+            meeting.joinUrl.get().then(function (url) {
+                urlJoin = url;
+                createAppointment();
+            });
+        });
+
+    }
+
+    var firstName = '';
+    var lastName = '';
+    var email = '';
+    var phone = '';
+    var otherFirstName = '';
+    var otherLastName = '';
+    var doctorId = '';
+    var doctorName = '';
+    var expectedDate = '';
+    var expectedTime = '';
+    var duration = '';
+    var isNewPatient = false;
+    var isCarer = false;
+
+    function createAppointment() {
+        var dataPost = {
+            IsCarer: isCarer,
+            IsNewPatient: isNewPatient,
+            PatientId: patientId,
+            FirstName: firstName,
+            LastName: lastName,
+            Email: email,
+            Phone: phone,
+            OtherFirstName: otherFirstName,
+            OtherLastName: otherLastName,
+            DoctorId: doctorId,
+            DoctorName: doctorName,
+            ExpectedDate: expectedDate,
+            ExpectedTime: expectedTime,
+            Duration: duration,
+            SipUriMeeting: uriMeeting,
+            UrlJoinMeeting: urlJoin
+        };
+        $('#addAppointmentOverlay').show();
+        $.ajax({
+            url: '@Url.Action("CreateAppointment","Appointment")',
+            type: "POST",
+            data: dataPost,
+            success: function (data, textStatus, jqXhr) {
+                isRunning = false;
+                console.log(data);
+                if (data.Key) {
+                    fillAppointment(null);
+                    alert(data.Value);
+                    try {
+                     
+                        if (table !== undefined && table !== null)
+                            table.fnDraw();   
+                    }catch(x) {
+                        //
+                    }
+                    $('#createAppointmentModal').modal('hide');
+                    if ($('#wrapper').hasClass('toggled')) $('#menu-toggle').click();
+                    //$('.j-close-sidebar').trigger("click");
+                } else {
+                    alert(data.Value);
+                }
+                $('#addAppointmentOverlay').hide();
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                console.log(errorThrown);
+                $('#addAppointmentOverlay').hide();
+                window.location.href = '@Url.Action("SignOut","User")';
+            }
+        });
+    }
+
+    function updateAppointment() {
+        var dataPost = {
+            Id: appointmentId,
+            PatientId: selectedApp.PatientId,
+            FirstName: firstName,
+            LastName: lastName,
+            Email: email,
+            Phone: phone,
+            OtherFirstName: otherFirstName,
+            OtherLastName: otherLastName,
+            DoctorId: doctorId,
+            ExpectedDate: expectedDate,
+            ExpectedTime: expectedTime,
+            Duration: duration,
+            SipUriMeeting: uSipUri,
+            UrlJoinMeeting: uUrlJoin,
+            IsFloating: selectedApp.IsFloating,
+            IsCarer: isCarer,
+        };
+        $('#addAppointmentOverlay').show();
+        $.ajax({
+            url: '@Url.Action("UpdateAppointment","Appointment")',
+            type: "POST",
+            data: dataPost,
+            success: function (data, textStatus, jqXhr) {
+                isRunning = false;
+                console.log(data);
+                if (data.Key) {
+                    fillAppointment(null);
+                    alert(data.Value);
+                    table.fnDraw();
+                    $('#createAppointmentModal').modal('hide');
+                    $('.j-close-sidebar').trigger("click");
+                } else {
+                    alert(data.Value);
+                }
+                $('#addAppointmentOverlay').hide();
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                console.log(errorThrown);
+                $('#addAppointmentOverlay').hide();
+                window.location.href = '@Url.Action("SignOut","User")';
+            }
+        });
+    }
+    $('#btn-close-add-app').click(function () {
+        var cf;
+        if (qClose === true) {
+            cf = confirm('If you close this window any unsaved information will be lost. Are you sure you want to continue?');
+            if (cf === true) {
+                qClose = false;
+                isUpdate = false;
+                $('#createAppointmentModal').modal('hide');
+            }
+        } else {
+            var p = $('#input-search-appointment').val();
+            if (p !== '') {
+                cf = confirm('If you close this window any unsaved information will be lost. Are you sure you want to continue?');
+                if (cf === true) {
+                    isUpdate = false;
+                    $('#createAppointmentModal').modal('hide');
+                }
+            } else {
+                isUpdate = false;
+                $('#createAppointmentModal').modal('hide');
+            }
+        }
+    });
+
+    $('#btn-cancel').click(function () {
+        $('#btn-close-add-app').trigger('click');
+    });
+
+    $('#btnCreateAppointment').on("click", function () {
+        var valid = true;
+        if (!isRunning) {
+            isCarer = $('#isCarer').val();
+            isNewPatient = $('#isNewPatient').val();
+            patientId = $('#patientId').val();
+            firstName = $('#input-add-appointment-first-name').val();
+            lastName = $('#input-add-appointment-sur-name').val();
+            email = $('#input-add-appointment-email').val();
+            phone = $('#input-add-appointment-phone').val();
+            otherFirstName = $('#add-appointment-patient-fn').val();
+            otherLastName = $('#add-appointment-patient-sn').val();
+            doctorId = $('#ListDoctor').val();
+            doctorName = $('#ListDoctor option:selected').text();
+            expectedDate = $('#datepicker-new-appointmet').val();
+            expectedTime = $('#timepicker-new-appointmet').val();
+            duration = $('#ListPrice').val();
+            if (doctorId === '' || doctorId === null) {
+                alert('Doctor field cannot be empty. Please check and try again.');
+                return;
+            }
+            if (patientId === '') {
+                if (firstName === '') {
+                    $('#firstName-valid').text("Firstname is required");
+                    valid = false;
+                } else {
+                    $('#firstName-valid').text("");
+                }
+
+                if (lastName === '') {
+                    $('#lastName-valid').text("Surname is required");
+                    valid = false;
+                } else {
+                    $('#lastName-valid').text("");
+                }
+            }
+
+            if (email === '') {
+                $('#email-valid').text("Email is required");
+                valid = false;
+            } else {
+                $('#email-valid').text("");
+            }
+
+            if (expectedDate === '' && expectedTime === '') {
+                valid = false;
+                alert("Please select Date, Time");
+            } else if (expectedDate === '') {
+                valid = false;
+                alert("Please select Date");
+            } else if (expectedTime === '') {
+                valid = false;
+                alert("Please select Time");
+            }
+
+            if ($('#cb-carer').is(':checked')) {
+                if (otherFirstName === '') {
+                    $('#other-first-valid').text('Patient First name is required');
+                    valid = false;
+                } else {
+                    $('#other-first-valid').text('');
+                }
+
+                if (otherLastName === '') {
+                    $('#other-last-valid').text('Patient Surname is required');
+                    valid = false;
+                } else {
+                    $('#other-last-valid').text('');
+                }
+            }
+
+            if (valid) {
+                isRunning = true;
+                if (isUpdate != undefined && isUpdate) {
+                    updateAppointment();
+                } else {
+                    createMeeting(firstName + " " + lastName +" - "+ expectedDate + " " + expectedTime);
+                }
+
+            }
+        }
+    });
+</script>

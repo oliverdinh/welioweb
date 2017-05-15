@@ -1,0 +1,209 @@
+﻿@using WaxWelio.Common.Enum
+@model IEnumerable<WaxWelio.Entities.Models.UserModel>
+@{
+    ViewBag.Title = "Clinic Users";
+}
+<div class="row fill">
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 padding-left-0 fill scroll-y">
+        <div class="header-action-body show-mob"></div>
+        <div class="grid col-sm-12 col-xs-12 padding-0 content-body content-body-padding">
+            <div class="col-lg-12 col-sm-12 col-xs-12 padding-0 content-title-table">
+                <div id="clinicUsers_search" class="input-group col-lg-4 col-sm-4 col-xs-4 padding-0 dataTables_filter">
+                    <input type="search" id="txtSearch" class="form-control" placeholder="Search"/>
+                    <span class="input-group-addon">
+                        <i class="fa fa-search"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table id="clinicUsers" class="table table-responsive table-hover" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Clinic</th>
+                        <th class="inline">User Type</th>
+                        <th>Access</th>
+                        <th class="inline">Account Status</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <div class="modal fade" id="signinModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="overlay-div-single" id="divOverlay" style="display: none;">
+                <div class="div-over"></div>
+                <img src="~/static/images/loading.gif" style="width: 64px" />
+            </div>
+            <div class="modal-content text-center">
+                <div id="content-signin">
+                    <div class="modal-header">
+                        <span style="margin: auto;font-size: 20px;font-weight: bold">User Clinics</span>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <hr style="margin-top: 0; margin-bottom: 0;border-top: 1px solid #c1c1c1;" />
+                    </div>
+                    <div class="modal-body" id="listClinic_user" style="padding-top: 5px">
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <table id="listClinic_user_table" class="table table-responsive table-stripped" style="margin: auto; width: 100%; text-align: left">
+                                    <thead>
+                                    <tr>
+                                        <th class="vertical-middle">Clinic</th>
+                                        <th>User Type</th>
+                                        <th class="vertical-middle">Access</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<style>
+    #clinicUsers_filter {
+        display: none;
+    }
+</style>
+@section scripts
+{
+    <script>
+        var table;
+        var count = 0;
+        function initDataTable(selector) {
+            var tableConfig = Global.ConfigEn.DatatableConfig;
+            tableConfig.searching = false,
+            tableConfig.pageLength = 9,
+            tableConfig.processing = true;
+            tableConfig.serverSide = true;
+            tableConfig.info = true;
+            tableConfig.stateSave = false;
+            tableConfig.ajaxSource = '/User/ListUsers';
+            tableConfig.fnServerData = function (sSource, aoData, fnCallback) {
+                aoData.push({ "name": "sSearch", "value": $('#txtSearch').val() });
+                $.ajax({
+                    "dataType": 'json',
+                    "contentType": "application/json; charset=utf-8",
+                    "type": "GET",
+                    "url": sSource,
+                    "data": aoData,
+                    "success": function (data) {
+                        fnCallback(data);
+                    },
+                    "error": function (xhr, textStatus, error) {
+                        window.location.href = "@Url.Action("SignOut","User")";
+                    }
+                });
+            }
+            tableConfig.columns = [
+                {
+                    "data": "FullName",
+                    "orderable": false,
+                    "className": "inline"
+                },
+                {
+                    "data": "ClinicUsers",
+                    "render": function (data) {
+                        if (data.length > 1) {
+                            count++;
+                            return data[0].Clinic.ClinicName + '<span><i class="fa fa-external-link" id=hospital_' + count + '" style="margin-left:10px" aria-hidden="true"></i></span>';
+                        }
+                        else if (data.length === 1) {
+                            count++;
+                            return data[0].Clinic.ClinicName;
+                        }
+                        else return "";
+                    },
+                    "orderable": false,
+                    "className": "inline"
+                },
+                {
+                    "data": "ClinicUsers",
+                    "render": function (data) {
+                        if (data.length > 0) {
+                            return data[0].UserTypeStr;
+                        } else return "";
+                    },
+                    "orderable": false,
+                    "className": "inline"
+                },
+                {
+                    "data": "ClinicUsers",
+                    "render": function (data) {
+                        if (data.length > 0) {
+                            return data[0].AccessTypeStr;
+                        } else return "";
+                    },
+                    "orderable": false,
+                    "className": "inline"
+                },
+                {
+                    "data": "ClinicUsers",
+                    "render": function (data) {
+                        if (data.length > 0) {
+                            return data[0].ClinicUserActivedStr;
+                        } else return "";
+                    },
+                    "orderable": false,
+                    "className": "inline"
+                }
+            ];
+
+            return $('#' + selector).dataTable(tableConfig).fnSetFilteringDelay();
+        }
+
+        $(document)
+            .ready(function () {
+                table = initDataTable("clinicUsers");
+                $('#clinicUsers tbody').on('click', 'tr', function (e) {
+                    var rowData;
+                    var id;
+                    var targetId = e.target.id.toString();
+                    if (targetId.includes("hospital_")) {
+                        rowData = table.api().row(this).data();
+                        id = rowData.DoctorId;
+                        $('#listClinic_user_table tbody').empty();
+                        $.each(rowData.ClinicUsers,
+                        function (i, l) {
+                            $('#listClinic_user_table tbody')
+                                .append('<tr><td style="text-align:left">' +
+                                    l.Clinic.ClinicName +
+                                    '</td><td>' +
+                                    l.UserTypeStr+
+                                    '</td><td>' +
+                                    l.AccessTypeStr +
+                                    '</td><td style="text-align:right">' +
+                                    '<a style="margin-left:10px" href="/User/Details?id=' +
+                                    id +
+                                    '&hospitalid=' +
+                                    l.Clinic.ClinicId +
+                                    '"><i class="glyphicon glyphicon-edit" style="margin-right:5px;color:green"></i></a></td>' +
+                                    '</tr>');
+                        });
+                        $('#signinModal').modal('show');
+                    } else {
+                        rowData = table.api().row(this).data();
+                        id = rowData.DoctorId;
+                        if (rowData.ClinicUsers.length > 0) {
+                            var hospitalId = rowData.ClinicUsers[0].Clinic.ClinicId;
+                            window.location.href = "../User/Details?id=" + id + "&hospitalId=" + hospitalId;
+                        }
+                    }
+                });
+            });
+    </script>
+}

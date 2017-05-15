@@ -1,0 +1,75 @@
+﻿@using WaxWelio.Common.Enum
+@using WaxWelio.Entities;
+@{
+    //List<int> userRole = ViewBag.BaseUserRole;
+    //int userType = ViewBag.BaseUserType;
+    //bool isHospital = ViewBag.IsHospital;
+    var authInfo = (AuthInfo)Session["auth_info"];
+    var accessType = (int)UserRole.Administrator;
+
+    accessType = authInfo.IsAdminBool ? 0 : authInfo.DoctorClinics.First(x => x.Clinic.ClinicId == authInfo.CurrentSelectedClinic.ClinicId).ClinicUserAccessType;
+
+}
+
+<div id="slide-menu" class="menu-list" style="height:100%!important">
+    <button id="btn-toggle-menu" class="glyphicon glyphicon-menu-hamburger"></button>
+    @if (authInfo != null && authInfo.IsAdminBool)
+    {
+        <div>
+            <a id="activeClinics" href="@Url.Action("ActiveClinics", "Clinic")" class="action-link"><div>Active Clinics</div></a>
+        </div>
+        <div>
+            <a id="newClinics" href="@Url.Action("NewClinic", "Clinic")" class="action-link"><div>New Clinics</div></a>
+        </div>
+        <div>
+            <a id="allClinics" href="@Url.Action("AllClinics", "Clinic")" class="action-link"><div>All Clinics</div></a>
+        </div>
+        <div>
+            <a id="clinicsUsers" onclick="goSetting('/User/ClinicUsers')" class="action-link"><div>Clinic Users</div></a>
+        </div>
+        <div>
+            <a id="patientUsers" onclick="goSetting('/Patient/Index')" class="action-link"><div>Patient Users</div></a>
+        </div>
+    }
+    @if (authInfo != null && !authInfo.IsAdminBool && accessType == (int)UserRole.Administrator)
+    {
+        <div>
+            <a id="clinic" onclick="goSetting('/Clinic')" class="action-link"><div>Clinic details</div></a>
+        </div>
+        <div>
+            <a id="users" onclick="goSetting('/User')" class="action-link"><div>Users</div></a>
+        </div>
+        <div>
+            <a id="pricing" onclick="goSetting('/Pricing')" class="action-link"><div>Pricing</div></a>
+        </div>
+        <div>
+            <a id="payments" onclick="goSetting('/Payment')" class="action-link"><div>Payments</div></a>
+        </div>
+        @*<div>
+            <a id="reports" onclick="goSetting('/Report')" class="action-link"><div>Reports</div></a>
+        </div>*@
+    }
+    @if (authInfo != null && !authInfo.IsAdminBool)
+    {
+        <div>
+            <a id="my-profile" onclick="goSetting('/User/MyProfile')" class="action-link"><div>My profile</div></a>
+        </div>
+    }
+</div>
+        
+
+    <script>
+        function runWhenReady() {
+            if (window.$) {
+                $('#slide-menu').height($('#col-details')[0].scrollHeight);
+                $(window)
+                    .resize(function() {
+                        $('#slide-menu').height($('#col-details')[0].scrollHeight);
+                    });
+            } else {
+                setTimeout(runWhenReady, 100);
+            }
+        }
+
+        runWhenReady();
+    </script>

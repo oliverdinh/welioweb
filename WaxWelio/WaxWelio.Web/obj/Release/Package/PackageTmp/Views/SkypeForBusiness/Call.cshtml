@@ -1,0 +1,36 @@
+﻿@using Newtonsoft.Json
+@using WaxWelio.Common.Config
+@using WaxWelio.Common.Enum
+@using WaxWelio.Common.Object
+
+@{
+    Layout = null;
+    ApiHeader apiHeader = null;
+    var title = "";
+    var apiHeaderCookie = HttpContext.Current.Request.Cookies[CookieConstant.ApiHeader];
+    if (apiHeaderCookie != null)
+    {
+        apiHeader = JsonConvert.DeserializeObject<ApiHeader>(apiHeaderCookie.Value);
+        if (!string.IsNullOrEmpty(apiHeader.User?.TitleUser))
+        {
+            title = ((Title)Enum.Parse(typeof(Title), apiHeader.User.TitleUser)).DescriptionAttr();
+        }
+    }
+    var adminLoginHospital = (ViewBag.BaseUserType == (int)UserType.SystemAdmin) && ViewBag.IsHospital;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Call</title>
+    @Styles.Render("~/css")
+    <link rel="stylesheet" href="~/static/plugin/font-awesome/css/font-awesome.min.css">
+
+</head>
+<body>
+    @apiHeader.HospitalName
+    <hr/>
+    @ViewBag.Hospital
+</body>
+</html>

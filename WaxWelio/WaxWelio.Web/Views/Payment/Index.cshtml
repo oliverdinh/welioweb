@@ -1,0 +1,49 @@
+﻿@model WaxWelio.Entities.Models.BankModel
+@{
+    ViewBag.Title = "Payments";
+}
+<div class="row fill">
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 fill padding-0 scroll-y" id="payment-index-page">
+        <div class="header-action-body">
+            <a href="@Url.Action("Edit", "Payment")" class="action-link"><i class="fa fa-pencil right-5px" aria-hidden="true"></i>Edit</a>
+        </div>
+        <div class="content-body content-body-padding">
+            <div>
+                @if (Model == null)
+                {
+                    <h2>N/A</h2>
+                }
+                else
+                {
+                    <h2>@Model.AccountName</h2>
+                }
+                
+            </div>
+            <div class="padding-bot-1">
+                <small class="label-details">BSB</small>
+                @if (Model == null)
+                {
+                    <div>N/A</div>
+                }
+                else
+                {
+                    <div>@Model.BSB</div>
+                }
+                
+            </div>
+            <div>
+                <small class="label-details">Account</small>
+                @if (Model == null)
+                {
+                    <div>N/A</div>
+                }
+                else
+                {
+                    <div>@Model.AccountNumber</div>
+                }
+                
+            </div>
+        </div>
+    </div>
+</div>

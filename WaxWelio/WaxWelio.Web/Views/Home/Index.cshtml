@@ -1,0 +1,85 @@
+﻿@{ 
+    Layout = null;
+}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @Styles.Render("~/css")
+    <link href="~/static/css/custom.css" type="text/css" rel="stylesheet" />
+    <link href="~/static/css/home.css" rel="stylesheet" />
+    @Scripts.Render("~/js")
+</head>
+<body>
+    <div class="col-lg-12 col-sm-12 col-xs-12 fill">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 home-left height-100">
+            <div class="block-intro">
+                <img width="200" src="~/static/images/logo.jpg" alt="" />
+                <button id="btn-signin" class="btn-home">Sign in</button>
+                <div class="signin-bottom">
+                    <div class="f-left">
+                        <a href="https://passwordreset.microsoftonline.com/">Forgot Password</a>
+                    </div>
+                    <div class="f-right">
+                        @Html.ActionLink("Don't have an account?", "Signup", "Clinic")
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 text-center home-right">
+            <div class="wrapper">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center height-100">
+                    <div class="block-intro">
+                        <h2 class="title-intro">Clinics</h2>
+                        <hr />
+                        <div class="row">
+                            <div class="col-xs-8 content-intro">
+                                With WELIO you can now<br />
+                                offer your patients the<br />
+                                convenience of HIPAA<br />
+                                complaint telehealth consultations.
+                            </div>
+                            <div class="col-xs-4">
+                                <img width="85" src="~/static/images/circle1.png" alt="" />
+                            </div>
+                        </div>
+                        @Html.ActionLink("Sign up", "Signup", "Clinic", null, new { @role = "button", @class = "btn-home" })
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center height-100">
+                    <div class="block-intro">
+                        <h2 class="title-intro">Patients</h2>
+                        <hr />
+                        <div class="row">
+                            <div class="col-xs-8 content-intro">
+                                WELIO brings healthcare to<br />
+                                you. Speak to your clinic if you<br />
+                                would like to get started with<br />
+                                telehealth consultations.
+                           </div>
+                            <div class="col-xs-4">
+                                <img width="85" src="~/static/images/circle2.png" alt="" />
+                            </div>
+                        </div>
+                        @Html.ActionLink("Invite my clinic", "NotifyClinic", "Clinic", null, new { @class = "btn-home" })
+                    </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    @Html.Partial("_LoginModal")
+    <script>
+           $(document).ready(function() {
+               @*var isModal = '@Request["isLogin"]';
+                if (isModal === true || isModal === 'true') {
+                    $('#signinModal').modal('show');
+                }*@
+               var baseUrl = window.location.origin;
+                $('#btn-signin').click(function () {
+                    location.assign("https://login.windows.net/common/oauth2/authorize?response_type=token&client_id=2bd937f8-d693-4e38-8718-2f53deed2dff&redirect_uri=" + baseUrl + "/SkypeForBusiness/Login&resource=https://graph.microsoft.com/");
+                });
+           });
+    </script>
+</body>
+</html>
+

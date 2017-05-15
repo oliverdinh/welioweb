@@ -1,0 +1,195 @@
+﻿@model WaxWelio.Entities.Result.ClinicResult
+@{
+    ViewBag.Title = "Clinic Details";
+}
+
+<div class="row fill">
+    <div class="col-lg-2 col-sm-3 col-xs-4 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-8 fill padding-0 scroll-y">
+        @using (Html.BeginForm("Details", "Clinic", FormMethod.Post, new {enctype = "multipart/form-data", id = "form_edit_clinic", @class = "content-body-padding" }))
+        {
+            <div class="col-lg-4 col-sm-12 col-xs-12 padding-left-0">
+                <div class="header-action-body show-mob"></div>
+                <div class="padding-bot-1 content-body">
+                    <h2>Clinic details</h2>
+                </div>
+                @Html.HiddenFor(model => model.ClinicEmail)
+                @Html.HiddenFor(model => model.ClinicId)
+                @Html.HiddenFor(model => model.Actived)
+                <div class="padding-bot-1">
+                    <small class="label-details">Clinic name</small>
+                    @Html.EditorFor(m => m.ClinicName, new {htmlAttributes = new {@class = "custom-select", @value = Model.ClinicName}})
+                    <!--@Html.ValidationMessageFor(m => m.ClinicName, "", new {@class = "text-danger"})-->
+                    <span class="field-validation-valid text-danger" id="validate-clinic-name"></span>
+                </div>
+                <div class="padding-bot-1">
+                    <small class="label-details">Street Address - Line 1</small>
+                    @Html.EditorFor(m => m.Street1, new {htmlAttributes = new {@class = "custom-select", @value = Model.Street1}})
+                    <!--@Html.ValidationMessageFor(m => m.Street1, "", new {@class = "text-danger"})-->
+                    <span class="field-validation-valid text-danger" id="validate-clinic-address"></span>
+                </div>
+                <div class="padding-bot-1">
+                    <small class="label-details">Street Address - Line 2</small>
+                    @Html.EditorFor(m => m.Street2, new {htmlAttributes = new {@class = "custom-select", @value = Model.Street2}})
+                    @Html.ValidationMessageFor(m => m.Street2, "", new {@class = "text-danger"})
+                </div>
+                <div class="col-md-12 padding-0 padding-bot-1">
+                    <div class="col-lg-9 col-sm-9 col-xs-9 padding-left-0">
+                        <small class="label-details">State</small>
+                        @Html.EditorFor(m => m.State, new {htmlAttributes = new {@class = "custom-select", @value = Model.State}})
+                        <!--@Html.ValidationMessageFor(m => m.State, "", new {@class = "text-danger"})-->
+                        <span class="field-validation-valid text-danger" id="validate-clinic-state"></span>
+                    </div>
+                    <div class="col-lg-3 col-sm-3 col-xs-3 padding-right-0">
+                        <small class="label-details">Postcode</small>
+                        @Html.EditorFor(m => m.PostCode, new {htmlAttributes = new {@class = "custom-select", @value = Model.PostCode}})
+                        <!--@Html.ValidationMessageFor(m => m.PostCode, "", new {@class = "text-danger"})-->
+                        <span class="field-validation-valid text-danger" id="validate-clinic-postcode"></span>
+                    </div>
+                </div>
+                <div class="padding-bot-1">
+                    <small class="label-details">Phone number</small>
+                    @Html.EditorFor(m => m.Phone, new {htmlAttributes = new {@class = "custom-select", @value = Model.Phone}})
+                    <!--@Html.ValidationMessageFor(m => m.Phone, "", new {@class = "text-danger"})-->
+                    <span class="field-validation-valid text-danger" id="validate-phone"></span>
+                    @*@Html.HiddenFor(m => m.SignUpStatus, new {Value = Model.SignUpStatus})*@
+                </div>
+                <div class="padding-top-2 margin-bot-6">
+                    <div class="col-lg-3 col-sm-3 col-xs-4 padding-left-0">
+                        <input type="button" onclick="submitEditClinic()" class="custom-btn action-btn" value="Save" />
+                    </div>
+                    <div class="col-lg-3 col-sm-3 col-xs-4 padding-right-0">
+                        <button onclick="goBackEditClinic()" type="button" class="custom-btn action-btn cancel-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var phone_validate = /^((\+[1-9]{1,4}[ \-]*)|(\([0-9]{2,3}\)[ \-]*)|([0-9]{2,4})[ \-]*)*?[0-9]{3,4}?[ \-]*[0-9]{3,4}?$/;
+        var formValid = true;
+        $(document).ready(function () {
+            $('#PhoneNumber_0_').blur(function () {
+                if ($('#PhoneNumber_0_').val() === '') {
+                    $('#validate-phone').html('Phone is required.');
+                    formValid = false;
+                } else {
+                    if (!phone_validate.test($('#PhoneNumber_0_').val())) {
+                        $('#validate-phone').html('Phone is invalid.');
+                        formValid = false;
+                    } else {
+                        $('#validate-phone').html('');
+                        formValid = true;
+                    }
+                }
+            });
+            $('#PhoneNumber_0_').keyup(function () {
+                if ($('#PhoneNumber_0_').val() === '') {
+                    $('#validate-phone').html('Phone is required.');
+                    formValid = false;
+                } else {
+
+                    if (!phone_validate.test($('#PhoneNumber_0_').val())) {
+                        $('#validate-phone').html('Phone is invalid.');
+                        formValid = false;
+                    } else {
+                        $('#validate-phone').html('');
+                        formValid = true;
+                    }
+                }
+            });
+
+            $('#ClinicName').blur(function () {
+                if ($('#ClinicName').val() === '') {
+                    $('#validate-clinic-name').html('Clinic name is required.');
+                    formValid = false;
+                } else {
+                    $('#validate-clinic-name').html('');
+                    formValid = true;
+                }
+            });
+            $('#ClinicName').keyup(function () {
+                if ($('#ClinicName').val() === '') {
+                    $('#validate-clinic-name').html('Clinic name is required.');
+                    formValid = false;
+                } else {
+                    $('#validate-clinic-name').html('');
+                    formValid = true;
+                }
+            });
+
+            $('#AddressLine1').blur(function () {
+                if ($('#AddressLine1').val() === '') {
+                    $('#validate-clinic-address').html('Address line 1 is required.');
+                    formValid = false;
+                } else {
+                    $('#validate-clinic-address').html('');
+                    formValid = true;
+                }
+            });
+            $('#AddressLine1').keyup(function () {
+                if ($('#AddressLine1').val() === '') {
+                    $('#validate-clinic-address').html('Address line 1 is required.');
+                    formValid = false;
+                } else {
+                    $('#validate-clinic-address').html('');
+                    formValid = true;
+                }
+            });
+
+            $('#Suburb').blur(function () {
+                if ($('#Suburb').val() === '') {
+                    $('#validate-clinic-state').html('State is required.');
+                    formValid = false;
+                } else {
+                    $('#validate-clinic-state').html('');
+                    formValid = true;
+                }
+            });
+            $('#Suburb').keyup(function () {
+                if ($('#Suburb').val() === '') {
+                    $('#validate-clinic-state').html('State is required.');
+                    formValid = false;
+                } else {
+                    $('#validate-clinic-state').html('');
+                    formValid = true;
+                }
+            });
+
+            $('#PostCode').blur(function () {
+                if ($('#PostCode').val() === '') {
+                    $('#validate-clinic-postcode').html('Post code is required.');
+                    formValid = false;
+                } else {
+                    $('#validate-clinic-postcode').html('');
+                    formValid = true;
+                }
+            });
+            $('#PostCode').keyup(function () {
+                if ($('#PostCode').val() === '') {
+                    $('#validate-clinic-postcode').html('Post code is required.');
+                    formValid = false;
+                } else {
+                    $('#validate-clinic-postcode').html('');
+                    formValid = true;
+                }
+            });
+        });
+
+        function submitEditClinic() {
+            if (!formValid) {
+                console.log('form invalid');
+                return false;
+            } else {
+                $('#form_edit_clinic').submit();
+            }
+        }
+
+        function goBackEditClinic() {
+            window.location.href = window.baseUrl + '/Clinic';
+        }
+    </script>
+}

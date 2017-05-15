@@ -1,0 +1,47 @@
+﻿@model WaxWelio.Entities.Models.PatientModel
+@{
+    ViewBag.Title = "Patient Details";
+}
+
+<div class="row fill">
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 fill padding-0 scroll-y">
+        <div class="overlay-div-single" id="div-Overlay" style="display: none;">
+            <div class="div-over"></div>
+            <img src="~/static/images/loading.gif" style="width: 64px"/>
+        </div>
+        <div class="header-action-body">
+            <span class="btn-header-action"><a href="@Url.Action("Index","Patient")" class="action-link"><i class="fa fa-angle-left right-5px" aria-hidden="true"></i>All users</a></span>
+            <span class="btn-header-action"><a href="javascript:;" onclick="alert('Coming Soon')" @*href="@Url.Action("EditDetails","Patient",new {id=Model.Id})"*@ class="action-link"><i class="fa fa-pencil right-5px" aria-hidden="true"></i>Edit</a></span>
+        </div>
+        <div class="content-body content-body-padding">
+            <div class="padding-top-30">
+                @if (string.IsNullOrEmpty(Model.PatientAvatar))
+                {
+                    <img src="~/images/user.png" class="img-circle img-avatar" />
+                }
+                else
+                {
+                    <img src="@Model.PatientAvatar" class="img-circle img-avatar" />
+                }
+            </div>
+            <div class="padding-bot-1">
+                <h2>
+                    <b>@Model.FullName</b>
+                </h2>
+            </div>
+            <div class="padding-bot-1">
+                <small class="label-details">Email</small>
+                <div class="value-details">
+                    @Model.Email
+                </div>
+            </div>
+            <div class="padding-bot-1">
+                <small class="label-details">Phone</small>
+                <div class="value-details">
+                    @Model.Phone
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

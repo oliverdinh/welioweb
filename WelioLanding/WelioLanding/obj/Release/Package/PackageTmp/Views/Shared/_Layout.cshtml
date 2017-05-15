@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welio</title>
+    <link href="~/Content/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/css/main.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="overlay-div-single" id="divOverlay" style="display: none;">
+        <div class="div-over"></div>
+        <img src="~/Content/images/loading.gif" style="width: 64px" />
+    </div>
+<div class="main-body">
+    @RenderBody()
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Message</h4>
+                </div>
+                <div class="modal-body" style="text-align: center">
+                    <p style="font-size: 24px">Thanks <span id="spanName"></span></p>
+                    <p style="font-size: 18px">We'll be in touch shortly once we have confirmed your details.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnClose">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Content/js/jquery-2.1.4.min.js"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <script src="~/Content/js/jquery.validate.min.js"></script>
+    <script src="~/Content/js/api.js"></script>
+    <script src="~/Content/js/main.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            //document.getElementById("btnsubmit").disabled = true;
+        });
+        function enableBtn() {
+            document.getElementById("btnsubmit").disabled = false;
+        }
+
+        $('#form-register')
+            .on('submit',
+                function() {
+                    var isvalidate = $("#form-register").valid();
+                    if (isvalidate != true) {
+                        e.preventDefault();
+                    }
+                    var fc = $("#form-register").serialize();
+                    $('#divOverlay').show();
+                    $.ajax({
+                        type: 'POST',
+                        url: "/Home/SendEmail",
+                        data: fc,
+                        dataType: 'json',
+                        success: function(data) {
+                            $("#spanName").text(data.name);
+                            $('#myModal').modal('show');
+                            $('#divOverlay').hide();
+                        }
+                    });
+                    return false;
+                });
+        $('#myModal')
+            .on('hidden.bs.modal',
+                function() {
+                    location.href = location.href;
+                });
+        $('#btnClose')
+            .on('click',
+                function() {
+                    location.href = location.href;
+                });
+
+    </script>
+</div>
+</body>
+</html>

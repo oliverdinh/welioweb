@@ -1,0 +1,63 @@
+﻿@using WaxWelio.Common.Enum;
+@model WaxWelio.Entities.Result.ClinicResult
+@{
+    ViewBag.Title = "Clinic Details";
+}
+
+<div class="row fill">
+    <div class="col-lg-2 col-sm-3 col-xs-4 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-8 fill padding-0 scroll-y">
+        <div class="col-lg-12 col-sm-12 col-xs-12 padding-0">
+            <div class="header-action-body">
+                <span class="btn-header-action">
+                   <a href="@Url.Action("Edit", new {@id = Model.ClinicId,@selected=ViewBag.idSelected})" class="action-link font-14-mob"> <i class="fa fa-pencil right-5px" aria-hidden="true"></i><span>Edit</span></a>
+                  </span>
+                @*<span class="btn-header-action">
+                    @if (Model.Actived != (int)ClinicStatus.Declined)
+                    {
+                       <a href="@Url.Action("LoginClinic", new {@id = Model.ClinicId})" class="action-link font-14-mob"><i class="fa fa-sign-in right-5px left-20px" aria-hidden="true"></i> Login to Welio as @Model.ClinicName</a>
+                    }
+                    </span>*@
+            </div>
+            <div class="content-body-padding">
+                <div class="padding-bot-1 content-body">
+                    <h2>@Model.ClinicName</h2>
+                </div>
+                <div class="padding-bot-1">
+                    <small class="label-details">Clinic status</small>
+                    @{
+                        switch (@Model.Actived)
+                        {
+                            case 1:
+                                <p class="value-details">Pending approval</p>
+                                break;
+                            case 2:
+                                <p class="value-details">Approved</p>
+                                break;
+                            case 0:
+                                <p class="value-details">Declined</p>
+                                break;
+                            case 3:
+                                <p class="value-details">Closed</p>
+                                break;
+                        }
+                    }
+                </div>
+                <div class="padding-bot-1">
+                    <small class="label-details">Address</small>
+                    <p class="value-details">@Model.Street1</p>
+                    <p class="value-details">@Model.Street2</p>
+                    <p class="value-details">@Model.State<span> @Model.PostCode</span></p>
+                </div>
+                <div class="padding-bot-1">
+                    <small class="label-details">Phone</small>
+                    <p class="value-details">@Model.Phone</p>
+                </div>
+                <div class="padding-bot-1">
+                    <small class="label-details">Signed-up</small>
+                    <p class="value-details">@Model.Created</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

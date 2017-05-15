@@ -1,0 +1,321 @@
+﻿@using WaxWelio.Entities;
+@using WaxWelio.Common.Enum;
+<div>
+    <div class="modal fade" id="signinModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="overlay-div-single" id="divOverlay" style="display: none;">
+                <div class="div-over"></div>
+                <img src="~/static/images/loading.gif" style="width: 64px" />
+            </div>
+            <div class="modal-content text-center">
+                @*<div id="content-signin">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div>
+                        <h1 class="modal-title h1-mob">Sign in</h1>
+                    </div>
+                    <div>
+                        <h2 id="sign-in-form-enter-email" class="h2-mob">Enter your account details</h2>
+                        <h2 id="sign-in-form-email-not-found" class="h2-mob">Account not found. Please try again.</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-lg-10 col-lg-offset-1">
+                                <input type="text" id="loginEmail" class="form-control custom-input custom-ff" placeholder="Email address" />
+                                <span class="field-validation-valid text-danger" id="emailValidate"></span>
+                            </div>
+                            <div class="form-group col-lg-10 col-lg-offset-1">
+                                <input type="password" required="required" id="loginPassword" class="form-control custom-input custom-ff" placeholder="Password" />
+                                <span class="field-validation-valid text-danger" id="passwordValidate"></span>
+                            </div>
+                            <div class="col-lg-6 col-lg-offset-3 padding-top-1">
+                                <button class="custom-btn" style="font-size: 25px" id="btn-signin-form">Sign in</button>
+                            </div>
+                            <div class="col-lg-10 col-lg-offset-1 text-left padding-top-2 padding-bot-1">
+                                <span class="float-left text-underline" data-toggle="modal" data-target="#forgotPasswordModal" data-dismiss="modal" style="cursor: pointer;">Forgot password</span>
+                                <span class="float-right span-btn text-underline">@Html.ActionLink("Don't have an account?", "Signup", "Clinic")</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+                <div id="content-select-clinic-signin">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="text-center padding-bot-2">
+                        <h1 class="modal-title" id="myModalLabel">Select clinic</h1>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+
+                                <div class="col-lg-8 col-lg-offset-2 padding-bot-3">
+                                    <select class="custom-select" name="selectHospital" id="listHospital-signin">
+                                        @if (Session["auth_info"] != null && ((AuthInfo)Session["auth_info"]).DoctorClinics.Count() > 0)
+                                        {
+                                            var listClinics = ((AuthInfo)Session["auth_info"]).DoctorClinics;
+                                            for (int i = 0; i < listClinics.Count(); i++)
+                                            {
+                                                <option value="@listClinics[i].Clinic.ClinicId">@listClinics[i].Clinic.ClinicName</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span class="field-validation-valid text-danger" id="errorSelect"></span>
+                                </div>
+                                <div class="col-lg-6 col-lg-offset-3">
+                                    @if (Session["auth_info"] != null && ((AuthInfo)Session["auth_info"]).DoctorClinics.Count() > 0)
+                                    {
+                                        <button id="btn-change-clinic-signin" class="custom-btn">Continue</button>
+                                    }
+                                    else
+                                    {
+                                        <button id="btn-close-logout" class="custom-btn">Sign out</button>
+                                    }
+                                </div>
+                                <div class="col-lg-8 col-lg-offset-2 padding-top-2 padding-bot-1 text-center">
+                                    If you can not find your clinic you may need to contact the clinic Practice Manager to create your account
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!--modal forgot password-->
+<div>
+    <div class="modal fade" id="forgotPasswordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="overlay-div-single" id="divOverlayfogot" style="display: none;">
+                <div class="div-over"></div>
+                <img src="~/static/images/loading.gif" style="width: 64px" />
+            </div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="row">
+                        <div class="col-lg-10 col-lg-offset-1" style="margin-top: -2em;">
+                            <h1 class="modal-title h1-mob">Forgot password</h1>
+                        </div>
+                        <div id="div-form">
+                            <div class="col-lg-10 col-lg-offset-1">
+                                <h2 class="h2-mob" id="fp-enter-email">Enter your email address to reset your password</h2>
+                                <h2 class="h2-mob" style="display: none" id="fp-email-not-found">Email address not found. Please try again.</h2>
+                            </div>
+                            <div class="form-group col-lg-10 col-lg-offset-1 padding-top-2 padding-bot-2">
+                                <input type="email" required="required" placeholder="Email address" class="form-control custom-input custom-ff" id="email-forgot">
+                                <span class="field-validation-valid text-danger" id="emailValidateFogot"></span>
+                            </div>
+                            <div class="col-lg-6 col-lg-offset-3">
+                                <button class="custom-btn" style="font-size: 25px" id="btn-reset-pass">Reset password</button>
+                            </div>
+                        </div>
+                        <div id="div-text" class="col-lg-10 col-lg-offset-1 padding-top-4 padding-bot-5" style="display: none">
+                            <h2 class="h2-mob">
+                                An email has been sent to <span id="email-forgot-label"></span> with instructions to reset your password.
+                            </h2>
+                        </div>
+
+                        <div class="form-group col-lg-10 col-lg-offset-1 text-left padding-top-2">
+                            <span class="pointer text-underline" data-toggle="modal" data-target="#signinModal" data-dismiss="modal">Sign in</span>
+                            <span class="float-right pointer span-btn text-underline">@Html.ActionLink("Don't have an account?", "SignUp", "Clinic")</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if(Session["auth_info"] != null && !((AuthInfo)Session["auth_info"]).IsAdminBool && ((AuthInfo)Session["auth_info"]).CurrentSelectedClinic == null)
+{
+    <script>
+        $('#signinModal').modal("show");
+    </script>
+}
+<script src="~/static/plugin/bootstrap-datetimepicker/js/moment.js"></script>
+<script src="~/static/plugin/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+<script src="~/static/plugin/bootstrap-datetimepicker/js/moment-timezone-with-data.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $(document).keypress(function (e) {
+            if (e.which === 13) {
+                if ($('#content-select-clinic-signin').is(':visible')) {
+                    $('#btn-change-clinic-signin').trigger('click');
+                } else {
+                if ($("#btn-signin-form").is(':visible')) {
+                    $("#btn-signin-form").trigger("click");
+                }
+                        
+                }
+            }
+        });
+        var emaiValidate = /^[A-Z0-9._%+-]+@@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
+        var timezone = moment.tz(moment.tz.guess()).format('Z');
+        document.cookie = "TimeZone=" + timezone;
+        @*$('#btn-signin-form').on('click', function () {
+            var email = $('#loginEmail').val();
+            var password = $('#loginPassword').val();
+
+            if (email === "") {
+                $('#emailValidate').text('Please input email');
+                return;
+            } else {
+                $('#emailValidate').text("");
+            }
+            if (!emaiValidate.test(email)) {
+                $('#emailValidate').text('Email not valid');
+                return;
+            } else {
+                $('#emailValidate').text('');
+            }
+            if (password === '') {
+                $('#passwordValidate').text('Please input passsword');
+                return;
+            } else {
+                $('#passwordValidate').text('');
+            }
+            if (password.length < 6) {
+                $('#passwordValidate').text('Password must contain at least 6 characters');
+                return;
+            } else {
+                $('#passwordValidate').text('');
+            }
+            $('#divOverlay').show();
+            var baseUrl = document.location.origin;
+            $.ajax({
+                url: '@Url.Action("SignIn","User")',
+                type: "POST",
+                data: { Email: email, Password: password, TimeZone: timezone },
+                success: function (data) {
+                    //data - response from server
+                    console.log(data);
+                    if (data.IsSuccess === true) {
+                        if (data.UserType === 99) {
+                            window.location.href = baseUrl + "/Clinic/ActiveClinics";
+                        } else {
+                            if (data.Hospitals.length == 0) {
+                                $('#content-signin').hide();
+                                $('#content-select-clinic-signin').show();
+                                $('#divOverlay').hide();
+                                $('#btn-change-clinic-signin').addClass('disabled-btn').attr("disabled", true);
+                            } else {
+                                $('#btn-change-clinic-signin').removeClass('disabled-btn').attr("disabled", false);
+                                $('#listHospital-signin').empty();
+                                $.each(data.Hospitals,
+                                    function(i, l) {
+                                        console.log(data.Hospitals);
+                                        $('#listHospital-signin')
+                                            .append('<option value="' + l.HospitalId + '">' + l.Name + '</option>');
+                                    });
+                                if (data.Hospitals.length === 1) {
+                                    window.location.href = baseUrl + "/Appointment";
+                                } else {
+                                    $('#content-signin').hide();
+                                    $('#content-select-clinic-signin').show();
+                                    $('#divOverlay').hide();
+                                }
+                            }
+                        }
+                    } else {
+                        //alert('Account not found. Please try again!');
+                        //alert(data.Error);
+                        $('#sign-in-form-enter-email').hide();
+                        $('#sign-in-form-email-not-found').show();
+                        $('#divOverlay').hide();
+                    }
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                    $('#divOverlay').hide();
+                    
+                }
+            });
+        });*@
+
+        //$('#signinModal').on("show.bs.modal", function () {
+            //$('#content-signin').show();
+            //$('#sign-in-form-enter-email').show();
+            //$('#content-select-clinic-signin').show();
+            //$('#sign-in-form-email-not-found').hide();
+        //});
+
+        $('#btn-change-clinic-signin').on("click", function () {
+            $('#divOverlay').show();
+            var id = $('#listHospital-signin').val();
+            $.ajax({
+                url:'@Url.Action("SelectHospital","User")?id=' + id,
+                type: "GET",
+                success: function (data, textStatus, jqXhr) {
+                    //data - response from server
+                    if (data === true) {
+                        window.location.href = '@Url.Action("Index","Appointment")';
+                    } else {
+                        $('#errorSelect').text(data.Value);
+                        $('#divOverlay').hide();
+                    }
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                    $('#divOverlay').hide();
+                    
+                }
+            });
+        });
+        //Forget password
+        $('#forgotPasswordModal').on("show.bs.modal", function () {
+            $('#div-form').show();
+            $('#fp-enter-email').show();
+            $('#div-text').hide();
+            $('#fp-email-not-found').hide();
+            $('#email-forgot').val('');
+        });
+        
+        $('#btn-close-logout').click(function () {
+            window.location.href = "User/SignOut";
+        });
+
+        $('#btn-reset-pass').click(function () {
+            var email = $('#email-forgot').val();
+            $('#fp-enter-email').show();
+            $('#fp-email-not-found').hide();
+            if (email === "") {
+                $('#emailValidateFogot').text('Please input email');
+                return;
+            } else {
+                $('#emailValidateFogot').text("");
+            }
+            if (!emaiValidate.test(email)) {
+                $('#emailValidateFogot').text('Email not valid');
+                return;
+            } else {
+                $('#emailValidateFogot').text('');
+            }
+            $('#divOverlayfogot').show();
+            $.ajax({
+                url: '@Url.Action("ForgotPassword","User")?email=' + email,
+                type: "GET",
+                success: function (data) {
+                    if (data.Key === true) {
+                        $('#email-forgot-label').text(email);
+                        $('#div-form').hide();
+                        $('#div-text').show();
+                        $('#divOverlayfogot').hide();
+                    } else {
+                        $('#divOverlayfogot').hide();
+                        //alert(data.Value);
+                        $('#fp-enter-email').hide();
+                        $('#fp-email-not-found').show();
+                    }
+                }
+            });
+        });
+    });
+
+</script>

@@ -1,0 +1,165 @@
+﻿@model IEnumerable<WaxWelio.Entities.Models.PriceModel>
+@{
+    ViewBag.Title = "Edit Pricing";
+}
+<div class="row fill">
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" style="overflow-x:hidden;" class="col-lg-10 col-sm-9 col-xs-9 fill padding-0 scroll-y">
+        <!--<div class="grid">-->
+        <div class="header-action-body show-mob"></div>
+        <div class="content-header-title content-body" style="margin-bottom: -35px;padding-bottom: 30px;">
+            <h2 style="padding-top:10px">Edit pricing</h2>
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12 col-sm-12 col-xs-12 padding-0">
+            <div class="table-responsive">
+                <table id="table-price-edit" class="table table-responsive table-hover">
+                <thead>
+                <tr>
+                    <th class="col-lg-2 col-sm-2 col-xs-2 padding-0 vertical-middle" style="width: 10%">Duration</th>
+                    <th class="col-lg-1 col-sm-1 col-xs-1 padding-0 vertical-middle">Patient fee</th>
+                    <th class="col-lg-1 col-sm-1 col-xs-1 padding-0 vertical-middle inline">Welio fee</th>
+                    <th class="col-lg-1 col-sm-1 col-xs-1 padding-0 vertical-middle"></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr data-id="@item.PricingId" data-clinicId="@item.ClinicId" data-status="0">
+                        <td class="vertical-middle">
+                            <div class="input-group width-15"><input class="price-input" value="@item.Duration"/>
+                                <div class="input-group-addon">min</div>
+                            </div>
+                            <span class="field-validation-valid text-danger"></span>
+                        </td>
+                        <td class="vertical-middle">
+                            <div class="input-group width-15">
+                                <div class="input-group-addon">$</div><input class="price-input" value="@item.PatientFee"/>
+                                <div class="input-group-addon">.00</div>
+                            </div>
+                            <span class="field-validation-valid text-danger"></span>
+                        </td>
+                        <td class="vertical-middle">$@item.WelioFee</td>
+                        <td class="pointer vertical-middle padding-left-0 padding-right-0"><span class="inline" onclick="DeleteTr(this);"><i class="fa fa-times right-5px" aria-hidden="true"></i>Delete</span></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            </div>
+            
+            <div style="padding-left:30px" id="btn-add-price" class="margin-top-16 margin-bot-32" style="width: 100px"><i class="fa fa-plus right-5px" aria-hidden="true"></i>Add new row
+            </div>
+            <div style="padding-left:30px" class="col-md-6 col-sm-8 col-xs-8 padding-0 padding-bot-2">
+                <div class="col-md-3 col-sm-6 col-xs-6 padding-left-0">
+                    <!--<button class="custom-btn action-btn">@Html.ActionLink("Save", "Index", "Pricing", null, new {@class = "custom-btn action-btn action-link"})</button>-->
+                    <a><button id="btn-save-price" class="custom-btn action-btn">Save</button></a>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-6 padding-right-0">
+                    <!--<button class="custom-btn action-btn action-link cancel-btn">@Html.ActionLink("Cancel", "Index", "Pricing", null, new {@class = ""})</button>-->
+                    <a href="../Pricing"><button class="custom-btn action-btn action-link cancel-btn">Cancel</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--</div>-->
+
+</div>
+@section scripts{
+    <script>
+        var arrPriceLength = 0
+        $('#btn-add-price').click(function () {
+            $('#table-price-edit tbody').append("<tr data-id='' data-status='1'><td class='vertical-middle'><div class='input-group width-15'><input class='price-input' value='' /><div class='input-group-addon'>min</div></div><span class='field-validation-valid text-danger'></span></td><td class='vertical-middle'><div class='input-group width-15'><div class='input-group-addon'>$</div><input class='price-input' value='' /><div class='input-group-addon'>.00</div></div><span class='field-validation-valid text-danger'></span></td><td class='vertical-middle'>$2</td> </td><td class='pointer vertical-middle padding-left-0 padding-right-0'><span onclick='DeleteTr(this);'><i class='fa fa-times right-5px' aria-hidden='true'></i>Delete</span></td></tr>");
+            arrPriceLength++;
+            bindKeyPressed();
+        });
+        $('#btn-save-price')
+            .click(function() {
+                var formPriceValid = true;
+                $('#table-price-edit tbody tr:visible').each(function(){
+                    if ($(this).find('td:nth-child(1) input').val() === ''){
+                        $(this).find('td:nth-child(1) span').html('Duration field is required.');
+                        formPriceValid = false;
+                    } else {
+                        $(this).find('td:nth-child(1) span').html('');
+                    }
+
+                    if ($(this).find('td:nth-child(2) input').val() === ''){
+                        $(this).find('td:nth-child(2) span').html('Patient fee field is required.');
+                        formPriceValid = false;
+                    } else {
+                        $(this).find('td:nth-child(2) span').html('');
+                    }
+                });
+                if (formPriceValid){
+                    var ok = confirm("Are you sure you want to save these fees?");
+                    if (ok) {
+                        var jsArr = [];
+                        var count = 0;
+                        $('#table-price-edit tbody tr')
+                            .each(function() {
+                                var item = {};
+                                item['PricingId'] = $(this).attr('data-id');
+                                item['Status'] = $(this).attr('data-status');
+                                item['Duration'] = $(this).find('td:nth-child(1) input').val();
+                                item['PatientFee'] = $(this).find('td:nth-child(2) input').val().replace(/[_\W]+/g, "");
+                                item['WelioFee'] = @ViewBag.welioFee;
+                                item['ClinicId'] = $(this).attr('data-clinicId');
+                                //if (item['PricingId'] !== ''){
+                                    jsArr.push(item);
+                                //}
+                                if ($(this).is(':visible')) 
+                                    count++;
+                            });
+                        if (count == 0) {
+                            alert("The pricing list can not empty.");
+                            return;
+                        }
+                        console.log(JSON.stringify(jsArr));
+                        $.ajax({
+                            url: window.baseUrl + '/Pricing/AddPrice',
+                            type: 'POST',
+                            data: { json: JSON.stringify(jsArr) },
+                            success: function(data) {
+                                console.log(data);
+                                if (data.success === "true") {
+                                    window.location.href = window.baseUrl + "/Pricing";
+                                }
+                            },
+                            error: function(data) {
+                                console.log(data);
+                                window.location.href = '@Url.Action("SignOut","User")';
+                            }
+                        });
+                    }
+                }
+            });
+        function DeleteTr(e) {
+            var tr = e.parentNode.parentNode;
+            //tr.remove();
+            $(e).parent().parent().attr('data-status', -1).hide();
+        }
+
+        $( document ).ready(function() {
+            // Handler for .ready() called.
+            $('.content-header-title.content-body').width($('#col-details')[0].scrollWidth);
+            bindKeyPressed();
+        });
+
+        function bindKeyPressed() {
+            $('#table-price-edit input').keydown(function(e)
+            {
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13]) !== -1 ||
+                    // Allow: Ctrl+A, Command+A
+            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+            (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+        }
+    </script>
+}

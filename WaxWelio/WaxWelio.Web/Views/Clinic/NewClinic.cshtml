@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "New Clinics";
+}
+
+<div class="row fill">
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 padding-left-0 fill scroll-y">
+        <div class="header-action-body show-mob"></div>
+        <div class="grid col-sm-12 col-xs-12 padding-0 content-body content-body-padding">
+            <div class="col-lg-12 col-sm-12 col-xs-12 padding-0 content-title-table">
+                <div id="listClinic_filter" class="input-group col-lg-4 col-sm-4 col-xs-4 padding-0 dataTables_filter" style="margin-top: 9px">
+                    <input type="search" id="txtSearch" class="form-control" placeholder="Search" onkeyup="myFunction()"/>
+                    <span class="input-group-addon">
+                        <i class="fa fa-search"></i>
+                    </span>
+                </div>
+                <div class="col-lg-12 col-sm-12 col-xs-12 padding-0">
+                    <div class="input-group col-lg-4 col-sm-4 col-xs-4 padding-0" style="margin-top: 5px; font-style: italic; min-width: 200px">
+                        <span style="visibility: hidden; font-weight: bold; color: gray;" id="searchLabel">Search results for </span><span id="searchResult" style="font-weight: bold"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive" style="min-height: 85px;">
+                <table id="listClinic" class="table table-hover" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>Clinic</th>
+                        <th>Suburb</th>
+                        <th>Postcode</th>
+                        <th>Phone</th>
+                        <th>Created</th>
+                        <th>Account status</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        var table;
+        function initDataTable(selector) {
+            var tableConfig = Global.ConfigEn.DatatableConfig;
+            tableConfig.searching = false,
+                tableConfig.pageLength = 10,
+                tableConfig.processing = true;
+            tableConfig.serverSide = true;
+            tableConfig.info = true;
+            tableConfig.stateSave = false;
+            tableConfig.ajaxSource = '/Clinic/ListClinics?type=1';
+            tableConfig.fnServerData = function (sSource, aoData, fnCallback) {
+                aoData.push({ "name": "sSearch", "value": $('#txtSearch').val() });
+                $.ajax({
+                    "dataType": 'json',
+                    "contentType": "application/json; charset=utf-8",
+                    "type": "GET",
+                    "url": sSource,
+                    "data": aoData,
+                    "success": function(data) {
+                        fnCallback(data);
+                    },
+                    "error": function (xhr, textStatus, error) {
+                        console.log(error);
+                        window.location.href = '@Url.Action("SignOut", "User")';
+                    }
+                });
+            };
+            tableConfig.columns = [
+                {
+                    "data": "ClinicName",
+                    "orderable": true,
+                    "className": "inline"
+                },
+                {
+                    "data": "State",
+                    "orderable": false,
+                    "className": "inline"
+                },
+                {
+                    "data": "PostCode",
+                    "orderable": false,
+                    "className": "inline"
+                },
+                {
+                    "data": "Phone",
+                    "orderable": false,
+                    "className": "inline"
+                },
+                {
+                    "data": "Created",
+                    "orderable": false,
+                    "className": "inline"
+                },
+                {
+                    "data": "StatusName",
+                    "orderable": false,
+                    "className": "inline"
+                }
+
+            ];
+
+            return $('#' + selector).dataTable(tableConfig).fnSetFilteringDelay();
+        }
+
+        $(document)
+            .ready(function() {
+                table = initDataTable("listClinic");
+
+                $('#listClinic tbody').on('click', 'tr', function () {
+                    var rowData = table.api().row(this).data();
+                    var id = rowData.ClinicId;
+                    window.location.href = "/Clinic/ClinicDetails?id=" + id + "&selected=newClinics";
+                });
+            });
+
+        function myFunction() {
+            var search = $('#txtSearch').val();
+            if ($('#txtSearch').val() === "") {
+                $('#searchResult').text("");
+                $('#searchLabel').css('visibility', 'hidden');
+            } else {
+                $('#searchLabel').css('visibility', 'visible');
+                $('#searchResult').text('"' + search + '"');
+            }
+        }
+    </script>
+}

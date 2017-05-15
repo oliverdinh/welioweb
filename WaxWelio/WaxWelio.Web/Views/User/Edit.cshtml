@@ -1,0 +1,177 @@
+﻿@using WaxWelio.Common.Enum
+@model WaxWelio.Entities.Models.UserModel
+@{
+    ViewBag.Title = "Edit User Details";
+    ViewBag.userTitle = "Prof";
+}
+<div class="row fill">
+    <div class="overlay-div-single" id="divOverlay" style="display: none;">
+        <div class="div-over"></div>
+        <img src="~/static/images/loading.gif" style="width: 64px" />
+    </div>
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 padding-left-0 fill scroll-y">
+        @using (Html.BeginForm("Edit", "User", FormMethod.Post, new {id = "form_edit_user", enctype = "multipart/form-data", @class = "content-body-padding" }))
+        {
+            <div class="grid">
+                <div class="header-action-body show-mob"></div>
+                <div class="row col-sm-12 col-xs-12 content-body">
+                    <h2>User details</h2>
+                </div>
+                @if (ViewBag.UserSubType == 2 && ViewBag.lengthClinic > 1)
+                {
+                    <div class="row col-sm-12 col-xs-12 padding-bot-1">User access for <b>@ViewBag.clinicName</b>
+                    </div>
+                }
+                <div class="row col-lg-12 col-md-12 col-xs-12">
+                    <div class="div-select-avatar pointer" id="div-select-avatar">
+                        <img id="imv-my-avatar" class="img-circle" src="@Model.DoctorAvatar" style="width: 100px; height: 100px"/>
+                        <div><i class="fa fa-camera" aria-hidden="true"></i> Change photo
+                        </div>
+
+                    </div>
+                </div>
+                <input type="hidden" name="image-data" id="image-data" class="hidden-image-data"/>
+                <input type="hidden" name="image-name" id="image-name" class="hidden-image-name"/>
+                <input type="hidden" name="clinicUserId" value="@ViewBag.clinicUserId"/>
+                @Html.HiddenFor(model => model.DoctorId)
+                <div class="row col-sm-12 col-xs-12 padding-0 padding-bot-1 padding-top-16">
+                    <div class="col-lg-4 col-sm-6 col-xs-6 padding-right-0">
+                        <div class="col-lg-6 col-sm-6 col-xs-6 padding-left-0">
+                            <small class="label-details">User Type</small>
+                            <div>@Html.DropDownListFor(model => model.UserType, (SelectList) ViewBag.listUserType, new {@class = "custom-select"})</div>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 col-xs-6 padding-right-0">
+                            <small class="label-details">Access</small>
+                            @Html.DropDownListFor(model => model.AccessType, (SelectList) ViewBag.listUserRole, new {@class = "custom-select"})
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-sm-12 col-xs-12 padding-bot-1">
+                    <div class="col-lg-2 col-sm-3 col-xs-3 padding-left-0">
+                        <!--<div class="col-lg-6 col-sm-6 col-xs-6 padding-left-0">-->
+                            <small class="label-details">Title</small>
+                            @if (!ViewBag.isOtherAccount)
+                            {
+                                @Html.DropDownListFor(model => model.TitleUser, (SelectList) ViewBag.listUserTitle, new {@class = "custom-select"})
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.TitleUser, (SelectList) ViewBag.listUserTitle, new {@class = "custom-select", @disabled = "disabled"})
+                                @Html.HiddenFor(model => model.TitleUser, new {Value = Model.TitleUser})
+                            }
+
+                        <!--</div>-->
+                    </div>
+                </div>
+                <div class="row col-sm-12 col-xs-12 padding-0 padding-bot-1">
+                    <div class="col-lg-4 col-sm-6 col-xs-6 padding-right-0">
+                        <div class="col-lg-6 col-sm-6 col-xs-6 padding-left-0">
+                            <small class="label-details">First Name</small>
+                            <!--<input class="custom-select" value="@Model.FirstName" disabled/>-->
+                            @if (!ViewBag.isOtherAccount)
+                            {
+                                @Html.EditorFor(model => model.FirstName, new {htmlAttributes = new {@class = "custom-select"}})
+                                @Html.ValidationMessageFor(model => model.FirstName, "", new {@class = "text-danger"})
+                            }
+                            else
+                            {
+                                <input class="custom-select" value="@Model.FirstName" disabled/>
+                                @Html.HiddenFor(model => model.FirstName, new {Value = Model.FirstName})
+                            }
+                        </div>
+                        <div class="col-lg-6 col-sm-6 col-xs-6 padding-right-0">
+                            <small class="label-details">Last Name</small>
+                            <!--<input class="custom-select" value="@Model.LastName" disabled/>-->
+                            @if (!ViewBag.isOtherAccount)
+                            {
+                                @Html.EditorFor(model => model.LastName, new {htmlAttributes = new {@class = "custom-select"}})
+                                @Html.ValidationMessageFor(model => model.LastName, "", new {@class = "text-danger"})
+                            }
+                            else
+                            {
+                                <input class="custom-select" value="@Model.LastName" disabled/>
+                                @Html.HiddenFor(model => model.LastName, new {Value = Model.LastName})
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-sm-12 col-xs-12 padding-0 padding-bot-1">
+                    <div class="col-lg-4 col-sm-6 col-xs-6 padding-right-0">
+                        <div class="col-lg-12 col-sm-12 col-xs-12 padding-0">
+                            <small class="label-details">Email/Username</small>
+                            <input class="custom-select" value="@Model.Email" disabled/>
+                            @Html.HiddenFor(model => model.Email, new {Value = Model.Email})
+                        </div>
+                    </div>
+                </div>
+                <div class="row padding-top-2 padding-bot-2 col-sm-12 col-xs-12 padding-0">
+                    <div class="col-lg-6 col-sm-6 col-xs-6 padding-right-0">
+                        <div class="col-lg-3 col-sm-6 col-xs-6 padding-left-0">
+                            <button id="btn-save" class="custom-btn action-btn">Save</button>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-xs-6 padding-right-0">
+                            <button id="btn-cancel" class="custom-btn action-btn cancel-btn">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+@section scripts{
+    <script>
+        $("#form_edit_user").validate({
+            rules: {
+                "FirstName": {
+                    required: true
+                },
+                "LastName": {
+                    required: true
+                }
+            },
+            messages: {
+                "FirstName": {
+                    required: "The First name field is required."
+                },
+                "LastName": {
+                    required: "The Last name field is required."
+                }
+            }
+        });
+
+        $('#btn-save')
+            .click(function() {
+                var countClinic = @ViewBag.lengthClinic;
+                var ok;
+                if (countClinic > 1) {
+                    if ('@Model.TitleUser' != $('#TitleUser').val() ||
+                        '@Model.FirstName' != $('#FirstName').val() ||
+                        '@Model.LastName' != $('#LastName').val()) {
+                        ok =
+                            confirm("Changing 'Title' and 'Name' will modify there details across all clinics for this account. Are you sure you want to update this information?");
+                    } else {
+                        ok =
+                            confirm("Are you sure you want to update this user?");
+                    }
+                } else {
+                    ok =
+                        confirm("Are you sure you want to update this user?");
+                }
+                if (ok) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        $('#btn-cancel').click(function () {
+            window.location.href = window.baseUrl + "/User/Profile?id=" + '@Model.Id';
+            return false;
+        });
+    </script>
+@Html.Partial("_CropImageModal")
+}
+

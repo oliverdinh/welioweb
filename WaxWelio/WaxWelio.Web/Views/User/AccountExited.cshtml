@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Verify Account";
+}
+
+<div class="row fill">
+    <div class="center-parent">
+        <div class="col-lg-6 col-lg-offset-3 text-center">
+            <div>
+                <h2>You can now use WELIO with</h2>
+            </div>
+            <div id="username-account-exit">
+                <h2><b>@(ViewBag.clinicName).</b></h2>
+            </div>
+            <div>
+                <h3>You can use your existing WELIO account to sign in:</h3>
+            </div>
+            <div id="email-account-exited">@ViewBag.emaiName</div>
+            <div class="col-lg-6 col-lg-offset-3"><button id="btn-verify-account" class="btn custom-btn btn-home-page">Get started</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    @Html.Partial("_LoginModal")
+    <script>
+        $(document)
+            .ready(function() {
+                $('#btn-verify-account')
+                    .click(function() {
+                        @*$.ajax({
+                            url: '@Url.Action("VerifyAccount", "User")',
+                            type: "POST",
+                            data: { hash: '@Request["hash"]', email: '@Request["email"]' },
+                            success: function(data) {
+                                if (data.success === true) {
+                                    $('#signinModal').modal('show');
+                                } else {
+                                    alert(data.message);
+                                }
+                            },
+                            error: function(data) {
+                                alert(data.message);
+                                window.location.href = '@Url.Action("SignOut","User")';
+                            }
+                        });*@
+                        window.location.href = '@Url.Action("Index","Home")';
+                        //location.assign("https://login.windows.net/common/oauth2/authorize?response_type=token&client_id=2bd937f8-d693-4e38-8718-2f53deed2dff&redirect_uri=" + baseUrl + "/SkypeForBusiness/Login&resource=https://graph.microsoft.com/");
+                    });
+            });
+    </script>
+}

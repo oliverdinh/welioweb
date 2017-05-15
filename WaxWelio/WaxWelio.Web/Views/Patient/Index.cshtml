@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewBag.Title = "Patient Users";
+}
+<div class="row fill">
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill padding-0"">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 padding-left-0 fill scroll-y">
+        <div class="header-action-body show-mob"></div>
+        <div class="grid col-sm-12 col-xs-12 padding-0 content-body content-body-padding">
+            <div class="col-lg-12 col-sm-12 col-xs-12 padding-0 content-title-table">
+                <div id="listPatient_filter" class="input-group col-lg-4 col-sm-4 col-xs-4 padding-0 dataTables_filter">
+                    <input type="search" id="txtSearch" class="form-control" placeholder="Search"/>
+                    <span class="input-group-addon">
+                        <i class="fa fa-search"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table id="listPatient" class="table table-hover" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                    </tr>
+                    </thead>
+                </table>    
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script>
+        var table;
+        function initDataTable(selector) {
+            var tableConfig = Global.ConfigEn.DatatableConfig;
+            tableConfig.searching = false,
+            tableConfig.pageLength = 9,
+            tableConfig.processing = true;
+            tableConfig.serverSide = true;
+            tableConfig.info = true;
+            tableConfig.stateSave = false;
+            tableConfig.ajaxSource = '/Patient/ListPatients';
+            tableConfig.fnServerData = function (sSource, aoData, fnCallback) {
+                aoData.push({ "name": "sSearch", "value": $('#txtSearch').val() });
+                $.ajax({
+                    "dataType": 'json',
+                    "contentType": "application/json; charset=utf-8",
+                    "type": "GET",
+                    "url": sSource,
+                    "data": aoData,
+                    "success": function (data) {
+                        fnCallback(data);
+                    },
+                    "error": function () {
+                        window.location.href = "@Url.Action("SignOut","User")";
+                    }
+                });
+            }
+            tableConfig.columns = [
+                {
+                    "data": "FullName",
+                    "orderable": false,
+                    "className": "inline"
+                },
+                {
+                    "data": "Phone",
+                    "orderable": false
+                },
+                {
+                    "data": "Email",
+                    "orderable": false
+                }
+            ];
+
+            return $('#' + selector).dataTable(tableConfig).fnSetFilteringDelay();
+        }
+
+        $(document).ready(function () {
+            table = initDataTable("listPatient");
+
+            $('#listPatient tbody').on('click', 'tr', function () {
+                var rowData = table.api().row(this).data();
+                var id = rowData.PatientId;
+                var url = "/Patient/PatientDetails?id=" + id;
+                window.location.href = url;
+            });
+        });
+    </script>
+}

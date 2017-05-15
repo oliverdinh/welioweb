@@ -1,0 +1,40 @@
+﻿<div class="modal fade" id="cropModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="overlay-div-single" id="divOverlay2" style="display: none;">
+                <div class="div-over"></div>
+                <img src="~/static/images/loading.gif" style="width: 64px" />
+            </div>
+            <div id="content-signin">
+                <div class="modal-header text-center">
+                    <span style="margin: auto; font-size: 20px; font-weight: bold">Crop Image</span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <hr style="margin-top: 0; margin-bottom: 0; border-top: 1px solid #c1c1c1;" />
+                </div>
+                <div class="modal-body" id="cropImage" style="padding-top: 5px">
+                    <div class="image-editor">
+                        <input type="file" id="input-file-avatar" name="file" accept="image/*" class="cropit-image-input" style="display: none" />
+                        <div class="cropit-preview" id="preview"></div>
+                        <div class="controls-wrapper" style="margin-top: 20px; text-align: center;">
+                            <span class="rotation-btns" style="font-size: 16px; margin-right: auto;">
+                                <span class="fa fa-undo" id="rotate-cw" style="margin-right: 10px;"></span>
+                                <span class="fa fa-repeat" id="rotate-ccw" style="margin-right: 10px;"></span>
+                                <span class="slider-wrapper inline-flex">
+                                    <span class="fa fa-picture-o" style="margin-right: 15px;">
+                                    </span><input type="range" class="cropit-image-zoom-input custom valid" min="0" max="1" step="0.01" aria-invalid="false" style="margin-top: -6px; margin-right: 10px;"><span class="fa fa-picture-o" style="margin-left: 8px; font-size: 24px; margin-top: -4px;"></span>
+                                </span>
+                            </span>
+                            <div style="margin: auto; margin-top: 15px; margin-bottom: 10px">
+                                <button class="btn btn-default" style="width: 150px" id="changeImage">Change Image</button>
+                                <button class="btn btn-default export" style="width: 100px">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/static/plugin/cropbox/jquery.cropit.js"></script>
+<link href="~/static/css/cropit.css" rel="stylesheet" />
+<script src="~/static/js/vqthinh.js"></script>

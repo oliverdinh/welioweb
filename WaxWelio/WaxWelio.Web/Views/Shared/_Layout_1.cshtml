@@ -1,0 +1,497 @@
+﻿@using WaxWelio.Common.Config
+@using WaxWelio.Common.Enum
+@using WaxWelio.Entities;
+@{
+    //ApiHeader apiHeader = null;
+    var authInfo = (AuthInfo)Session["auth_info"];
+    int accessType = 0;
+    if (authInfo != null)
+    {
+        accessType = authInfo.IsAdminBool ? 0 : authInfo.DoctorClinics.First(x => x.Clinic.ClinicId == authInfo.CurrentSelectedClinic.ClinicId).ClinicUserAccessType;
+    }
+
+    //if (apiHeaderCookie != null)
+    //{
+    //    apiHeader = JsonConvert.DeserializeObject<ApiHeader>(apiHeaderCookie.Value);
+    //    if (!string.IsNullOrEmpty(apiHeader.User?.TitleUser))
+    //    {
+    //        title = ((Title)Enum.Parse(typeof(Title), apiHeader.User.TitleUser)).DescriptionAttr();
+    //    }
+    //}
+    //var adminLoginHospital = (ViewBag.BaseUserType == (int)UserType.SystemAdmin) && ViewBag.IsHospital;
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/css")
+    <link href="~/static/css/custom.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/static/plugin/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/static/plugin/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css">
+    @Styles.Render("~/css/datatable")
+
+</head>
+<body>
+    @if (authInfo != null && authInfo.IsAdminBool)
+    {
+        <div class="system-login-clinic" style="height: 40px">
+            Super Administrator
+            <div class="float-right">
+                <a href="/User/SignOut">Logout</a>
+                <a href="/Clinic/ExitClinic">Exit Clinic</a>
+            </div>
+
+        </div>
+    }
+    <div class="navbar navbar-inverse navbar-fixed-top" style="height: 80px; ">
+        <div class="container container-header">
+            <div class="navbar-header" style="display: flex; height: 80px">
+                <span class="nav-title pointer" onclick="goHome()"><img src="/static/images/welio_rgb.jpg" /></span>
+                <span class="nav-title3"></span>
+                <span class="nav-title2">Healthcare where you are</span>
+            </div>
+            <div class="navbar-collapse collapse" style="float: right; color: black;border-color:transparent">
+                @if (authInfo != null)
+                {
+                <div style="text-align: right; margin-top: 10px;">
+                    <strong>
+                        @if (!authInfo.IsAdminBool)
+                        {
+                            @authInfo.CurrentSelectedClinic.ClinicName
+                        } else
+                        {
+                            @:Super Administrator
+                        }
+                    </strong>
+                </div>
+                <div class="pointer" id="user-name" style="text-align: right;">
+                    @authInfo.FullName
+                </div>
+                <div style="display: flex; display: -webkit-box; float: right;">
+                    @if (!authInfo.IsAdminBool) {
+                        <div style="margin-left: 10px; cursor: pointer;" data-toggle="modal" data-target="#selectClinicModal">
+                            <u>Change Clinic</u>
+                        </div>
+                    }
+                    <div style="margin-left: 10px; cursor: pointer;" id="signout">
+                        <u>Sign Out</u>
+                    </div>
+                </div>
+                }
+                @*@{
+                    if (apiHeader != null)
+                    {
+                        if (apiHeader.UserType == (int)UserType.SystemAdmin)
+                        {
+                            if (adminLoginHospital)
+                            {
+                                <div style="text-align: right; margin-top: 10px;">
+                                    <strong>
+                                       @HttpUtility.UrlDecode(apiHeader.HospitalName)
+                                    </strong>
+                                </div>
+                            }
+                            else
+                            {
+                                <div style="text-align: right; margin-top: 15px;font-size: 16px">
+                                    <b>Super Administrator</b>
+                                </div>
+                                <div class="pointer" id="user-name" style="text-align: right;">
+
+                                </div>
+                                <div style="margin-top: 15px">
+                                    <div style="margin-left: 10px; cursor: pointer; text-align: right" id="signout">
+                                        <u>Sign Out</u>
+                                    </div>
+                                </div>
+                            }
+
+                        }
+                        else
+                        {
+                            <div style="text-align: right; margin-top: 10px;">
+                                <strong>
+                                  @HttpUtility.UrlDecode(apiHeader.HospitalName)
+                                </strong>
+                            </div>
+                            <div class="pointer" id="user-name" style="text-align: right;">
+                                @title @if (apiHeader.User != null)
+                                {
+                                    @(apiHeader.User.FullName)
+                                }
+                            </div>
+                            <div style="display: flex; display: -webkit-box; float: right;">
+                                <div style="margin-left: 10px; cursor: pointer;" data-toggle="modal" data-target="#selectClinicModal">
+                                    <u>Change Clinic</u>
+                                </div>
+                                <div style="margin-left: 10px; cursor: pointer;" id="signout">
+                                    <u>Sign Out</u>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div style="display: flex">
+                            <div class="header-btn hide-mob">@Html.ActionLink("Sign up", "Signup", "Clinic", null, new { @class = "action-link" })</div>
+                            <div id="btn-signin">Sign in</div>
+                        </div>
+                    }
+                }*@
+
+            </div>
+        </div>
+    </div>
+    <div class="nav-bar nav-bar-680-819 padding-0 col-lg-12 col-sm-12 col-xs-12" @*style="@(authInfo != null && authInfo.IsAdminBool?"margin-top: 64px;":"")*@">
+        @{
+            if (authInfo != null && !authInfo.IsAdminBool)
+            {
+
+                <div class="col-lg-2 col-820-1279-3 padding-right-0">
+                    <a href="@Url.Action("Index", "Appointment")" class="action-link">
+                        <div class="center-680-819 pointer float-left float-none-680-819 height-100">
+                            <i class="fa fa-calendar right-5px" aria-hidden="true"></i><span class="center-bot-680-819"><span class="hide-mob">Clinic </span><span class="font-14-mob">Schedule</span></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-2 col-820-1279-3 padding-0 margin-right-2-sm">
+                    <div id="overlay-new-app" class="overlay-div left--30-desk">
+                        <div class="div-over hidden"></div>
+                        <img class="img-small hidden" src="~/static/images/loading.gif" />
+                    </div>
+                    <div class="center-680-819 pointer float-left float-none-680-819 height-100" id="btn-new-appointment-header" data-toggle="modal" data-target="#createAppointmentModal"><i class="fa fa-plus-circle right-5px" aria-hidden="true"></i><span class="center-bot-680-819"><span class="hide-mob">New </span><span class="font-14-mob">Appointment</span></span></div>
+                </div>
+                <div class="col-lg-2 col-820-1279-3 padding-0 margin-left-2-sm height-100" id="btn-cancellations">
+                    <a href="@Url.Action("Cancellation", "Appointment")" class="action-link" style="margin-top:1px"><div class="center-680-819 pointer float-left float-none-680-819"><i class="fa fa-ban right-5px" aria-hidden="true"></i><span class="center-bot-680-819 font-14-mob">Cancellations</span></div></a>
+                </div>
+                if (authInfo != null && !authInfo.IsAdminBool)
+                {
+                    if (accessType == (int)UserRole.Administrator)
+                    {
+                        <div class="col-lg-6 col-820-1279-3 padding-left-0 padding-right-mob-0 float-none-680-819 float-left height-100">
+                            <a href="@Url.Action("Index", "Clinic")" class="action-link"><div class="pull-right float-none-680-819 center-680-819 pointer"><i class="fa fa-cog right-5px" aria-hidden="true"></i><span class="center-bot-680-819 font-14-mob">Settings</span></div></a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-lg-6 col-820-1279-3 padding-left-0 padding-right-mob-0 float-none-680-819 float-left height-100">
+                            <a href="@Url.Action("MyProfile", "User")" class="action-link"><div class="pull-right float-none-680-819 center-680-819 pointer"><i class="fa fa-cog right-5px" aria-hidden="true"></i><span class="center-bot-680-819 font-14-mob">Settings</span></div></a>
+                        </div>
+                    }
+                }
+                else
+                {
+                    @*<div class="col-lg-6 col-820-1279-3 padding-left-0 padding-right-mob-0 height-100 float-left float-none-680-819">
+                        <a href="@Url.Action("Index", "Clinic")" class="action-link"><div class="pull-right float-none-680-819 center-680-819 pointer"><i class="fa fa-cog right-5px" aria-hidden="true"></i><span class="center-bot-680-819 font-14-mob">Settings</span></div></a>
+                    </div>*@
+                }
+            }
+        }
+    </div>
+    <div class="container body-content" style="@(authInfo != null && authInfo.IsAdminBool?"top: 130px;":"")">
+        @RenderBody()
+    </div>
+
+    @if (authInfo != null && !authInfo.IsAdminBool)
+    {
+        <div class="modal fade" id="selectClinicModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div id="content-select-clinic">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="text-center padding-bot-2">
+                            <h1 class="modal-title">Select clinic</h1>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="col-lg-8 col-lg-offset-2 padding-bot-3">
+                                        <select class="custom-select" id="listHospital">
+                                            @if (Session["auth_info"] != null && ((AuthInfo)Session["auth_info"]).DoctorClinics.Count() > 0)
+                                            {
+                                                var listClinics = ((AuthInfo)Session["auth_info"]).DoctorClinics;
+                                                for (int i = 0; i < listClinics.Count(); i++)
+                                                {
+                                                    <option value="@listClinics[i].Clinic.ClinicId">@listClinics[i].Clinic.ClinicName</option>
+                                                }
+                                            }
+                                        </select>
+                                        <span class="field-validation-valid text-danger" id="errorSelect"></span>
+                                    </div>
+                                    <div class="col-lg-6 col-lg-offset-3">
+                                        <button id="btn-change-clinic" class="custom-btn">Continue</button>
+                                    </div>
+                                    <div class="col-lg-8 col-lg-offset-2 padding-top-2 padding-bot-1 text-center">
+                                        If you can not find your clinic you may need to contact the clinic Practice Manager to create your account
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @Scripts.Render("~/js")
+    @Scripts.Render("~/js/datatable")
+    @Scripts.Render("~/validate")
+    @Scripts.Render("~/static/plugin/bootstrap-datetimepicker/js/moment.js",
+    "~/static/plugin/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js")
+    <script src="//swx.cdn.skype.com/shared/v/1.2.15/SkypeBootstrap.min.js"></script>
+    <script src="~/static/js/config.js"></script>
+    <script>
+        var errorTemp = '@TempData[GlobalConstant.ErrorTemp]';
+        var isUpdate = false;
+        if (errorTemp !== '') {
+            alert(errorTemp);
+        }
+        var baseUrl = window.location.origin;
+        window.baseUrl = baseUrl;
+        window.window_1020_1279 = false;
+        window.window_820_1019 = false;
+        window.window_680_819 = false;
+        window.window_480_679 = false;
+        window.window_320_479 = false;
+        var isLogin = false;
+        var showPopup = false;
+        var client;
+
+        function goSetting(url) {
+            window.location.href = document.location.origin + url;
+        }
+
+        function goBack() {
+            window.history.back();
+            return false;
+        }
+
+        function goHome() {
+            window.location.href = window.baseUrl;
+        }
+
+        $(document).ready(function () {
+            $(window)
+                .resize(function () {
+                    getWindowHeight();
+                });
+
+            function getWindowHeight() {
+                if ($(window).width() >= 1020 && $(window).width() <= 1279) {
+                    window.window_1020_1279 = true;
+                } else {
+                    window.window_1020_1279 = false;
+                }
+                if ($(window).width() >= 820 && $(window).width() <= 1019) {
+                    window.window_820_1019 = true;
+                } else {
+                    window.window_820_1019 = false;
+                }
+                if ($(window).width() >= 680 && $(window).width() <= 819) {
+                    window.window_680_819 = true;
+                } else {
+                    window.window_680_819 = false;
+                }
+                if ($(window).width() >= 480 && $(window).width() <= 679) {
+                    window.window_480_679 = true;
+                } else {
+                    window.window_480_679 = false;
+                }
+                if ($(window).width() > 320 && $(window).width() <= 479) {
+                    window.window_320_479 = true;
+                } else {
+                    window.window_320_479 = false;
+                }
+            }
+
+            getWindowHeight();
+
+            var idSelected = '@(string.IsNullOrEmpty(ViewBag.idSelected) ? "none" : ViewBag.idSelected)';
+            $('#' + idSelected).parent().attr('style', 'background-color: #939598;');
+
+
+            $("#signout")
+                .click(function () {
+                    console.log(baseUrl + "/User/SignOut");
+                    var rs = confirm("Are you sure you want to sign out?");
+                    if (rs) {
+                        var url = baseUrl + "/User/SignOut";
+                        window.location.href = url;
+                    }
+                });
+            $('#datepicker').datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+            $('#timepicker').datetimepicker({
+                format: 'LT'
+            });
+
+            $('#input-search').on('blur', function () {
+                $('#div-fill-date-appointment').removeClass('hide-320-1019');
+                $('#div-fill-doctor-appointment').removeClass('hide-320-1019');
+                $('#div-fill-search-appointment').removeClass('fill-width-320-1019');
+                $('#tblAppointment_wrapper').removeClass('padding-top-32');
+            });
+            $('#input-search').on('focus', function () {
+                $('#div-fill-date-appointment').addClass('hide-320-1019');
+                $('#div-fill-doctor-appointment').addClass('hide-320-1019');
+                $('#div-fill-search-appointment').addClass('fill-width-320-1019');
+                $('#tblAppointment_wrapper').addClass('padding-top-32');
+            });
+
+
+            $('#user-name').click(function () {
+                window.location.href = baseUrl + '/User/MyProfile';
+            });
+
+            var slideneg = '34vw';
+            var toggler = '#slide-menu';
+            var menuneg = '0vw';
+            $('#btn-toggle-menu').on('click', function (e) {
+                $('#slide-menu, #col-details, #btn-toggle-menu').toggleClass('slide-active');
+                var selected = $(this).hasClass('slide-active');
+                console.log(selected);
+                $('#slide-menu').stop().animate({
+                    left: selected ? menuneg : '-34vw'
+                });
+                $('#col-details').stop().animate({
+                    left: selected ? slideneg : '0vw'
+                    //width: selected ? '66vw' : '100vw'
+                });
+            });
+
+            /* Start some function for skype for business - Long*/
+            function configAndSignIn(options) {
+                window.Skype.initialize({
+                    apiKey: config.apiKeyCC
+                }, function (api) {
+                    window.skypeWebApp = api.UIApplicationInstance;
+                    window.skypeApi = api;
+                    window.skypeWebAppCtor = api.application;
+                    signin(options);
+                }, function (err) {
+                    console.log(err);
+                    disableWhenLogin(false);
+                    disableWhenLogin(false);
+                });
+            }
+
+            function disableWhenLogin(isDisable) {
+                if (isDisable) {
+                    console.log('Start Disable');
+                    $('.overlay-div').show();
+                } else {
+                    console.log('Stop Disable');
+                    $('.overlay-div').hide();
+                }
+            }
+
+            function signin(options) {
+                disableWhenLogin(true);
+                window.skypeWebApp.signInManager.signIn(options).then(function () {
+                    console.log('Signed in as ' + window.skypeWebApp.personsAndGroupsManager.mePerson.displayName());
+                    client = window.skypeWebApp;
+                    isLogin = true;
+                    disableWhenLogin(false);
+                    if (showPopup)
+                        $('#createAppointmentModal').modal();
+                    if (!window.skypeWebApp.personsAndGroupsManager.mePerson.id()
+                        && !window.skypeWebApp.personsAndGroupsManager.mePerson.avatarUrl()
+                        && !window.skypeWebApp.personsAndGroupsManager.mePerson.email()
+                        && !window.skypeWebApp.personsAndGroupsManager.mePerson.displayName()
+                        && !window.skypeWebApp.personsAndGroupsManager.mePerson.title()) {
+                        window['noMeResource'] = true;
+                    }
+                }, function (error) {
+                    $('#btn-new-appointment-header').removeAttr('data-toggle');
+                    $('#add-appointment').removeAttr('data-toggle');
+                    isLogin = false;
+                    console.log('Can not sign in: ' + error);
+                    var forbiden = error.toString().indexOf("Forbidden");
+                    var serverError = error.toString().indexOf("Internal Server Error");
+                    if (forbiden > -1 || serverError > -1) {
+                        @if (Session["auth_info"] != null)
+                        {
+                            <text>
+                        var lu = confirm('The Microsoft account that you\'re using does not have permission to access Welio. Please sign out and sign in with another Microsoft account. Press [OK] to sign out.');
+                                if (lu) {
+                                    window.location.href = "https://login.microsoftonline.com/logout.srf";
+                                }
+                            </text>
+                        }
+
+                    }
+                    var oAuthFailed = error.toString().indexOf("OAuthFailed");
+                    disableWhenLogin(false);
+                });
+            }
+
+            configAndSignIn({
+                "client_id": "2bd937f8-d693-4e38-8718-2f53deed2dff",
+                "origins": ["https://webdir.online.lync.com/autodiscover/autodiscoverservice.svc/root"],
+                "cors": true,
+                "version": 'skype for business Welio/1.0.0',
+                "redirect_uri": '/token.html'
+            });
+            $('#overlay-new-app')
+                .click(function () {
+                    var child = $(this);
+                    showPopup = true;
+                    child.children().removeClass("hidden");
+                });
+            /*End Skype for business*/
+        });
+
+        jQuery.fn.ForceNumericOnly =
+            function () {
+                return this.each(function () {
+                    $(this).keydown(function (e) {
+                        var key = e.charCode || e.keyCode || 0;
+                        // allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
+                        // home, end, period, and numpad decimal
+                        return (
+                            key === 8 ||
+                                key === 9 ||
+                                key === 13 ||
+                                key === 46 ||
+                                (key >= 35 && key <= 40) ||
+                                (key >= 48 && key <= 57) ||
+                                (key >= 96 && key <= 105));
+                    });
+                });
+            };
+
+        $('#btn-change-clinic').on('click', function () {
+            $('#divOverlay').show();
+            var id = $('#listHospital').val();
+            $.ajax({
+                url: baseUrl + "/User/SelectHospital?id=" + id,
+                type: "GET",
+                success: function (data, textStatus, jqXhr) {
+                    if (data === true) {
+                        location.href = baseUrl + "/Appointment";
+                    } else {
+                        $('#errorSelect').text(data.Value);
+                        $('#divOverlay').hide();
+                    }
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                    $('#divOverlay').hide();
+                    window.location.href = '@Url.Action("SignOut","User")';
+                }
+            });
+        });
+
+
+    </script>
+    @Html.Partial("_AppointmentModalPartial")
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "Profile";
+}
+<div class="row fill">
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 fill padding-0">
+        <div class="header-action-body">
+            <span class="btn-header-action"><i class="fa fa-angle-left right-5px" aria-hidden="true"></i>@Html.ActionLink("All users","Index","User",null,new{@class="action-link"})</span>
+            <span class="btn-header-action pointer" id="btn-reopen-account"><i class="fa fa-sign-in right-5px" aria-hidden="true"></i>Re-open account</span>
+        </div>
+        <div class="content-body">
+            <div class="padding-bot-1">
+                <h2><b>Miss Tiffany Case</b></h2>
+            </div>
+            <div class="padding-bot-1">
+                <small>User Type</small>
+                <div>Receptionist</div>
+            </div>
+            <div class="padding-bot-1">
+                <small>Access</small>
+                <div>User</div>
+            </div>
+            <div class="padding-bot-1">
+                <small>Email</small>
+                <div>tiffanyc@gmail.com.au</div>
+            </div>
+            <div class="padding-bot-1">
+                <small>Account Status</small>
+                <div>Closed</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section scripts
+{
+    <script>
+        $('#btn-reset-pass').click(function () {
+            var ok = confirm('Are you sure you want to reset the password');
+            if (ok) {
+                alert("An email has been sent to rosiec@surryhillclinic.com.au with instructions to reset the password.");
+            }
+        });
+        $('#btn-reopen-account').click(function () {
+            var ok = confirm('Are you sure you want to re-open this account');
+            if (ok) {
+                alert("The account has been re-open and the user has been notified.");
+            }
+        });
+    </script>
+}

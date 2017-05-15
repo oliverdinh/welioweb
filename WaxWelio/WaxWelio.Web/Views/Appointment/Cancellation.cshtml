@@ -1,0 +1,420 @@
+﻿@using WaxWelio.Common.Config
+@using WaxWelio.Entities;
+@using WaxWelio.Common.Enum;
+@{
+    ViewBag.Title = "Cancellations";
+    var authInfo = (AuthInfo)Session["auth_info"];
+    var accessType = authInfo.DoctorClinics.First(x => x.Clinic.ClinicId == authInfo.CurrentSelectedClinic.ClinicId).ClinicUserAccessType;
+}
+<div class="row fill">
+    <div class="col-lg-12 col-md-12 scroll-x-mob">
+        <div id="div-fill-appointment" class="col-lg-12 col-sm-12 col-xs-12 padding-0 padding-top-1 flex-680-819">
+            <div id="div-fill-date-appointment" class="col-lg-4 col-sm-4 col-680-819-30 padding-0">
+                <input id="datepicker-fill-appointment" class="custom-select datepicker pointer" placeholder="Select Date" />
+            </div>
+            @if (accessType == (int)UserRole.Administrator)
+            {
+                <div id="div-fill-doctor-appointment" class="col-lg-4 col-sm-4 col-680-819-30 padding-0 margin-left-15 margin-right-15">
+                    @Html.DropDownList("DoctorFilter", null, new { @class = "custom-select pointer", @id = "selectDoctor" })
+                </div>
+            }
+            <div id="div-fill-search-appointment" class="col-lg-4 col-sm-4 col-680-819-40 pull-right padding-0 search-form">
+                <input id="input-search" placeholder="Search" type="text" class="form-control custom-select">
+            </div>
+        </div>
+        <table id="tblAppointment" class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="table-hide">Date</th>
+                    <th>Time</th>
+                    <th>Patient</th>
+                    <th class="table-hide-doctor">Doctor</th>
+                    <th>Status</th>
+                    <th>Duration</th>
+                    <th>Actual</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@Html.Partial("_PartialCall")
+
+@section scripts
+{
+    <script src="//cdn.datatables.net/plug-ins/1.10.12/api/fnReloadAjax.js"></script>
+    <script>
+        var table;
+        var currentId = "";
+        var conferenceId = "";
+        var STATUS = {
+            CANCEL: @((int)AppointmentStatus.Cancel),
+            NEW: @((int)AppointmentStatus.New),
+            INPROGRESS: @((int)AppointmentStatus.InProgress),
+            FINISHED: @((int)AppointmentStatus.Finished),
+        };
+        var baseUrl = window.location.origin;
+        //Start config table
+        $(document)
+            .ready(function() {
+                var dateValue = "";
+                var doctorValue = "";
+                var searchValue = "";
+
+                function initDataTable(selector) {
+                    var tableConfig = Global.ConfigEn.DatatableConfig;
+                    tableConfig.processing = true;
+                    tableConfig.serverSide = true;
+                    tableConfig.info = true;
+                    tableConfig.stateSave = false;
+                    tableConfig.ajaxSource = '/Appointment/GetAppointment?status=0';
+                    tableConfig.fnServerData = function(sSource, aoData, fnCallback) {
+                        aoData.push({ "name": "selectDate", "value": dateValue });
+                        aoData.push({ "name": "doctorId", "value": doctorValue });
+                        aoData.push({ "name": "keyword", "value": searchValue });
+                        $.ajax({
+                            "dataType": 'json',
+                            "contentType": "application/json; charset=utf-8",
+                            "type": "GET",
+                            "url": sSource,
+                            "data": aoData,
+                            "success": function(data) {
+                                if (data === 'err_2') {
+                                    window.location.href = "@Url.Action("Index", "Home")";
+                                }
+                                fnCallback(data);
+                            },
+                            error: function(xhr, textStatus, error) {
+                                window.location.href = "@Url.Action("SignOut", "User")";
+                            }
+                        });
+                    };
+                    tableConfig.columns = [
+                        {
+                            "data": "appointment.Id",
+                            "orderable": false,
+                            "visible": false
+                        },
+                        {
+                            "data": "appointment.Date",
+                            "orderable": false
+                        },
+                        {
+                            "data": "appointment.Time",
+                            "orderable": false
+                        },
+                        {
+                            "data": "appointment.PatientName",
+                            "orderable": false
+                        },
+                        {
+                            "data": "appointment.DoctorName",
+                            "orderable": false
+                        },
+                        {
+                            "data": "appointment.ActualStatus",
+                            "orderable": false
+                        },
+                        {
+                            "data": "appointment.ActualDuration", "orderable": false, "render": function(a) {
+                                if(a === '-') return '-';
+                                else {
+                                    var secs = parseInt(a);
+                                    var hr = Math.floor(secs / 3600);
+                                    var min = Math.floor((secs - (hr * 3600))/60);
+                                    var sec = secs - (hr * 3600) - (min * 60);
+
+                                    if (hr) {hr = "00";}
+                                    return ((hr > 0 ) ? (hr + 'h') : '') + ((min > 0 ) ? (min + 'm') : '') + sec + 's';
+                                }
+                            }
+                        }
+                    ];
+                    return $('#' + selector).dataTable(tableConfig).fnSetFilteringDelay();
+                }
+
+                table = initDataTable('tblAppointment');
+
+                $(window)
+                    .resize(function() {
+                        responsiveAppointment();
+                    });
+
+                function responsiveAppointment() {
+                    table.fnSetColumnVis(1, true, false);
+                    table.fnSetColumnVis(2, true, false);
+                    table.fnSetColumnVis(3, true, false);
+                    table.fnSetColumnVis(4, true, false);
+                    table.fnSetColumnVis(5, true, false);
+                    table.fnSetColumnVis(6, true, false);
+                    if (window.window_1020_1279) {
+                        table.fnSetColumnVis(6, false, false);
+                    }
+                    if (window.window_820_1019 || window.window_480_679) {
+                        table.fnSetColumnVis(5, false, false);
+                        table.fnSetColumnVis(6, false, false);
+                    }
+                    if (window.window_680_819 || window.window_320_479) {
+                        table.fnSetColumnVis(4, false, false);
+                        table.fnSetColumnVis(5, false, false);
+                        table.fnSetColumnVis(6, false, false);
+                    }
+                }
+
+                responsiveAppointment();
+
+                $('#tblAppointment_filter').hide();
+
+                function detailClick() {
+                    $('#apointment-detail-patient').show();
+                    $('#message-patient').hide();
+                    $('#btn-appointment').addClass("btn-selected").removeClass("btn-unselected");
+                    $('#btn-message').addClass("btn-unselected").removeClass("btn-selected");
+                }
+
+                $('#btn-appointment')
+                    .on('click',
+                        function() {
+                            detailClick();
+                        });
+
+                function fillAppointmentDetal(app) {
+                    $('#app-PatientName').text(app.PatientName);
+                    $('#app-CarerName').text(app.OtherFamilyMember);
+                    $('#app-PhoneNumber').text(app.Phone);
+                    $('#app-Status').text(app.ActualStatus);
+                    $('#app-DoctorName').text(app.DoctorName);
+                    $('#app-Date').text(app.Date);
+                    $('#app-Start').text(app.Time);
+                    $('#app-Duration').text(app.Duration);
+                    $('#app-Fee').text(app.Fee);
+                    $('#app-ActualStart').text(app.ActualStart);
+                    var actual = '-';
+                    if(app.ActualDuration != '-') {
+                        var secs = parseInt(app.ActualDuration);
+                        var hr = Math.floor(secs / 3600);
+                        var min = Math.floor((secs - (hr * 3600))/60);
+                        var sec = secs - (hr * 3600) - (min * 60);
+                        actual = ((hr > 0 ) ? (hr + 'h') : '') + ((min > 0 ) ? (min + 'm') : '') + sec + 's';
+                    }
+                    $('#app-ActualDuration').text(actual);
+                    $('#app-ActualFee').text(app.ActualFee);
+                    conferenceId = app.SipUriMeeting;
+                }
+
+                function showAppointmentDetail(data) {
+                    fillAppointmentDetal(data);
+                    $('#add-appointment').hide();
+                    $('#leftSidebar').show();
+                    $('#col-table').removeClass('col-820-1279-12').addClass('col-820-1279-9');
+                    $('#col-sidebar').removeClass('hide-820-1279');
+                    if (data.HasCarer) {
+                        $('#btn-call-patient span:first-child').html("Call Carer");
+                        $('#isCaree').show();
+                        $('#apointment-detail-patient, #message-patient').addClass("show-patient-parrent");
+                    } else {
+                        $('#btn-call-patient span:first-child').html("Call Patient");
+                        $('#isCaree').hide();
+                        $('#apointment-detail-patient, #message-patient').removeClass("show-patient-parrent");
+                    }
+                    $('#div-fill-date-appointment').addClass('col-820-1279-5');
+                    $('#div-fill-doctor-appointment').addClass('col-820-1279-5');
+                    $('#div-fill-search-appointment').addClass('col-820-1279-2');
+                    $('#tblAppointment_paginate').addClass('paginate-820-1279');
+                    $('#tblAppointment_paginate').parent().addClass('parent-paginate-820-1279');
+                    $('#btn-call-patient').find('img').attr('src', baseUrl + '/static/images/call_dis.png');
+                    document.getElementById('btn-call-patient').style.pointerEvents = 'none';
+                    $('#btn-edit-appointment').hide();
+                    document.getElementById('btn-message').style.pointerEvents = 'none';
+                }
+                $('#tblAppointment tbody')
+                    .on('click',
+                        'tr',
+                        function() {
+                            $('#overlay-div-detail').show();
+                            detailClick();
+                            var rowData = table.api().row(this).data();
+                            var that = $(this);
+                            that.parent().find('tr').removeClass('selected');
+                            that.addClass('selected');
+                            if (rowData === undefined) {
+                                $('#overlay-div-detail').hide();
+                                return;
+                            }
+                            showAppointmentDetail(table.api().row(this).data().appointment);
+                            $('#overlay-div-detail').hide();
+                            if (!$('#wrapper').hasClass('toggled')) $('#menu-toggle').click();
+                            $('#sidebar-wrapper').show();
+                        });
+
+                $('#close-panel')
+                    .click(function() {
+                        $('#add-appointment').show();
+                        $('#leftSidebar').hide();
+                        $('#col-table').removeClass('col-820-1279-9').addClass('col-820-1279-12');
+                        $('#col-sidebar').addClass('hide-820-1279');
+                        
+                        $('#div-fill-date-appointment').removeClass('col-820-1279-5');
+                        $('#div-fill-doctor-appointment').removeClass('col-820-1279-5');
+                        $('#div-fill-search-appointment').removeClass('col-820-1279-2');
+                        $('#tblAppointment_paginate').removeClass('paginate-820-1279');
+                        $('#tblAppointment_paginate').parent().removeClass('parent-paginate-820-1279');
+                    });
+
+                $('#datepicker-fill-appointment')
+                    .datetimepicker({
+                        format: 'DD MMM YYYY'
+                    });
+
+                $('#datepicker-fill-appointment')
+                    .datetimepicker()
+                    .on("dp.show",
+                        function() {
+                            $('#datepicker-fill-appointment')
+                                .datetimepicker()
+                                .on("dp.change",
+                                    function() {
+                                        dateValue = $(this).val();
+                                        table.fnReloadAjax();
+                                        if (dateValue === '') {
+                                            table.fnSetColumnVis(1, true, false);
+                                            if (window.window_1020_1279) {
+                                                table.fnSetColumnVis(1, true, false);
+                                            }
+                                            if (window.window_820_1019 || window.window_480_679) {
+                                                table.fnSetColumnVis(1, true, false);
+                                                table.fnSetColumnVis(5, false, false);
+                                                table.fnSetColumnVis(6, false, false);
+                                            }
+                                            if (window.window_680_819 || window.window_320_479) {
+                                                table.fnSetColumnVis(1, true, false);
+                                                table.fnSetColumnVis(4, false, false);
+                                                table.fnSetColumnVis(5, false, false);
+                                                table.fnSetColumnVis(6, false, false);
+                                            }
+                                        } else {
+                                            table.fnSetColumnVis(1, false, false);
+                                            if (window.window_1020_1279) {
+                                                table.fnSetColumnVis(1, false, false);
+                                                if ($('#selectDoctor').val() !== '') {
+
+                                                }
+                                            }
+                                            if (window.window_820_1019 || window.window_480_679) {
+                                                table.fnSetColumnVis(1, false, false);
+                                                table.fnSetColumnVis(4, true, false);
+                                                table.fnSetColumnVis(5, true, false);
+                                                table.fnSetColumnVis(6, false, false);
+                                                if ($('#selectDoctor').val() !== '') {
+                                                    table.fnSetColumnVis(6, true, false);
+                                                    table.fnSetColumnVis(4, false, false);
+                                                }
+                                            }
+                                            if (window.window_680_819 || window.window_320_479) {
+                                                if ($('#selectDoctor').val() !== '') {
+                                                    table.fnSetColumnVis(1, false, false);
+                                                    table.fnSetColumnVis(5, true, false);
+                                                } else {
+                                                    table.fnSetColumnVis(1, false, false);
+                                                    table.fnSetColumnVis(4, true, false);
+                                                    table.fnSetColumnVis(5, false, false);
+                                                    table.fnSetColumnVis(6, false, false);
+                                                }
+                                            }
+
+                                        }
+                                    });
+                        });
+
+                $('#selectDoctor')
+                    .on('change',
+                        function() {
+                            doctorValue = $(this).val();
+                            table.fnReloadAjax();
+                            if (doctorValue === '') {
+                                table.fnSetColumnVis(4, true, false);
+                                if (window.window_1020_1279) {
+                                    table.fnSetColumnVis(4, true, false);
+                                }
+                                if (window.window_820_1019 || window.window_480_679) {
+                                    if ($('#datepicker-fill-appointment').val() !== '') {
+                                        table.fnSetColumnVis(1, false, false);
+                                        table.fnSetColumnVis(4, true, false);
+                                        table.fnSetColumnVis(6, false, false);
+                                    } else {
+                                        table.fnSetColumnVis(4, true, false);
+                                        table.fnSetColumnVis(5, false, false);
+                                        table.fnSetColumnVis(6, false, false);
+                                    }
+                                }
+                                if (window.window_680_819 || window.window_320_479) {
+                                    if ($('#datepicker-fill-appointment').val() !== '') {
+                                        table.fnSetColumnVis(4, true, false);
+                                        table.fnSetColumnVis(5, false, false);
+                                    }
+                                }
+                            } else {
+                                table.fnSetColumnVis(4, false, false);
+                                if (window.window_1020_1279) {
+                                    table.fnSetColumnVis(4, false, false);
+                                    table.fnSetColumnVis(6, true, false);
+                                    if ($('#datepicker-fill-appointment').val() !== '') {
+
+                                    }
+                                }
+                                if (window.window_820_1019 || window.window_480_679) {
+                                    table.fnSetColumnVis(4, false, false);
+                                    table.fnSetColumnVis(5, true, false);
+                                    table.fnSetColumnVis(6, false, false);
+                                    if ($('#datepicker-fill-appointment').val() !== '') {
+                                        table.fnSetColumnVis(6, true, false);
+                                        table.fnSetColumnVis(4, false, false);
+                                    }
+                                }
+                                if (window.window_680_819 || window.window_320_479) {
+                                    table.fnSetColumnVis(4, false, false);
+                                    table.fnSetColumnVis(5, true, false);
+                                }
+
+                            }
+                        });
+
+                function reload() {
+                    searchValue = $('#input-search').val();
+                    table.fnReloadAjax();
+                }
+
+                var timer = 0;
+                $('#input-search')
+                    .on("keyup",
+                        function() {
+                            if (timer) {
+                                clearTimeout(timer);
+                            }
+                            timer = setTimeout(reload, 1000);
+                        });
+
+                $('#add-appointment')
+                    .click(function() {
+                        if (isLogin) {
+                            $('#createAppointmentModal')
+                                .on('show.bs.modal',
+                                    function() {
+                                        $('#div-modal-add-appointment').hide();
+                                        $('#div-search-appointment').show();
+                                        $('#modal-appointment-title').html("Add appointment");
+                                    });
+                        } else {
+                            var isConfirm =
+                                confirm('You need to sign in with Microsoft Office 365 to use this feature. Do you want to sign in?');
+                            if (isConfirm) {
+                                location
+                                    .assign("https://login.windows.net/common/oauth2/authorize?response_type=token&client_id=2bd937f8-d693-4e38-8718-2f53deed2dff&redirect_uri=" + baseUrl + "/SkypeForBusiness/Login&resource=https://webdir.online.lync.com");
+                            }
+                            $('#div-modal-add-appointment').hide();
+                        }
+                    });
+            });
+        var login365 = @(string.IsNullOrEmpty(TempData["login365"] as string) ? "false" : "true");
+    </script>
+}

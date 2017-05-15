@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaxWelio.Web", "WaxWelio.Web\WaxWelio.Web.csproj", "{4A51F80F-096E-4D66-9850-3A82472504A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaxWelio.Abstractions", "WaxWelio.Abstractions\WaxWelio.Abstractions.csproj", "{88AAB4B3-4936-444A-9F13-F66610B33B8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaxWelio.Common", "WaxWelio.Common\WaxWelio.Common.csproj", "{50BA4E36-DCA1-4A51-A7D4-5396EA4AC97F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaxWelio.Entities", "WaxWelio.Entities\WaxWelio.Entities.csproj", "{78317507-F081-4C1C-86B6-EAC03302EE6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaxWelio.Services", "WaxWelio.Services\WaxWelio.Services.csproj", "{98AD4E03-9AA0-4FE6-BE95-8C748E91F350}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4A51F80F-096E-4D66-9850-3A82472504A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A51F80F-096E-4D66-9850-3A82472504A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A51F80F-096E-4D66-9850-3A82472504A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A51F80F-096E-4D66-9850-3A82472504A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88AAB4B3-4936-444A-9F13-F66610B33B8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88AAB4B3-4936-444A-9F13-F66610B33B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88AAB4B3-4936-444A-9F13-F66610B33B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88AAB4B3-4936-444A-9F13-F66610B33B8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50BA4E36-DCA1-4A51-A7D4-5396EA4AC97F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50BA4E36-DCA1-4A51-A7D4-5396EA4AC97F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50BA4E36-DCA1-4A51-A7D4-5396EA4AC97F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50BA4E36-DCA1-4A51-A7D4-5396EA4AC97F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78317507-F081-4C1C-86B6-EAC03302EE6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78317507-F081-4C1C-86B6-EAC03302EE6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78317507-F081-4C1C-86B6-EAC03302EE6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78317507-F081-4C1C-86B6-EAC03302EE6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98AD4E03-9AA0-4FE6-BE95-8C748E91F350}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98AD4E03-9AA0-4FE6-BE95-8C748E91F350}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98AD4E03-9AA0-4FE6-BE95-8C748E91F350}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98AD4E03-9AA0-4FE6-BE95-8C748E91F350}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

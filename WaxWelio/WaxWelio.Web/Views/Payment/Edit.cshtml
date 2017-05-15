@@ -1,0 +1,65 @@
+﻿@model WaxWelio.Entities.Models.BankModel
+@{
+    ViewBag.Title = "Edit Payments";
+}
+<div class="row fill">
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 padding-left-0 fill scroll-y">
+        <div class="grid col-lg-8 col-sm-12 col-xs-12 padding-0">
+            <div class="header-action-body show-mob"></div>
+            @using (Html.BeginForm("Edit", "Payment", FormMethod.Post, new { @class = "content-body-padding" }))
+            {
+            <div class="row col-xs-12 content-body">
+                <h2>Account details</h2>
+            </div>
+            <div class="row col-sm-12 col-xs-12 padding-0 padding-bot-1">
+                <div class="col-lg-6 col-sm-12 col-xs-12 padding-right-0">
+                    <small class="label-details">Account name</small>
+                    <!--<input class="custom-select" value="SHM Bank Account" />-->
+                    @Html.EditorFor(model => model.AccountName, new { htmlAttributes = new { @class = "custom-select", @value = "Model.AccountName" } })
+                    @Html.ValidationMessageFor(model => model.AccountName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row col-sm-12 col-xs-12 padding-0">
+                <div class="col-lg-6 col-sm-12 col-xs-12 padding-right-0">
+                    <div class="col-lg-6 col-sm-6 col-xs-6 padding-left-0">
+                        <small class="label-details">BSB</small>
+                        <!--<input class="custom-select" value="123 456" />-->
+                        @Html.EditorFor(model => model.BSB, new { htmlAttributes = new { @class = "custom-select", @value = "Model.BSB" } })
+                        @Html.ValidationMessageFor(model => model.BSB, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-lg-6 col-sm-6 col-xs-6 padding-right-0">
+                        <small class="label-details">Account number</small>
+                        <!--<input class="custom-select" value="1234 5678" />-->
+                        @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "custom-select", @value = "Model.AccountNumber" } })
+                        @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(m => m.Id)
+                    </div>
+                </div>
+            </div>
+                <div class="row col-lg-6 col-sm-8 col-xs-8 padding-right-0" style="margin-top:3em">
+                    <div class="col-lg-3 col-sm-6 col-xs-6 padding-left-0">
+                        <!--<button class="custom-btn action-btn">@Html.ActionLink("Save","Index","Payment",null,new{@class="action-link"})</button>-->
+                        <input type="submit" class="custom-btn action-btn" value="Save"/>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-6 padding-right-0">
+                        <!--<button class="custom-btn action-btn cancel-btn">@Html.ActionLink("Cancel","Index","Payment",null,new{@class="action-link"})</button>-->
+                        <button id="btn-cancel-edit-bank" class="custom-btn action-btn cancel-btn">Cancel</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script>
+        $('#btn-cancel-edit-bank')
+            .click(function() {
+                console.log("back");
+                window.location.href = '../Payment';
+                return false;
+            });
+    </script>
+}

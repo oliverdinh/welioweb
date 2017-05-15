@@ -1,0 +1,124 @@
+﻿@{
+    ViewBag.Title = "Signup Clinic";
+    SelectList listTitle = new SelectList(Enum.GetValues(typeof(Title)).Cast<Title>().Select(v => new SelectListItem
+                {
+                    Text = v.DisplayName(),
+                    Value = v.ToString(),
+                }), "Value", "Text");
+    var error = ViewBag.ErrorSignUp;
+}
+@using WaxWelio.Common.Config;
+@using WaxWelio.Common.Enum
+@using WaxWelio.Common.Exception
+@model WaxWelio.Entities.Models.SignUpModel
+<div class="col-lg-12 col-sm-12 col-xs-12 col-sm-12 col-xs-12">
+    <div class="text-center" style="padding-top:1em;padding-bottom:1em;"><h1>Healthcare Professional sign up</h1></div>
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="col-lg-2 col-sm-2"></div>
+        <div class="col-lg-8 col-sm-8 col-xs-12" style="padding-bottom:2em;font-size:16px">Note: Please contact your practice manager for access to an existing WELIO account</div>
+    </div>
+    @using (Html.BeginForm("Signup", "Clinic", FormMethod.Post))
+    {
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            <div class="col-lg-2 col-sm-2"></div>
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+                @if(error != null)
+                {
+                    <div class="text-danger">@error</div>
+                }
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            <div class="col-lg-2 col-sm-2"></div>
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                <div id="div-signup-clinic" class="col-lg-6 col-md-6 col-sm-12 col-xs-12 padding-left-0">
+                    <div style="margin-top: -20px">
+                        <h3>Clinic details</h3>
+                    </div>
+                    <div class="">
+                        Clinic name (*)
+                        @Html.EditorFor(model => model.ClinicName, new { htmlAttributes = new { @class = "form-control signup-input" } })
+                        @Html.ValidationMessageFor(model => model.ClinicName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="padding-top-16">
+                        Clinic address - Line 1 (*)
+                        @Html.EditorFor(model => model.AddressLine1, new { htmlAttributes = new { @class = "form-control signup-input" } })
+                        @Html.ValidationMessageFor(model => model.AddressLine1, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="padding-top-16">
+                        Clinic address - Line 2
+                        @Html.EditorFor(model => model.AddressLine2, new { htmlAttributes = new { @class = "form-control signup-input" } })
+                    </div>
+                    <div class="padding-top-16">
+                        Suburb (*)
+                        @Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control signup-input" } })
+                        @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="padding-top-16">
+                        Postcode (*)
+                        @Html.EditorFor(model => model.PostCode, new { htmlAttributes = new { @class = "form-control signup-input" } })
+                        @Html.ValidationMessageFor(model => model.PostCode, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="padding-top-16">
+                        Phone number (*)
+                        @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control signup-input" } })
+                        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div id="div-signup-user" class="col-lg-6 col-md-6 col-sm-12 col-xs-12 padding-right-0">
+                    <div style="margin-top: -20px">
+                        <h3>Healthcare Professional</h3>
+                    </div>
+                    <div id="signup-text" class="" style="font-size: 16px">Enter the details for the person who will adminster your clinic. This is usually the practice manager.</div>
+                    <div class="col-lg-12 col-sm-12 padding-0">
+                        <div class="col-lg-6 col-sm-6 padding-0">
+                            Title
+                            @Html.DropDownListFor(model => model.DoctorTitle, listTitle, new {@class = "signup-input"})
+                            @Html.ValidationMessageFor(model => model.DoctorTitle, "", new {@class = "text-danger"})
+                        </div>
+                    </div>
+                    <div class="padding-top-16 col-lg-12 col-sm-12 padding-0">
+                        First name (*)
+                        @Html.EditorFor(model => model.DoctorFirstName, new { htmlAttributes = new { @class = "form-control signup-input" } })
+                        @Html.ValidationMessageFor(model => model.DoctorFirstName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="padding-top-16 col-lg-12 col-sm-12 padding-0">
+                        Last name (*)
+                        @Html.EditorFor(model => model.DoctorLastName, new { htmlAttributes = new { @class = "form-control signup-input" } })
+                        @Html.ValidationMessageFor(model => model.DoctorLastName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="padding-top-16 col-lg-12 col-sm-12 padding-0">
+                        Email (*)
+                        @Html.EditorFor(model => model.DoctorEmail, new { htmlAttributes = new { @class = "form-control signup-input" } })
+                        @Html.ValidationMessageFor(model => model.DoctorEmail, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="padding-top-16 col-lg-12 col-sm-12 padding-0">
+                        Phone number (*)
+                        @Html.EditorFor(model => model.DoctorPhoneNumber, new { htmlAttributes = new { @class = "form-control signup-input" } })
+                        @Html.ValidationMessageFor(model => model.DoctorPhoneNumber, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12" style="padding-top: 4em; padding-bottom: 5em;">
+            <div class="col-lg-2 col-sm-2"></div>
+            <div class="col-lg-8 col-sm-8 col-xs-12">
+                <div class="center-parent" style="width: 50%; margin-top: 3em">
+                    <button type="submit" class="custom-btn">Sign up</button>
+                    <div class="text-center" style="margin-top: 20px">By proceeding I agree to the terms and conditions</div>
+                    <br />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section scripts{
+    @Html.Partial("_LoginModal")
+    <script>
+        $(document)
+            .ready(function() {
+
+            });
+    </script>
+}

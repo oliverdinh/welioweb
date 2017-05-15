@@ -1,0 +1,145 @@
+﻿@using WaxWelio.Common.Enum
+@using WaxWelio.Entities;
+@model WaxWelio.Entities.Models.UserModel
+@{
+    ViewBag.Title = "My Profile";
+
+    var title =!string.IsNullOrEmpty(Model.TitleUser) ?((Title) Enum.Parse(typeof(Title),Model.TitleUser)).DescriptionAttr():"";
+    var authInfo = (AuthInfo)Session["auth_info"];
+    var accessType = authInfo.IsAdminBool ? 0 : authInfo.DoctorClinics.First(x => x.Clinic.ClinicId == authInfo.CurrentSelectedClinic.ClinicId).ClinicUserAccessType;
+    var userType = authInfo.IsAdminBool ? 0 : authInfo.DoctorClinics.First(x => x.Clinic.ClinicId == authInfo.CurrentSelectedClinic.ClinicId).ClinicUserUserType;
+}
+
+<div class="row fill">
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 fill padding-0 scroll-y">
+        <div class="header-action-body">
+            <span class="btn-header-action"><a href="/User/EditProfile" class="action-link"><i class="fa fa-pencil right-5px" aria-hidden="true"></i>Edit</a></span>
+            <span class="btn-header-action hide-mob" id="btn-reset-pass"><span class="pointer"><i class="fa fa-lock right-5px" aria-hidden="true"></i>Reset password</span></span>
+            @if (accessType == (int)UserRole.Administrator)
+            {
+                <span class="btn-header-action" id="btn-close-account"><i class="fa fa-trash right-5px" aria-hidden="true"></i>Close account</span>
+            }
+        </div>
+        <div class="content-body content-body-padding">
+            <div class="padding-top-30">
+                @if (string.IsNullOrEmpty(Model.DoctorAvatar))
+                {
+                    <img src="~/static/images/user.png" class="img-circle img-avatar" />
+                }
+                else
+                {
+                    <img src="@Model.DoctorAvatar" class="img-circle img-avatar" />
+                }
+            </div>
+            <div class="padding-bot-1">
+                <h2><b>@title  @Model.FullName </b>(Me)
+                </h2>
+            </div>
+            <div class="padding-bot-1">
+                <small class="label-details">User Type</small>
+                <div>@ObjectDescription.DescriptionAttr((UserType)userType)</div>
+            </div>
+            <div class="padding-bot-1">
+                <small class="label-details">Access</small>
+                <div>@ObjectDescription.DescriptionAttr((UserRole)accessType)</div>
+            </div>
+            <div class="padding-bot-1">
+                <small class="label-details">Email</small>
+                <div>@Model.Email</div>
+            </div>
+            @if (ViewBag.userRole != 1)
+            {
+                <div class="padding-bot-1">
+                    <small class="label-details">Account Status</small>
+                    <div>@ObjectDescription.DescriptionAttr((Status)Model.Actived)</div>
+                </div>
+            }
+            @if (Model.ClinicUsers.Any())
+            {
+                if (ViewBag.userType == 2)
+                {
+                    <div class="padding-bot-1">
+                        <small class="label-details">My Clinics</small>
+                        @foreach (var item in Model.ClinicUsers)
+                        {
+                            <div>@item.Clinic.ClinicName</div>
+                        }
+                    </div>
+                }
+            }
+            <input type="hidden" id="doctorId" value="@Model.DoctorId" />
+            <input type="hidden" id="email" value="@Model.Email" />
+            <input type="hidden" id="clinicId" value="@authInfo.CurrentSelectedClinic.ClinicId" />
+        </div>
+    </div>
+
+</div>
+@section scripts
+{
+    <script>
+        $('#btn-reset-pass').click(function () {
+            window.open(
+              'https://account.activedirectory.windowsazure.com/ChangePassword.aspx?BrandContextID=O365&ruO365=',
+              '_blank'
+            );
+        });
+        $('#btn-close-account').click(function () {
+            var confirmClose = confirm('Are you sure you want to close your account?');
+            var email = $("#email").val();
+            var clinicId = $("#clinicId").val();
+            var doctorId = $('#doctorId').val();
+            $('#div-Overlay').show();
+            if (confirmClose) {
+                $.ajax({
+                    url: '@Url.Action("CheckUpcomingAppointmentsOfDoctor", "User")',
+                    type: "POST",
+                    data: {
+                        doctorId: doctorId,
+                        clinicId: clinicId,
+                        status: -1
+                    },
+                    success: function (data) {
+                        if (data.Key) {
+                            changeStatusUser(email, clinicId, -1, doctorId, 0)
+                        } else {
+                            var ok = confirm(data.Value);
+                            if (ok) {
+                                changeStatusUser(email, clinicId, -1, doctorId, 0)
+                            } else {
+                                $('#div-Overlay').hide();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        function changeStatusUser(email, clinicId, status, doctorId, isUnconfirmed) {
+            $.ajax({
+                url: '@Url.Action("ChangeStatusUser", "User")',
+                type: "POST",
+                data: {
+                    email: email,
+                    clinicId: clinicId,
+                    status: status,
+                    doctorId: doctorId,
+                    isUnconfirmed: isUnconfirmed
+                },
+                success: function (data) {
+                    if (data.Key) {
+                        $('#div-Overlay').hide();
+                        alert(data.Value.Message);
+                        window.location.href = '@Url.Action("SignOut","User")';
+                    } else {
+                        $('#div-Overlay').hide();
+                        alert(data.Value);
+                    }
+                },
+                error: function () {
+                    window.location.href = '@Url.Action("SignOut","User")';
+                }
+            });
+        }
+    </script>
+}

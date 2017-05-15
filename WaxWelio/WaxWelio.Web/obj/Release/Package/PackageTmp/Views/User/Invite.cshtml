@@ -1,0 +1,196 @@
+﻿@model WaxWelio.Entities.Models.UserModel
+@{
+    ViewBag.Title = "Invite";
+   <!--IEnumerable<SelectListItem> listUserTitleUser = ViewBag.listUserTitleUser;-->
+}
+<div class="overlay-div-single" id="div_Loading" style="display: none;">
+        <div class="div-over"></div>
+        <img src="~/static/images/loading.gif" style="width: 64px" />
+    </div>
+<div class="row fill">
+    <div class="overlay-div-single" id="div_Loading" style="display: none;">
+        <div class="div-over"></div>
+        <img src="~/static/images/loading.gif" style="width: 64px" />
+    </div>
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="col-lg-3 col-sm-3 col-xs-3"></div>
+        <div class="col-lg-6 col-sm-6 col-xs-6">
+            <div class="text-center padding-top-1">
+                <h2>You've been invited to use WELIO with<br/><b>@(ViewBag.clinicName).</b>
+                </h2>
+            </div>
+            <div class="text-center">
+                <h3 id="h3-pass-true">Complete your details below to setup your account.</h3>
+                <h3 id="h3-pass-false" style="display: none">Your passwords did not match. Please try again.</h3>
+            </div>
+        </div>
+    </div>
+
+        <div class="col-lg-12 col-sm-12 col-xs-12 padding-bot-1 padding-top-1">
+            <div class="col-lg-4 col-sm-4 col-xs-4"></div>
+            <div class="col-lg-4 col-sm-4 col-xs-4">
+                <div class="col-lg-6 col-sm-6 col-xs-6">
+                    <small>Title</small>
+                    <div>@Html.DropDownList("userTitleUser", (SelectList) ViewBag.listUserTitle, new {@class = "signup-input"})</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12 padding-bot-1">
+            <div class="col-lg-4 col-sm-4 col-xs-4"></div>
+            <div class="col-lg-4 col-sm-4 col-xs-4">
+                <div class="col-lg-6 col-sm-6 col-xs-6">
+                    <small>First Name</small>
+                    @Html.EditorFor(model => model.FirstName, new {htmlAttributes = new {@class = "signup-input", @value = "@ViewBag.userFN"}})
+                    @Html.ValidationMessageFor(model => model.FirstName, "", new {@class = "text-danger"})
+                </div>
+                <div class="col-lg-6 col-sm-6 col-xs-6">
+                    <small></small><br/>
+                    @Html.EditorFor(model => model.LastName, new {htmlAttributes = new {@class = "signup-input", @value = "@ViewBag.userLN"}})
+                    @Html.ValidationMessageFor(model => model.LastName, "", new {@class = "text-danger"})
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12 padding-bot-1">
+            <div class="col-lg-4 col-sm-4 col-xs-4"></div>
+            <div class="col-lg-4 col-sm-4 col-xs-4">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                    <small>Email</small>
+                    <input class="signup-input" disabled="disabled" value="@ViewBag.userEmail"/>
+                    @Html.HiddenFor(model => model.Email, new {Value = @ViewBag.userEmail})
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12 padding-bot-1">
+            <div class="col-lg-4 col-sm-4 col-xs-4"></div>
+            <div class="col-lg-4 col-sm-4 col-xs-4">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                    <small>Password</small>
+                    <input class="signup-input" type="password" id="input-invite-pass"/>
+                    <span class="field-validation-valid text-danger" id="errorPassInvite"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12 padding-bot-1">
+            <div class="col-lg-4 col-sm-4 col-xs-4"></div>
+            <div class="col-lg-4 col-sm-4 col-xs-4">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                    <small>Re-enter password</small>
+                    <input class="signup-input" type="password" id="input-invite-repass"/>
+                    <span class="field-validation-valid text-danger" id="errorRepassInvite"></span>
+                    @Html.HiddenFor(model => model.Hash, new {Value = @ViewBag.hash})
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-sm-12 col-xs-12 padding-top-2 padding-bot-1">
+            <div class="col-lg-4 col-sm-4 col-xs-4"></div>
+            <div class="col-lg-4 col-sm-4 col-xs-4">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                    <button id="btn-submit-invite" class="custom-btn">Sign-in</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12 padding-bot-3">
+            <div class="col-lg-4 col-sm-4 col-xs-4"></div>
+            <div class="col-lg-4 col-sm-4 col-xs-4">
+                <div class="col-lg-12 col-sm-12 col-xs-12 text-center">
+                    By proceeding I agree to the term and conditions
+                </div>
+            </div>
+        </div>
+</div>
+@section scripts{
+    @Html.Partial("_LoginModal")
+    <script>
+        $(document)
+            .ready(function() {
+                var baseurl = document.location.origin;
+                $('#btn-submit-invite')
+                    .click(function () {
+                        var passErr = (/^(?=.*[A-Z])(?=.*\W).{6,}$/);
+                        if ($('#input-invite-pass').val() == "") {
+                            $('#errorPassInvite').text('Please input pasword');
+                            return;
+                        } else {
+                            $('#errorPassInvite').text('');
+                        }
+                        if (!passErr.test($('#input-invite-pass').val())) {
+                            $('#errorPassInvite')
+                                .text('Password must contain at least 6 characters including at least 1 uppercase letter and 1 special character');
+                            return;
+                        } else {
+                            $('#errorPassInvite').text('');
+                        }
+                        if ($('#input-invite-pass').val() != $('#input-invite-repass').val()) {
+                            console.log("pass error");
+                            $('#h3-pass-true').hide();
+                            $('#h3-pass-false').show();
+                            return;
+                        } else {
+                            $('#h3-pass-true').show();
+                            $('#h3-pass-false').hide();
+                        }
+                        $('#div_Loading').show();
+                        $.ajax({
+                            url: baseurl + "/User/Invite",
+                            type: "POST",
+                            data: { title: $('#userTitle').val(), firstName: $('#FirstName').val(), lastName: $('#LastName').val(), email: $('#Email').val(), pass: $('#input-invite-pass').val(), hash: $('#Hash').val() },
+                            success: function (data) {
+                                $('#div_Loading').hide();
+                                console.log(data);
+                                if (data.success === 'true') {
+                                    loginInvite();
+                                }
+                            },
+                            error: function(data) {
+                                $('#div_Loading').hide();
+                                window.location.href = '@Url.Action("SignOut","User")';
+                            }
+                        });
+                    });
+
+                var createPass = '@ViewBag.createPass';
+                function loginInvite() {
+                    var email = $('#Email').val();
+                    var password = $('#input-invite-pass').val();
+                    $('#div_Loading').show();
+                    $.ajax({
+                        url: baseurl + "/User/SignIn",
+                        type: "POST",
+                        data: { Email: email, Password: password },
+                        success: function(data) {
+                            //data - response from server
+                            console.log(data);
+                            if (data.IsSuccess === true) {
+                                if (data.UserType === 99) {
+                                    location.href = baseurl + "/Clinic";
+                                } else {
+                                    $.each(data.Hospitals,
+                                        function(i, l) {
+                                            console.log(data.Hospitals);
+                                            $('#listHospital')
+                                                .append('<option value="' + l.HospitalId + '">' + l.Name + '</option>');
+                                        });
+                                    if (data.Hospitals.length === 1) {
+                                        location.href = baseurl + "/Appointment";
+                                    } else {
+                                        $('#content-signin').hide();
+                                        $('#content-select-clinic').show();
+                                        $('#div_Loading').hide();
+                                    }
+                                }
+                            } else {
+                                alert('Email or password wrong');
+                                $('#div_Loading').hide();
+                            }
+                        },
+                        error: function(jqXhr, textStatus, errorThrown) {
+                            console.log(errorThrown);
+                            $('#div_Loading').hide();
+                            window.location.href = '@Url.Action("SignOut","User")';
+                        }
+                    });
+                }
+            });
+    </script>
+}

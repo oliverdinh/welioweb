@@ -1,0 +1,129 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="WaxWelio.Common.Config" GeneratedClassName="ApiUrl">
+  <Profiles />
+  <Settings>
+    <Setting Name="RootApi" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://welio.clas.mobi:8445/staging-welio/</Value>
+    </Setting>
+    <Setting Name="SignUp" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/signUp</Value>
+    </Setting>
+    <Setting Name="ApproveClinic" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/{0}/approve</Value>
+    </Setting>
+    <Setting Name="SystemLogin" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://welio.clas.mobi:8445/staging-welio/login</Value>
+    </Setting>
+    <Setting Name="ListHospital" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospitals?status={0}&amp;signUpStatus={1}&amp;start={2}&amp;length={3}&amp;getAdminUsers={4}&amp;searchExactly={5}&amp;search={6}</Value>
+    </Setting>
+    <Setting Name="ListAppointment" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">doctor/appointments?hospitalId={0}&amp;doctorId={1}&amp;status={2}&amp;startDate={3}&amp;endDate={4}&amp;start={5}&amp;length={6}&amp;search={7}&amp;searchExactly={8}&amp;sortField={9}&amp;order={10}</Value>
+    </Setting>
+    <Setting Name="GetPatientByPhone" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">patient/getByPhone?phone={0}</Value>
+    </Setting>
+    <Setting Name="ListPricing" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/prices?hospitalId={0}&amp;status={1}&amp;start={2}&amp;length={3}</Value>
+    </Setting>
+    <Setting Name="AddUpdatePrice" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/price/save</Value>
+    </Setting>
+    <Setting Name="ListUser" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/doctors?hospitalId={0}&amp;userSubType={1}&amp;status={2}&amp;start={3}&amp;length={4}&amp;search={5}&amp;searchExactly={6}</Value>
+    </Setting>
+    <Setting Name="CreateNormalingAppointment" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">doctor/appointment/do</Value>
+    </Setting>
+    <Setting Name="CreateFloatingAppointment" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">doctor/appointment/doFloating</Value>
+    </Setting>
+    <Setting Name="GetAppointmentById" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">appointment/{0}/get</Value>
+    </Setting>
+    <Setting Name="AddAppointmentNormal" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">doctor/appointment/do</Value>
+    </Setting>
+    <Setting Name="ActiveClinic" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">public/user/active?hash={0}&amp;email={1}&amp;login=true</Value>
+    </Setting>
+    <Setting Name="ChangePassword" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">changePassword</Value>
+    </Setting>
+    <Setting Name="CheckExpired" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">public/user/verifyActiveUrl?hash={0}&amp;email={1}&amp;login=true</Value>
+    </Setting>
+    <Setting Name="ResendActiveEmail" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">public/doctor/resendActiveUrl?email={0}</Value>
+    </Setting>
+    <Setting Name="AddOrUpdateUser" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/user/addOrEdit</Value>
+    </Setting>
+    <Setting Name="GetUserProfile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">user/{0}/get?getUpcomingAppointment=true</Value>
+    </Setting>
+    <Setting Name="ConfirmInvitationNewUser" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">public/user/confirmInvitationUrl</Value>
+    </Setting>
+    <Setting Name="AddPrice" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/prices/save</Value>
+    </Setting>
+    <Setting Name="GetClinic" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/{0}/get</Value>
+    </Setting>
+    <Setting Name="PushNotifiCall" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">appointment/{0}/pushCalling</Value>
+    </Setting>
+    <Setting Name="AddOrEditBankAccount" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/bankaccount/save</Value>
+    </Setting>
+    <Setting Name="GetBankAccount" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/{0}/bankaccount/get</Value>
+    </Setting>
+    <Setting Name="NotifyClinic" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">public/hospital/notify</Value>
+    </Setting>
+    <Setting Name="UpdateOtherUser" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/user/updateOtherInfo</Value>
+    </Setting>
+    <Setting Name="ForgotPassword" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">public/doctor/requestPassword?id={0}</Value>
+    </Setting>
+    <Setting Name="SetPasswordForSignUp" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">setPasswordForSignUp</Value>
+    </Setting>
+    <Setting Name="UpateAppointmentStatus" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">appointment/{0}/updateStatus?status={1}</Value>
+    </Setting>
+    <Setting Name="EditClinic" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/save</Value>
+    </Setting>
+    <Setting Name="CloseUnconfirmAccount" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/user/{0}/close?hospitalId={1}</Value>
+    </Setting>
+    <Setting Name="UpdateAppointment" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">doctor/appointment/update</Value>
+    </Setting>
+    <Setting Name="ReOpenAccount" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/user/{0}/reopen?hospitalId={1}</Value>
+    </Setting>
+    <Setting Name="ListPatient" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/patients?hospitalId={0}&amp;start={1}&amp;length={2}&amp;search={3}&amp;searchExactly={4}&amp;status={5}</Value>
+    </Setting>
+    <Setting Name="UpdatePatient" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">patient/{0}/profile/save</Value>
+    </Setting>
+    <Setting Name="GetClinicInforForPartner" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/{0}/get</Value>
+    </Setting>
+    <Setting Name="ConfirmInvitationUser" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">public/user/confirmInvitationUrl?hash={0}&amp;email={1}&amp;login=true</Value>
+    </Setting>
+    <Setting Name="ResendInviteEmail" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">hospital/user/{0}/resendInvite?hospitalId={1}</Value>
+    </Setting>
+    <Setting Name="CallStatus" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">appointment/call/{0}/ping?status={1}</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

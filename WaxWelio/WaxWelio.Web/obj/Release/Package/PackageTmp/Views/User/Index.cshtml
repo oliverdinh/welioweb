@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewBag.Title = "All Users";
+}
+<div class="row fill">
+    <div class="col-lg-2 col-xs-2 col-sm-3 col-xs-3 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 fill padding-0 scroll-y">
+        <div class="header-action-body">
+            <a href="@Url.Action("Add","User")" class="action-link"><i class="fa fa-plus right-5px" aria-hidden="true"></i>Add new user</a>
+        </div>
+        <div class="content-body">
+            <div class="content-header-title margin-bot-40">
+                <h2>All Users</h2>
+            </div>
+            <div class="col-lg-12 col-sm-12 col-xs-12 padding-0">   
+                    <table id="table-user" class="table-hover table-responsive" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="col-lg-2 col-sm-2 col-xs-2 padding-0 inline">Name</th>
+                            <th class="col-lg-2 col-sm-2 col-xs-2 padding-0 inline">User Type</th>
+                            <th class="col-lg-2 col-sm-2 col-xs-2 padding-0 inline">Access</th>
+                            <th class="col-lg-2 col-sm-2 col-xs-2 padding-0 inline">Account Status</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@section scripts{
+    
+    <script>
+        console.log($.fn.dataTable.version);
+        var table;
+        function initDataTable(selector) {
+            var tableConfig = Global.ConfigEn.DatatableConfig;
+            tableConfig.searching = false,
+            tableConfig.pageLength = 5,
+            tableConfig.processing = true;
+            tableConfig.serverSide = true;
+            tableConfig.info = true;
+            tableConfig.stateSave = false;
+            tableConfig.ajaxSource = '/User/GetListUser';
+            tableConfig.bDestroy = true;
+            tableConfig.fnServerData = function (sSource, aoData, fnCallback) {
+                
+                $.ajax({
+                    "dataType": 'json',
+                    "contentType": "application/json; charset=utf-8",
+                    "type": "GET",
+                    "url": sSource,
+                    "data": aoData,
+                    "success": function (data) {
+                        fnCallback(data);
+                    },
+                    "error": function () {
+                        window.location.href = "@Url.Action("SignOut","User")";
+                    }
+                });
+            }
+            tableConfig.columns = [
+                {
+                    "data": "FullName",
+                    "orderable": true,
+                    "className": "inline"
+                },
+                {
+                    "data": "ShortDoctorInfo.StrUserType",
+                    "orderable": false,
+                    "className": "inline"
+                },
+                {
+                    "data": "ShortDoctorInfo.StrAccessType",
+                    "orderable": false,
+                    "className": "inline"
+                },
+                {
+                    "data": "ShortDoctorInfo.StrClinicUserActived",
+                    "orderable": false,
+                    "className": "inline"
+                }
+            ];
+
+            return $('#' + selector).dataTable(tableConfig).fnSetFilteringDelay();
+        }
+
+        
+
+        $(document).ready(function () {
+            table = initDataTable("table-user");
+            
+            $('#table-user tbody').on('click', 'tr', function () {
+                console.log("a");
+                var rowData = table.api().row(this).data();
+                var id = rowData.DoctorId;
+                window.location.href = window.baseUrl + "/User/Profile?id=" + id;
+            });
+
+            console.log($('#col-details')[0].scrollHeight);
+        });
+    </script>
+}

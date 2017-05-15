@@ -1,0 +1,229 @@
+﻿@model WaxWelio.Entities.Models.InviteNewUserModel
+@{
+    ViewBag.Title = "InviteUser";
+    <!--IEnumerable<SelectListItem> listUserTitleUser = ViewBag.listUserTitleUser;-->
+}
+<div class="overlay-div-single" id="div_Loading" style="display: none;">
+    <div class="div-over"></div>
+    <img src="~/static/images/loading.gif" style="width: 64px"/>
+</div>
+<div class="row fill">
+    <div class="overlay-div-single" id="divOverlay" style="display: none;">
+        <div class="div-over"></div>
+        <img src="~/static/images/loading.gif" style="width: 64px" />
+    </div>
+    <form id="form_invite_user" enctype="multipart/form-data">
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            <div class="col-lg-6 col-sm-8 col-xs-8 col-lg-offset-3 col-sm-offset-2 col-xs-offset-2">
+                <div class="text-center padding-top-1">
+                    <h2>
+                        You've been invited to use WELIO with<br/><b>@(ViewBag.clinicName).</b>
+                    </h2>
+                </div>
+                <div class="text-center">
+                    <h3 id="h3-pass-true">Complete your details below to setup your account.</h3>
+                    <h3 id="h3-pass-false" style="display: none">Your passwords did not match. Please try again.</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 pointer" id="div-avatar-invite">
+            <img id="imv-my-avatar" src="@Model.User.Photo" class="img-avatar img-circle"/>
+            <div><i class="fa fa-camera" aria-hidden="true"></i> Change photo
+            </div>
+        </div>
+        <input type="hidden" name="image-data" id="image-data" class="hidden-image-data"/>
+        <input type="hidden" name="image-name" id="image-name" class="hidden-image-name"/>
+        <div class="col-lg-12 col-sm-12 col-xs-12 padding-bot-1 padding-top-1">
+            <div class="col-lg-4 col-sm-6 col-xs-8 col-lg-offset-4 col-sm-offset-3 col-xs-offset-2">
+                <div class="col-lg-6 col-sm-6 col-xs-6">
+                    <small>Title</small>
+                    <div>@Html.DropDownListFor(m => m.User.TitleUser, (SelectList) ViewBag.listUserTitle, "", new {@class = "signup-input"})</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12 padding-bot-1">
+            <div class="col-lg-4 col-sm-6 col-xs-8 col-lg-offset-4 col-sm-offset-3 col-xs-offset-2">
+                <div class="col-lg-6 col-sm-6 col-xs-6">
+                    <small>First Name</small>
+                    @Html.EditorFor(model => model.User.FirstName, new {htmlAttributes = new {@class = "signup-input"}})
+                    <span class="field-validation-valid text-danger" id="validate-user-firstname"></span>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-xs-6">
+                    <small>Last Name</small><br/>
+                    @Html.EditorFor(model => model.User.LastName, new {htmlAttributes = new {@class = "signup-input"}})
+                    <span class="field-validation-valid text-danger" id="validate-user-lastname"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12 padding-bot-1">
+            <div class="col-lg-4 col-sm-6 col-xs-8 col-lg-offset-4 col-sm-offset-3 col-xs-offset-2">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                    <small>Email</small>
+                    <input class="signup-input" disabled="disabled" value="@Model.User.Email"/>
+                    @Html.HiddenFor(model => model.User.Email, new {Value = @Model.User.Email})
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12 padding-bot-1">
+            <div class="col-lg-4 col-sm-6 col-xs-8 col-lg-offset-4 col-sm-offset-3 col-xs-offset-2">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                    <small>Password</small>
+                    @Html.PasswordFor(model => model.Password.Password, new {@class = "signup-input"})
+                    <span class="field-validation-valid text-danger" id="validate-user-password"></span>
+                    <!--@Html.ValidationMessageFor(model => model.Password.Password, "", new {@class = "text-danger"})-->
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12 padding-bot-1">
+            <div class="col-lg-4 col-sm-6 col-xs-8 col-lg-offset-4 col-sm-offset-3 col-xs-offset-2">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                    <small>Re-enter password</small>
+                    <input type="password" class="signup-input" id="Password_Re_password"/>
+                    <!--@Html.PasswordFor(model => model.Password.Re_password, new {@class = "signup-input"})-->
+                    @Html.HiddenFor(model => model.User.Hash, new {Value = @Model.User.Hash})
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-sm-12 col-xs-12 padding-top-2 padding-bot-1">
+            <div class="col-lg-4 col-sm-6 col-xs-8 col-lg-offset-4 col-sm-offset-3 col-xs-offset-2">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                    <button id="btn-submit-invite" class="custom-btn" type="button">Sign-in</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12 padding-bot-3">
+            <div class="col-lg-4 col-sm-6 col-xs-8 col-lg-offset-4 col-sm-offset-3 col-xs-offset-2">
+                <div class="col-lg-12 col-sm-12 col-xs-12 text-center">
+                    By proceeding I agree to the term and conditions
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section scripts{
+    @Html.Partial("_LoginModal")
+    <script>
+        $(document)
+            .ready(function() {
+                var baseurl = document.location.origin;
+                var timezone = moment.tz(moment.tz.guess()).format('Z');
+                $('#div-avatar-invite')
+                    .click(function() {
+                        $('#input-file-avatar').trigger('click');
+                    });
+                $('#btn-submit-invite')
+                    .click(function() {
+                        var form = $('form')[0];
+                        var isValidate = true;
+                        // Check FirstName
+                        if ($('#User_FirstName').val() === "") {
+                            $('#validate-user-firstname').html('First name field is required.');
+                            isValidate = false;
+                        }
+                        else {
+                            $('#validate-user-firstname').html('');
+                        }
+                        // Check LastName
+                        if ($('#User_LastName').val() === "") {
+                            $('#validate-user-lastname').html('Last name field is required.');
+                            isValidate = false;
+                        }
+                        else {
+                            $('#validate-user-lastname').html('');
+                        }
+                        // Check Password
+                        if ($('#Password_Password').val() === "") {
+                            $('#validate-user-password').html('Password field is required.');
+                            return false;
+                        }
+                        else {
+                            $('#validate-user-password').html('');
+                        }
+                        var password_validate = /^(?=.*[A-Z])(?=.*\W).{6,}/;
+                        if (!password_validate.test($('#Password_Password').val())) {
+                            $('#validate-user-password').html('Password must contain at least 6 characters including at least 1 uppercase letter and 1 special character');
+                            isValidate = false;
+                        } else {
+                            $('#validate-user-password').html('');
+                        }
+                        // Compare password and re_password
+                        if ($('#Password_Password').val() !== $('#Password_Re_password').val()) {
+                            $('#h3-pass-true').hide();
+                            $('#h3-pass-false').show();
+                            isValidate = false;
+                        } else {
+                            $('#h3-pass-true').show();
+                            $('#h3-pass-false').hide();
+                        }
+                        if (isValidate) {
+                            $('#div_Loading').show();
+                            var fd = new FormData(form);
+                            fd.append('file', $('input[type=file]')[0].files[0]);
+                            $.ajax({
+                                url: baseurl + "/User/InviteUser",
+                                type: "POST",
+                                data: fd,
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+                                success: function (d) {
+                                    console.log(d);
+                                    if (d.success == true || d.success == 'true') {
+                                        loginInvite();
+                                    }
+                                },
+                                error: function (jqXhr, textStatus, errorThrown) {
+                                    console.log(errorThrown);
+                                    $('#div_Loading').hide();
+                                    window.location.href = '@Url.Action("SignOut","User")';
+                                }
+                            });
+                        }
+                    });
+                    
+
+                function loginInvite() {
+                    $('#div_Loading').show();
+                    $.ajax({
+                        url: baseurl + "/User/SignIn",
+                        type: "POST",
+                        data: { Email: $('#User_Email').val(), Password: $('#Password_Password').val(), TimeZone: timezone },
+                        success: function(data) {
+                            //data - response from server
+                            console.log(data);
+                            if (data.IsSuccess === true) {
+                                if (data.UserType === 99) {
+                                    location.href = baseurl + "/Clinic";
+                                } else {
+                                    $.each(data.Hospitals,
+                                        function(i, l) {
+                                            console.log(data.Hospitals);
+                                            $('#listHospital')
+                                                .append('<option value="' + l.HospitalId + '">' + l.Name + '</option>');
+                                        });
+                                    if (data.Hospitals.length === 1) {
+                                        location.href = baseurl + "/Appointment";
+                                    } else {
+                                        $('#content-signin').hide();
+                                        $('#content-select-clinic').show();
+                                        $('#div_Loading').hide();
+                                    }
+                                }
+                            } else {
+                                alert('Email or password wrong');
+                                $('#div_Loading').hide();
+                            }
+                        },
+                        error: function(jqXhr, textStatus, errorThrown) {
+                            console.log(errorThrown);
+                            $('#div_Loading').hide();
+                            window.location.href = '@Url.Action("SignOut","User")';
+                        }
+                    });
+                }
+            });
+    </script>
+@Html.Partial("_CropImageModal")
+}

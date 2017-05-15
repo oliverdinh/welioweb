@@ -1,0 +1,118 @@
+D:\Project\Welio\Landing Page\WelioLanding\bin\ApplicationInsights.config
+D:\Project\Welio\Landing Page\WelioLanding\bin\roslyn\csc.exe
+D:\Project\Welio\Landing Page\WelioLanding\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\Project\Welio\Landing Page\WelioLanding\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Project\Welio\Landing Page\WelioLanding\bin\roslyn\System.Collections.Immutable.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\roslyn\System.Reflection.Metadata.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\roslyn\vbc.exe
+D:\Project\Welio\Landing Page\WelioLanding\bin\roslyn\VBCSCompiler.exe
+D:\Project\Welio\Landing Page\WelioLanding\bin\roslyn\VBCSCompiler.exe.config
+D:\Project\Welio\Landing Page\WelioLanding\bin\WelioLanding.dll.config
+D:\Project\Welio\Landing Page\WelioLanding\bin\WelioLanding.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\WelioLanding.pdb
+D:\Project\Welio\Landing Page\WelioLanding\bin\Antlr3.Runtime.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\Microsoft.AI.Agent.Intercept.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\Microsoft.AI.DependencyCollector.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\Microsoft.AI.PerfCounterCollector.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\Microsoft.AI.ServerTelemetryChannel.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\Microsoft.AI.Web.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\Microsoft.AI.WindowsServer.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\Microsoft.ApplicationInsights.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\Microsoft.Web.Infrastructure.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\Newtonsoft.Json.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Net.Http.Formatting.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.Helpers.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.Http.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.Http.WebHost.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.Mvc.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.Optimization.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.Razor.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.WebPages.Deployment.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.WebPages.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.WebPages.Razor.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\WebGrease.dll
+D:\Project\Welio\Landing Page\WelioLanding\bin\Microsoft.AI.DependencyCollector.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\Microsoft.AI.ServerTelemetryChannel.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\Microsoft.AI.Web.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\Microsoft.AI.WindowsServer.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\Microsoft.ApplicationInsights.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\Newtonsoft.Json.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Net.Http.Formatting.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.Helpers.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.Http.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.Http.WebHost.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.Mvc.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.Optimization.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.Razor.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.WebPages.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.WebPages.Deployment.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\System.Web.WebPages.Razor.xml
+D:\Project\Welio\Landing Page\WelioLanding\bin\Antlr3.Runtime.pdb
+D:\Project\Welio\Landing Page\WelioLanding\obj\Release\WelioLanding.dll
+D:\Project\Welio\Landing Page\WelioLanding\obj\Release\WelioLanding.pdb
+D:\Project\Welio\Landing Page\WelioLanding\obj\Release\WelioLanding.csprojResolveAssemblyReference.cache
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\ApplicationInsights.config
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\roslyn\csc.exe
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\roslyn\vbc.exe
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\roslyn\VBCSCompiler.exe
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\WelioLanding.dll.config
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\WelioLanding.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\WelioLanding.pdb
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Antlr3.Runtime.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Microsoft.AI.Web.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Microsoft.ApplicationInsights.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Newtonsoft.Json.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Net.Http.Formatting.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.Helpers.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.Http.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.Http.WebHost.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.Mvc.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.Optimization.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.Razor.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.WebPages.Deployment.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.WebPages.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.WebPages.Razor.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\WebGrease.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Microsoft.AI.Web.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Microsoft.ApplicationInsights.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Newtonsoft.Json.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Net.Http.Formatting.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.Helpers.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.Http.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.Http.WebHost.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.Mvc.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.Optimization.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.Razor.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.WebPages.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.WebPages.Deployment.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\System.Web.WebPages.Razor.xml
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\bin\Antlr3.Runtime.pdb
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\obj\Release\WelioLanding.csprojResolveAssemblyReference.cache
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\obj\Release\WelioLanding.dll
+C:\Users\boyst\Desktop\Landing Page\Landing Page\WelioLanding\obj\Release\WelioLanding.pdb

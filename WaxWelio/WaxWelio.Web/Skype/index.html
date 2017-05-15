@@ -1,0 +1,21 @@
+<html>
+<head>
+    <title>SomeDummySite</title>
+</head>
+<body>
+    <script>
+        // redirect to Org ID if there is no token in the URL
+        if (!location.hash) {
+            location.assign('https://login.windows.net/common/oauth2/authorize?response_type=token' +
+                '&client_id=99fb8594-241f-44c3-8fd1-0ecbb16444ab' +
+                '&redirect_uri=' + location.href +
+                '&resource=https://webdir.online.lync.com');
+        }
+
+        // show the UI if the user has signed in
+        if (/^#access_token=/.test(location.hash)) {
+            location.assign('http://heliomeeting.azurewebsites.net/UI/'); 
+        }
+    </script>
+</body>
+</html>

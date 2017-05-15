@@ -1,0 +1,32 @@
+﻿@model WaxWelio.Entities.Result.ClinicResult
+@{
+    ViewBag.Title = "Setting";
+}
+
+<div class="row fill">
+    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-md-10 col-sm-9 col-xs-8 fill padding-0 scroll-y">
+        <div class="header-action-body">
+            <a href="@Url.Action("Details","Clinic")" class="action-link"><i class="fa fa-pencil right-5px" aria-hidden="true"></i>Edit</a>
+        </div>
+        <div class="content-body content-body-padding">
+            <div>
+                <h2>@Model.ClinicName</h2>
+            </div>
+            <div class="padding-top-1">
+                <small class="label-details">Address</small>
+                <div>@Model.Street1</div>
+                @if (Model.Street2 != null)
+                {
+                    <div>@Model.Street2</div>
+                }
+                <div>@Model.State @Model.PostCode</div>
+            </div>
+            
+            <div class="padding-top-16">
+                <small class="label-details">Phone</small>
+                <div>@Model.Phone</div>
+            </div>
+        </div>
+    </div>
+</div>

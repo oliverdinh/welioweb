@@ -1,0 +1,122 @@
+﻿@model WaxWelio.Entities.Models.UserModel
+@{
+    ViewBag.Title = "Add New User";
+    IEnumerable<SelectListItem> listUserRole = ViewBag.listUserRole;
+    IEnumerable<SelectListItem> listUserType = ViewBag.listUserType;
+    IEnumerable<SelectListItem> listUserTitle = ViewBag.listUserTitle;
+}
+<div class="row fill">
+    <div class="overlay-div-single" id="divOverlay" style="display: none;">
+        <div class="div-over"></div>
+        <img src="~/static/images/loading.gif" style="width: 64px" />
+    </div>
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 padding-left-0 fill scroll-y">     
+        @using (Html.BeginForm("Add", "User", FormMethod.Post, new { id = "form_add_user", enctype = "multipart/form-data", @class = "content-body-padding" }))
+        {
+            <div class="header-action-body show-mob"></div>
+            <div class="padding-bot-1 content-body">
+                <h2>Add new user</h2>
+            </div>
+            @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+            <div class="row col-lg-12 padding-bot-1">
+                <div class="div-select-avatar pointer" id="div-select-avatar">
+                    <img id="imv-my-avatar" class="img-circle" src="../static/images/user-default.png"/>
+                    <div><i class="fa fa-camera" aria-hidden="true"></i> Change photo</div>
+                </div>
+            </div>
+            <input type="hidden" name="image-data" id="image-data" class="hidden-image-data" />
+            <input type="hidden" name="image-name" id="image-name" class="hidden-image-name" />
+            <div class="row col-sm-12 col-xs-12 padding-bot-1">
+                <div class="col-lg-6 col-sm-12 col-xs-12 padding-0">
+                    <div class="col-lg-6 col-sm-6 col-xs-6 padding-left-0">
+                        <small class="label-details">User Type</small>
+                        <div>@Html.DropDownListFor(model => model.UserType, listUserType, null, new { @class = "custom-select" })</div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 col-xs-6 padding-right-0">
+                        <small class="label-details">Access</small>
+                        <div>@Html.DropDownListFor(model => model.AccessType, listUserRole, null, new { @class = "custom-select" })</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row col-sm-12 col-xs-12 padding-0 padding-bot-1">
+                <div class="col-lg-6 col-sm-12 col-xs-12 padding-right-0">
+                    <div class="col-lg-6 col-sm-6 col-xs-6 padding-left-0">
+                        <small class="label-details">Title</small>
+                        <div>@Html.DropDownListFor(model => model.TitleUser, listUserTitle, null, new { @class = "custom-select" })</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row col-sm-12 col-xs-12 padding-0 padding-bot-1">
+                <div class="col-lg-6 col-sm-12 col-xs-12 padding-right-0">
+                    <div class="col-lg-6 col-sm-6 col-xs-6 padding-left-0">
+                        <small class="label-details">First Name</small>
+                        <div>@Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "custom-select" } })</div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 col-xs-6 padding-right-0">
+                        <small class="label-details">Last Name</small>
+                        <div>@Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "custom-select" } })</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row col-sm-12 col-xs-12 padding-0 padding-bot-1">
+                <div class="col-lg-6 col-sm-12 col-xs-12 padding-right-0">
+                    <div class="col-lg-12 col-sm-12 col-xs-12 padding-0">
+                        <small class="label-details">Email/Username</small>
+                        <div>@Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "custom-select" } })</div>
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div style="padding-bottom:30px" class="row padding-top-2 col-sm-12 col-xs-12 padding-0">
+                <div class="col-lg-6 col-sm-12 col-xs-12 padding-right-0">
+                    <div class="col-lg-3 col-sm-4 col-xs-4 padding-left-0">
+                        <input type="submit" value="Invite" class="custom-btn action-btn" />
+                    </div>
+                    <div class="col-lg-3 col-sm-4 col-xs-4 padding-right-0">
+                        <button class="custom-btn action-btn cancel-btn" type="button" onclick="goBack()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+
+</div>
+@section scripts{
+    <script>
+        $("#form_add_user").validate({
+            rules: {
+                "FirstName": {
+                    required: true
+                },
+                "LastName": {
+                    required: true
+                },
+                "Email": {
+                    required: true
+                }
+            },
+            messages: {
+                "FirstName": {
+                    required: "First name field is required."
+                },
+                "LastName": {
+                    required: "Last name field is required."
+                },
+                "Email": {
+                    required: "Email field is required."
+                }
+            }
+        });
+        $('#btn-invite').click(function () {
+            alert("An email has been sent to this user inviting them to WELIO");
+            window.location.href = "../User/Profile";
+        });
+
+        function goBack() {
+            window.location.href = window.baseUrl + "/User";
+        }
+    </script>
+@Html.Partial("_CropImageModal")
+}

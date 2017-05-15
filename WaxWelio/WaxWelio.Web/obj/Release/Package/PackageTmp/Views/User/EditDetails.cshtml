@@ -1,0 +1,228 @@
+﻿@using WaxWelio.Entities.Models
+@model UserModel
+@{
+    ViewBag.Title = "Edit User Details";
+    ViewBag.userTitle = "Prof";
+    var hospital = (DoctorInfoModel)ViewBag.hospital;
+}
+
+<div class="row fill">
+    <div class="overlay-div-single" id="divOverlay" style="display: none;">
+        <div class="div-over"></div>
+        <img src="~/static/images/loading.gif" style="width: 64px" />
+    </div>
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 padding-left-0 fill scroll-y">
+        <div class="header-action-body show-mob"></div>
+        @using (Html.BeginForm("EditDetails", "User", new {hospitalId = hospital.Clinic.ClinicId, clinicUserId = hospital.ClinicUserId }, FormMethod.Post, new {id = "form_edit_user", enctype = "multipart/form-data", @class = "content-body-padding" }))
+        {
+            @Html.HiddenFor(model => model.DoctorId);
+            <div class="grid padding-left-15">
+                <div class="row col-lg-12 padding-left-30-mob content-body" style="padding-bottom: 0; margin-bottom: 20px">
+                    <h2 style="margin-bottom: 0">User details</h2>
+                    <span> User access for <b>@hospital.Clinic.ClinicName</b></span>        
+                </div>
+                <div class="row col-lg-12">
+                    <div class="div-select-avatar pointer" id="div-select-avatar">
+                        @if (string.IsNullOrEmpty(Model.DoctorAvatar))
+                        {
+                            <img id="imv-my-avatar" class="img-circle" src="~/static/images/user.png" style="width: 100px; height: 100px" />
+                        }
+                        else
+                        {
+                            <img id="imv-my-avatar" class="img-circle" src="@Model.DoctorAvatar" style="width: 100px; height: 100px" />
+                        }
+                        <div><i class="fa fa-camera" aria-hidden="true"></i> Change photo
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="image-data" id="image-data" class="hidden-image-data"/>
+                <input type="hidden" name="image-name" id="image-name" class="hidden-image-name"/>
+                <div class="row col-sm-12 col-xs-12 padding-0 padding-bot-1 padding-top-1">
+                    <div class="col-lg-4 col-sm-12 col-xs-12 padding-right-0">
+                        <div class="col-lg-6 col-sm-6 col-xs-6 padding-left-0">
+                            <small>User Type</small>
+                            <div>@Html.DropDownListFor(model => model.UserType, (SelectList) ViewBag.listUserType, new {@class = "custom-select"})</div>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 col-xs-6 padding-right-0">
+                            <small>Access</small>
+                            @Html.DropDownListFor(model => model.AccessType, (SelectList) ViewBag.listUserRole, new {@class = "custom-select"})
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-sm-12 col-xs-12 padding-bot-1">
+                    <div class="col-lg-4 col-sm-6 col-xs-6 padding-0">
+                        <div class="col-lg-6 col-sm-6 col-xs-6 padding-left-0">
+                            <small>Title</small>
+                            @Html.DropDownListFor(model => model.TitleUser, (SelectList) ViewBag.listUserTitle, new {@class = "custom-select"})
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-sm-12 col-xs-12 padding-0 padding-bot-1">
+                    <div class="col-lg-4 col-sm-8 col-xs-8 padding-right-0">
+                        <div class="col-lg-6 col-sm-6 col-xs-6 padding-left-0">
+                            <small>First Name</small>
+                            @Html.EditorFor(model => model.FirstName, new {htmlAttributes = new {@class = "custom-select"}})
+                        </div>
+                        <div class="col-lg-6 col-sm-6 col-xs-6 padding-right-0">
+                            <small>Last Name</small>
+                            @Html.EditorFor(model => model.LastName, new {htmlAttributes = new {@class = "custom-select"}})
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-sm-12 col-xs-12 padding-0 padding-bot-1">
+                    <div class="col-lg-4 col-sm-6 col-xs-6 padding-right-0">
+                        <div class="col-lg-12 col-sm-12 col-xs-12 padding-0">
+                            <small>Email/Username</small>
+                            <input class="custom-select" value="@Model.Email" disabled/>
+                            @Html.HiddenFor(model => model.Email, new {Value = Model.Email})
+                        </div>
+                    </div>
+                </div>
+                @*<div class="row col-sm-12 col-xs-12 padding-0 padding-bot-1">
+                    <div class="col-lg-4 col-sm-6 col-xs-6 padding-right-0">
+                        <div class="col-lg-8 col-sm-8 col-xs-8 padding-0">
+                            <small>Email Office 365</small>
+                            <input class="custom-select" value="@Model.Office365" disabled />
+                        </div>
+                    </div>
+                </div>*@
+                <div class="row padding-top-2 col-sm-12 col-xs-12 padding-0" style="padding-bottom:50px">
+                    <div class="col-lg-6 col-sm-6 col-xs-6 padding-right-0">
+                        <div class="col-lg-3 col-sm-6 col-xs-6 padding-left-0">
+                            <button id="btn-save" class="custom-btn action-btn">Save</button>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-xs-6 padding-right-0">
+                            <button id="btn-cancel" class="custom-btn action-btn cancel-btn">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+@section scripts
+{
+    <script>
+        var baseurl = window.location.origin;
+        var doctorId = '@Model.DoctorId';
+        var email = '@Model.Email';
+        var firstname = '@Model.FirstName';
+        var lastname = '@Model.LastName';
+        var password365 = '@Model.Office365TempPassword'
+        $('.j-send-email-office-365').on('click', function(){
+            var email365 = $('.email-office365').val();
+            $('#divOverlay').show();
+            $.ajax({
+                url: '@Url.Action("SendEmailOffice365Account", "User")',
+                type: "POST",
+                data: {
+                    email: email,
+                    email365: email365,
+                    firstname: firstname,
+                    password365: password365
+                },
+                success: function(data) {
+                    if (data === true) {
+                        $('#divOverlay').hide();
+                        alert("The Office 365 account has been successfully sent.");
+                    } else {
+                        $('#divOverlay').hide();
+                        alert(data.Value);
+                    }
+                },
+                error: function() {
+                    window.location.href = '@Url.Action("SignOut","User")';
+                }
+            });
+        });
+
+        $('.j-create-user-office-365').on('click', function(){
+            var email365 = $('.email-office365').val();
+            if (email365 != '') {
+                $('#divOverlay').show();
+                $.ajax({
+                    url: '@Url.Action("CreateOffice365User", "User")',
+                    type: "POST",
+                    data: {
+                        doctorId: doctorId,
+                        email: email,
+                        email365: email365,
+                        firstname: firstname,
+                        lastname: lastname
+                    },
+                    success: function(data) {
+                        if (data === true) {
+                            $('#divOverlay').hide();
+                            alert("Office 365 account successfully created.");
+                            window.location.href = '@Url.Action("EditDetails", "User")?id=' + doctorId + '&hospitalId=@hospital.Clinic.ClinicId';
+                        } else {
+                            $('#divOverlay').hide();
+                            alert(data.Value);
+                        }
+                    },
+                    error: function() {
+                        window.location.href = '@Url.Action("SignOut","User")';
+                    }
+                });
+            } else {
+                alert("Please enter your email address.");
+            }
+        });
+        $("#form_edit_user").validate({
+            rules: {
+                "FirstName": {
+                    required: true
+                },
+                "LastName": {
+                    required: true
+                }
+            },
+            messages: {
+                "FirstName": {
+                    required: "The First name field is required."
+                },
+                "LastName": {
+                    required: "The Last name field is required."
+                }
+            }
+        });
+        $('#btn-save')
+            .click(function() {
+                var countClinic = @ViewBag.countClinic;
+                var ok;
+                if (countClinic > 1) {
+                    if ('@Model.TitleUser' != $('#TitleUser').val() ||
+                        '@Model.FirstName' != $('#FirstName').val() ||
+                        '@Model.LastName' != $('#LastName').val()) {
+                        ok =
+                            confirm("Changing 'Title' and 'Name' will modify there details across all clinics for this account. Are you sure you want to update this information?");
+                    } else {
+                        ok =
+                            confirm("Are you sure you want to update this user?");
+                    }
+                } else {
+                    ok =
+                        confirm("Are you sure you want to update this user?");
+                }
+                if (ok) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        $('#btn-cancel')
+            .click(function() {
+                window.location.href = window.baseUrl +
+                    "/User/Details?id=" +
+                    '@Model.DoctorId' +
+                    "&hospitalId=" +
+                    '@(hospital.Clinic.ClinicId)';
+                return false;
+            });
+    </script>
+@Html.Partial("_CropImageModal")
+}

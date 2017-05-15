@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "NotifyClinic";
+}
+
+@model WaxWelio.Entities.Models.NotifyClinicModel
+<div class="col-lg-12 text-center" id="div-form">
+    <div style="margin-bottom:3em;margin-top:3em"><h1>Invite my clinic</h1></div>
+    <div style="font-size:27px;padding-bottom: 1.5em;">Let us know who your clinic is so we can notify them</div>
+    @using (Html.BeginForm("NotifyClinic", "Clinic", FormMethod.Post)){
+    <div class="col-lg-4 col-lg-offset-4 text-left">
+        <div class="padding-bot-1">
+            Doctor's name
+            @Html.EditorFor(model => model.DoctorName, new { htmlAttributes = new { @class = "form-control signup-input"}})
+            @Html.ValidationMessageFor(model => model.DoctorName, "", new { @class = "text-danger" })
+        </div>
+        <div class="padding-bot-1">
+            Clinic name
+            @Html.EditorFor(model => model.ClinicName, new { htmlAttributes = new { @class = "form-control signup-input"}})
+            @Html.ValidationMessageFor(model => model.ClinicName, "", new { @class = "text-danger" })
+        </div>
+        <div class="padding-bot-1">
+            Suburb
+            @Html.EditorFor(model => model.Suburb, new { htmlAttributes = new { @class = "form-control signup-input"}})
+            @Html.ValidationMessageFor(model => model.Suburb, "", new { @class = "text-danger" })
+        </div>
+        <div>
+            State
+            @Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control signup-input"}})
+            @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-lg-4 col-lg-offset-4 text-center padding-top-4 padding-bot-1">
+        
+        <input type="submit" class="custom-btn" value="Submit"/>
+    </div>
+    <div class="col-lg-4 col-lg-offset-4 text-center padding-bot-4">By proceeding I agree to the terms and conditions</div>
+    }
+</div>
+
+@section scripts{
+@Html.Partial("_LoginModal")
+
+}

@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "Account Expired";
+}
+
+<div class="overlay-div-single" id="div-loading" style="display: none;">
+                <div class="div-over"></div>
+                <img src="~/static/images/loading.gif" style="width: 64px" />
+            </div>
+<div class="col-lg-12 fill text-center">
+    <div class="col-lg-6 col-lg-offset-3 fill">
+        <div id="div-send">
+            <div style="padding-top:4em;padding-bottom: 1em;"><h1>Activation expired</h1></div>
+            <div class="padding-bot-1" id="div-enter-email"><h2>Enter your email address to recieve a<br /> new activation link</h2></div>
+            <div class="padding-bot-1" id="div-email-not-register" style="display: none"><h2>The email address you entered is not registerd, please try again.</h2></div>
+            <div class="col-lg-8 col-lg-offset-2" style="padding-top: 1.5em;padding-bottom: 4em;">
+                <input id="input-resend-email" class="signup-input" placeholder="Email address" />
+                <span class="field-validation-valid text-danger" id="emailValid"></span>
+            </div>
+            <div class="col-lg-4 col-lg-offset-4">
+                <button id="btn-submit" class="custom-btn">Submit</button>
+            </div>
+        </div>
+        <div id="div-text" class="center-parent" style="display:none"><h2>A new activation link has been sent to your email.</h2></div>
+    </div>
+</div>
+@section scripts{
+@Html.Partial("_LoginModal")
+    <script>
+    $("#btn-submit").on("click", function () {
+        var email = $('#input-resend-email').val();
+        var emaiValidate = /^[A-Z0-9._%+-]+@@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
+        if (email === "") {
+            $('#emailValid').text('Please input email');
+            return;
+        } else {
+            $('#emailValid').text("");
+        }
+        if (!emaiValidate.test(email)) {
+            $('#emailValid').text('Email not valid');
+            return;
+        } else {
+            $('#emailValid').text('');
+        }
+        $('#div-loading').show();
+        $.ajax({
+            url: "ResendEmail",
+            type: "POST",
+            data: { Email: email },
+
+            success: function (data) {
+                console.log(data);
+                $('#div-loading').hide();
+                if (data.success === "true") {
+                    $("#div-send").hide();
+                    $("#div-text").show();
+                } else {
+                    console.log("email not register");
+                    $("#div-enter-email").hide();
+                    $("#div-email-not-register").show();
+                }
+            },
+            error: function(data) {
+                console.log(data);
+                $('#div-loading').hide();
+                window.location.href = '@Url.Action("SignOut","User")';
+            }
+        });
+    })
+
+</script>
+}

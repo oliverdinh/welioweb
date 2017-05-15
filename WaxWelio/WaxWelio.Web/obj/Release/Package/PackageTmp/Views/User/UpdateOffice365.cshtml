@@ -1,0 +1,104 @@
+﻿@{
+    ViewBag.Title = "Update Office 365";
+    var email365 = ViewBag.Email365;
+    var doctorId = ViewBag.DoctorId;
+    var hospitalId = ViewBag.HospitalId;
+}
+<div class="row fill">
+    <div class="overlay-div-single" id="divOverlay" style="display: none;">
+        <div class="div-over"></div>
+        <img src="~/static/images/loading.gif" style="width: 64px" />
+    </div>
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill padding-0">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 padding-left-0 fill scroll-y">
+        @using (Html.BeginForm("UpdateOffice365Email", "User", FormMethod.Post, new { id = "form_edit_365", enctype = "multipart/form-data", @class = "content-body-padding" }))
+        {
+            <input type="hidden" name="doctorId" value="@doctorId"/>
+            <input type="hidden" name="hospitalId" value="@hospitalId" />
+            <div class="grid">
+                <div class="header-action-body show-mob"></div>
+                <div class="row col-sm-12 col-xs-12 content-body">
+                    <h2>Update Office 365 Email</h2>
+                </div>
+                <div class="row col-sm-12 col-xs-12 padding-0 padding-bot-1">
+                    <div class="col-lg-4 col-sm-6 col-xs-6 padding-right-0">
+                        <div class="col-lg-12 col-sm-12 col-xs-12 padding-0">
+                            <small class="label-details">Email Office 365</small>
+                            <input class="custom-select" required id="email365" name="email365" value="@email365"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row padding-top-2 padding-bot-2 col-sm-12 col-xs-12 padding-0">
+                    <div class="col-lg-6 col-sm-6 col-xs-6 padding-right-0">
+                        <div class="col-lg-3 col-sm-6 col-xs-6 padding-left-0">
+                            <button type="button" id="btn-save" class="custom-btn action-btn">Save</button>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-xs-6 padding-right-0">
+                            <button type="button" id="btn-cancel" class="custom-btn action-btn cancel-btn">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+@section scripts{
+    <script>
+        $("#form_edit_365").validate({
+            rules: {
+                "email365": {
+                    required: true
+                }
+            },
+            messages: {
+                "email365": {
+                    required: "The email Office 365 field is required."
+                }
+            }
+        });
+
+        $('#btn-save').click(function () {
+            var email365 = $('#email365').val();
+            if (email365 != '') {
+
+                var doctorId = '@doctorId';
+                var hospitalId = '@hospitalId';
+
+                $('#divOverlay').show();
+                $.ajax({
+                    url: '@Url.Action("UpdateOffice365Email", "User")',
+                    type: "POST",
+                    async: false,
+                    data: {
+                        doctorId: doctorId,
+                        hospitalId: hospitalId,
+                        email365: email365
+                    },
+                    success: function (data) {
+                        if (data === true) {
+                            $('#divOverlay').hide();
+                            alert("Update successfully.");
+                            window.location.href = '@Url.Action("Details", "User", new { id = doctorId, hospitalId })';
+                        } else {
+                            $('#divOverlay').hide();
+                            alert(data.Value);
+                        }
+                    },
+                    error: function () {
+                        window.location.href = '@Url.Action("SignOut","User")';
+                    }
+                });
+            } else {
+                $('#form_edit_365').submit();
+            }
+        });
+
+        $('#btn-cancel').click(function () {
+            window.history.back();
+            return false;
+        });
+    </script>
+}
+

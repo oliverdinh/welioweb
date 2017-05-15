@@ -1,0 +1,753 @@
+﻿@using WaxWelio.Common.Config
+@using WaxWelio.Common.Enum
+@using WaxWelio.Entities;
+@{
+    //ApiHeader apiHeader = null;
+    var authInfo = (AuthInfo)Session["auth_info"];
+    int accessType = 0;
+    if (authInfo != null)
+    {
+        accessType = authInfo.IsAdminBool ? 0 : authInfo.DoctorClinics.First(x => x.Clinic.ClinicId == authInfo.CurrentSelectedClinic.ClinicId).ClinicUserAccessType;
+    }
+    //if (apiHeaderCookie != null)
+    //{
+    //    apiHeader = JsonConvert.DeserializeObject<ApiHeader>(apiHeaderCookie.Value);
+    //    if (!string.IsNullOrEmpty(apiHeader.User?.TitleUser))
+    //    {
+    //        title = ((Title)Enum.Parse(typeof(Title), apiHeader.User.TitleUser)).DescriptionAttr();
+    //    }
+    //}
+    //var adminLoginHospital = (ViewBag.BaseUserType == (int)UserType.SystemAdmin) && ViewBag.IsHospital;
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/css")
+    <link href="~/static/css/custom.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/static/plugin/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/static/plugin/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css">
+    @Styles.Render("~/css/datatable")
+
+</head>
+<body>
+    <div id="wrapper">
+        <div id="page-content-wrapper">
+            @if (authInfo != null && authInfo.IsAdminBool)
+            {
+                @*<div class="system-login-clinic" style="height: 40px">
+                    Super Administrator
+                    <div class="float-right">
+                        <a href="/User/SignOut">Logout</a>
+                        <a href="/Clinic/ExitClinic">Exit Clinic</a>
+                    </div>
+
+                </div>*@
+            }
+            <div class="col-lg-12 top-bar">
+                <div class="col-md-4">
+                    <img style="cursor:pointer" width="100" class="img-responsive" onclick="goHome()" src="~/static/images/welio_logo.png" />
+                </div>
+                <div class="col-md-8">
+                    <div class="pull-right text-right">
+                        @if (authInfo != null)
+                        {
+                        <a href="javascript:;" class="dropdown-mn dropdown-toggle" data-toggle="dropdown">
+                            <span>
+                                
+                                    @if (string.IsNullOrEmpty(authInfo.DoctorAvatar))
+                                    {
+                                        <img width="50" class="avatar" src="~/images/user.png" alt="" />
+                                    }
+                                    else
+                                    {
+                                        <img width="50" class="avatar" src="@authInfo.DoctorAvatar" alt="" />
+                                    }
+                                
+                            </span>
+                            <span class="arrow-down"></span>
+                        </a>
+                        }
+                        <ul class="dropdown-menu">
+                            @if (authInfo != null && !authInfo.IsAdminBool)
+                            {
+                                <li><a href="javascript:;" data-toggle="modal" data-target="#selectClinicModal">Change clinic</a></li>
+                            }
+                            <li><a href="javascript:;" id="signout">Sign out</a></li>
+                        </ul>
+                    </div>
+                    <div class="pull-right text-right">
+                        @if (authInfo != null)
+                        {
+                            if (!authInfo.IsAdminBool)
+                            {
+                                <div class="clinic-name">@authInfo.CurrentSelectedClinic.ClinicName</div>
+                            }
+                            else
+                            {
+                                <div class="username">Admin Page</div>
+                            }
+                            if (authInfo.Office365.Equals("oliver.dinh@welio.com"))
+                            {
+                                <div class="username">
+                                    @authInfo.FullName
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="username" style="cursor:pointer;" onclick="location.href = '@Url.Action("MyProfile", "User")';">
+                                    @authInfo.Title @authInfo.FullName
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            @*<div class="navbar navbar-inverse navbar-fixed-top" style="height: 80px; ">
+                <div class="container container-header">
+                    <div class="navbar-header" style="display: flex; height: 80px">
+                        <span class="nav-title pointer" onclick="goHome()"><img src="/static/images/welio_rgb.jpg" /></span>
+                        <span class="nav-title3"></span>
+                        <span class="nav-title2">Healthcare where you are</span>
+                    </div>
+                    <div class="navbar-collapse collapse" style="float: right; color: black;border-color:transparent">
+                        @if (authInfo != null)
+                        {
+                            <div style="text-align: right; margin-top: 10px;">
+                                <strong>
+                                    @if (!authInfo.IsAdminBool)
+                                    {
+                                        @authInfo.CurrentSelectedClinic.ClinicName
+                                    }
+                                    else
+                                    {
+                                        @:Super Administrator
+                            }
+                                </strong>
+                            </div>
+                            <div class="pointer" id="user-name" style="text-align: right;">
+                                @authInfo.FullName
+                            </div>
+                            <div style="display: flex; display: -webkit-box; float: right;">
+                                @if (!authInfo.IsAdminBool)
+                                {
+                                    <div style="margin-left: 10px; cursor: pointer;" data-toggle="modal" data-target="#selectClinicModal">
+                                        <u>Change Clinic</u>
+                                    </div>
+                                }
+                                <div style="margin-left: 10px; cursor: pointer;" id="signout">
+                                    <u>Sign Out</u>
+                                </div>
+                            </div>
+                        }*@
+                        @*@{
+                                if (apiHeader != null)
+                                {
+                                    if (apiHeader.UserType == (int)UserType.SystemAdmin)
+                                    {
+                                        if (adminLoginHospital)
+                                        {
+                                            <div style="text-align: right; margin-top: 10px;">
+                                                <strong>
+                                                    @HttpUtility.UrlDecode(apiHeader.HospitalName)
+                                                </strong>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div style="text-align: right; margin-top: 15px;font-size: 16px">
+                                                <b>Super Administrator</b>
+                                            </div>
+                                            <div class="pointer" id="user-name" style="text-align: right;">
+
+                                            </div>
+                                            <div style="margin-top: 15px">
+                                                <div style="margin-left: 10px; cursor: pointer; text-align: right" id="signout">
+                                                    <u>Sign Out</u>
+                                                </div>
+                                            </div>
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        <div style="text-align: right; margin-top: 10px;">
+                                            <strong>
+                                                @HttpUtility.UrlDecode(apiHeader.HospitalName)
+                                            </strong>
+                                        </div>
+                                        <div class="pointer" id="user-name" style="text-align: right;">
+                                            @title @if (apiHeader.User != null)
+                                            {
+                                                @(apiHeader.User.FullName)
+                                            }
+                                        </div>
+                                        <div style="display: flex; display: -webkit-box; float: right;">
+                                            <div style="margin-left: 10px; cursor: pointer;" data-toggle="modal" data-target="#selectClinicModal">
+                                                <u>Change Clinic</u>
+                                            </div>
+                                            <div style="margin-left: 10px; cursor: pointer;" id="signout">
+                                                <u>Sign Out</u>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div style="display: flex">
+                                        <div class="header-btn hide-mob">@Html.ActionLink("Sign up", "Signup", "Clinic", null, new { @class = "action-link" })</div>
+                                        <div id="btn-signin">Sign in</div>
+                                    </div>
+                                }
+                            }*@
+
+                    @*</div>
+                </div>
+            </div>*@
+            @if (authInfo != null)
+            {
+            <div class="col-sm-12 menu-bar">
+                @{
+                    if (!authInfo.IsAdminBool)
+                    {
+
+                        <div class="col-sm-3 padding-right-0">
+                            <a href="@Url.Action("Index", "Appointment")" class="action-link">
+                                <div class="menu-item center-680-819 pointer float-left float-none-680-819 height-100 @(ViewBag.Title == "Dashboard" ? "menu-bottom-border" :"")">
+                                    <img style="padding-bottom:4px;" width="12" src="~/static/images/ic_canlendar.png" alt="" />&nbsp;&nbsp;
+                                    Clinic Schedule
+                                </div>
+                            </a>
+                        </div>
+                        if(ViewBag.CanCreateAppoinment != null && ViewBag.CanCreateAppoinment == true)
+                        {
+                            <div class="col-sm-3 padding-0 margin-right-2-sm">
+                                <div id="overlay-new-app" class="overlay-div left--30-desk">
+                                    <div class="div-over hidden"></div>
+                                    <img class="img-small hidden" src="~/static/images/loading.gif" />
+                                </div>
+                                <div class="menu-item center-680-819 pointer float-left float-none-680-819 height-100" id="btn-new-appointment-header" data-toggle="modal" data-target="#createAppointmentModal">
+                                    <img style="padding-bottom:4px;" width="12" src="~/static/images/ic_plus.png" alt="" />&nbsp;&nbsp;
+                                    New Appointment
+                                </div>
+                            </div>
+                        }
+                        <div class="col-sm-3 padding-0 margin-left-2-sm height-100" id="btn-cancellations">
+                            <a href="@Url.Action("Cancellation", "Appointment")" class="action-link" style="margin-top:1px">
+                                <div class="menu-item center-680-819 pointer float-left float-none-680-819 height-100 @(ViewBag.Title == "Cancellations" ? "menu-bottom-border" :"")">
+                                    <img style="padding-bottom:4px;" width="12" src="~/static/images/ic_banned.png" alt="" />&nbsp;&nbsp;
+                                    Cancellations
+                                </div>
+                            </a>
+                        </div>
+                        if (authInfo != null && !authInfo.IsAdminBool)
+                        {
+                            if (accessType == (int)UserRole.Administrator)
+                            {
+                                <div class="@(ViewBag.CanCreateAppoinment != null ? "col-sm-3" : "col-sm-6") padding-left-0 padding-right-mob-0 float-none-680-819 float-left height-100">
+                                    <a href="@Url.Action("Index", "Clinic")" class="action-link">
+                                        <div class="pull-right menu-item @(ViewBag.Title == "Setting" ? "menu-bottom-border" :"")">
+                                            <img style="padding-bottom:4px;" width="12" src="~/static/images/ic_setting.png" alt="" />&nbsp;&nbsp;
+                                            Settings
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="@(ViewBag.CanCreateAppoinment != null ? "col-sm-3" : "col-sm-6") padding-left-0 padding-right-mob-0 float-none-680-819 float-left height-100">
+                                    <a href="@Url.Action("MyProfile", "User")" class="action-link">
+                                        <div class="pull-right menu-item @(ViewBag.Title == "Setting" ? "menu-bottom-border" :"")">
+                                            <img style="padding-bottom:4px;" width="12" src="~/static/images/ic_setting.png" alt="" />&nbsp;&nbsp;
+                                            Settings
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            @*<div class="col-lg-6 col-820-1279-3 padding-left-0 padding-right-mob-0 height-100 float-left float-none-680-819">
+                                    <a href="@Url.Action("Index", "Clinic")" class="action-link"><div class="pull-right float-none-680-819 center-680-819 pointer"><i class="fa fa-cog right-5px" aria-hidden="true"></i><span class="center-bot-680-819 font-14-mob">Settings</span></div></a>
+                                </div>*@
+                        }
+                    }
+                }
+            </div>
+            }
+            <div class="container body-content col-lg-12 col-sm-12 col-xs-12" @((authInfo != null && (authInfo.IsAdminBool || ViewBag.idSelected != null)) ? "style=overflow-y:inherit;" : "")>
+                <a href="#menu-toggle" style="display:none;" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
+                @RenderBody()
+            </div>
+
+            @if (authInfo != null && !authInfo.IsAdminBool)
+            {
+                <div class="modal fade" id="selectClinicModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div id="content-select-clinic">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                </div>
+                                <div class="text-center padding-bot-2">
+                                    <h1 class="modal-title">Select clinic</h1>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="col-lg-8 col-lg-offset-2 padding-bot-3">
+                                                <select class="custom-select" id="listHospital">
+                                                    @if (Session["auth_info"] != null && ((AuthInfo)Session["auth_info"]).DoctorClinics.Count() > 0)
+                                                    {
+                                                        var listClinics = ((AuthInfo)Session["auth_info"]).DoctorClinics;
+                                                        for (int i = 0; i < listClinics.Count(); i++)
+                                                        {
+                                                            <option @(((AuthInfo)Session["auth_info"]).CurrentSelectedClinic.ClinicId == listClinics[i].Clinic.ClinicId ? "selected'" : "") value="@listClinics[i].Clinic.ClinicId">@listClinics[i].Clinic.ClinicName</option>
+                                                        }
+                                                    }
+                                                </select>
+                                                <span class="field-validation-valid text-danger" id="errorSelect"></span>
+                                            </div>
+                                            <div class="col-lg-6 col-lg-offset-3">
+                                                <button id="btn-change-clinic" class="custom-btn">Continue</button>
+                                            </div>
+                                            <div class="col-lg-8 col-lg-offset-2 padding-top-2 padding-bot-1 text-center">
+                                                If you can not find your clinic you may need to contact the clinic Practice Manager to create your account
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div id="sidebar-wrapper">
+            <div style="padding: 20px;" class="container-fluid">
+                <div class="row">
+                    <a style="padding-left: 10px;" href="javascript:;" class="pull-left j-close-sidebar">
+                        <span style="color:#fff;font-size: 25px;" class="glyphicon glyphicon-remove-circle"></span>
+                    </a>
+                    <a id="btn-edit-appointment" data-toggle="modal" data-target="#createAppointmentModal" style="padding-right: 10px;" href="javascript:;" class="pull-right">
+                        <img width="25" src="~/static/images/ic_edit_circle.png" alt="" />
+                    </a>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 text-center">
+                        <img id="app-PatientAvatar" style="padding: 7px;" class="doctor-avatar" width="120" height="120px" src="~/images/user.png" alt="" />
+                        <div style="margin-top: 10px;" class="doctor-name" id="app-PatientName">Will Smith</div>
+                    </div>
+                    <div class="col-xs-6 text-center">
+                        @{
+                            var url = GlobalConstant.BaseUrl + "/HealthCare/Conference";
+                        }
+                        <div style="cursor:pointer;" id="btn-call-patient" data-url="@url">
+                            <img width="120" src="~/static/images/ic_camera_circle.png" alt="" />
+                        </div>                        
+                        <div style="margin-top: 10px;">
+                            <span style="padding-right: 5px"><img width="14" src="~/static/images/ic_phone.png" alt="Alternate Text" /></span>
+                            <span class="phone-number" id="app-PhoneNumber">047787548548</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-xs-12 padding-0 btn-group-aapointment">
+                <span id="btn-appointment" class="col-lg-6 col-xs-6 padding-0 text-center btn-selected tab-bar" style="padding: 10px; height: 70px;">
+                    <span class="icon-select"><img width="30" src="~/static/images/ic_appointment.png" alt="" /></span>
+                    <br />
+                    <span class="title-select" style="padding-top: 4px; color:#5dc7d0;">Appointment</span>
+                </span>
+                <span id="btn-message" class="col-lg-6 col-xs-6 padding-0 text-center btn-unselected tab-bar" style="padding: 10px; height: 70px;">
+                    <span class="icon-select"><img width="30" src="~/static/images/ic_messages.png" alt="" /></span>
+                    <br />
+                    <span class="title-select" style="padding-top: 4px;color:#fff;">Messages</span>
+                </span>
+            </div>
+            <div id="appointment-detail-wrapper" class="col-xs-12 padding-0 scroll-info" style="width: 350px;height: calc(100% - 295px);">
+                <!--Start Person info-->
+                @*<div id="info-patient-parent">
+                    <div class="col-lg-12 col-xs-12">
+                        <div>
+                            <div class="app-PatientName" id="app-PatientName"></div>
+                            <div id="isCaree">
+                                <span>Carer</span><br />
+                                <span id="app-CarerName" style="font-weight: bold"></span>
+                            </div>
+                            <div id="app-PhoneNumber">0345 456 789</div>
+                        </div>
+                        <div class="center" style="position: absolute; right: 25px; bottom: 0">
+                            <span class="fa fa-user fa-4x pull-right" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>*@
+                <!--End person info-->
+                <!--Start Appointment info-->
+                <div id="apointment-detail-patient" style="width: 100%">
+                    <div style="padding: 0 20px;">
+                        <div class="col-lg-12 col-xs-12 title-info">
+                            Status
+                        </div>
+                        <div id="app-Status-div" class="col-lg-12 col-xs-12">
+                            <span id="app-Status" class="value-info"></span>
+                            @*<span class="btn-finish" id="btn-finish">Finish</span>*@
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="line"></div>
+                    <div style="padding: 0 20px;">
+                        <div class="col-lg-12 col-xs-12 title-info">
+                            Appointment
+                        </div>
+                        <div class="col-lg-12 col-xs-12 padding-0">
+                            <span class="col-lg-4 col-xs-4 value-info">Doctor</span>
+                            <span id="app-DoctorName" class="col-lg-8 col-xs-8 value-info">Sean Connery</span>
+                        </div>
+                        <div class="col-lg-12 col-xs-12 padding-0">
+                            <span class="col-lg-4 col-xs-4 value-info">Date</span>
+                            <span id="app-Date" class="col-lg-8 col-xs-8 value-info">27th August 2016</span>
+                        </div>
+                        <div class="col-lg-12 col-xs-12 padding-0">
+                            <span class="col-lg-4 col-xs-4 value-info">Start</span>
+                            <span id="app-Start" class="col-lg-8 col-xs-8 value-info">11:15am</span>
+                        </div>
+                        <div class="col-lg-12 col-xs-12 padding-0">
+                            <span class="col-lg-4 col-xs-4 value-info">Duration</span>
+                            <span id="app-Duration" class="col-lg-8 col-xs-8 value-info">20m</span>
+                        </div>
+                        <div class="col-lg-12 col-xs-12 padding-0">
+                            <span class="col-lg-4 col-xs-4 value-info">Fee</span>
+                            <span id="app-Fee" class="col-lg-8 col-xs-8 value-info">$80</span>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="line"></div>
+                    <div style="padding:0px 20px;">
+                        <div class="col-lg-12 col-xs-12 title-info">
+                            Call summary
+                        </div>
+                        <div class="col-lg-12 col-xs-12 padding-0 flex">
+                            <span class="col-lg-5 col-xs-5 flex-middle-left value-info">Actual Start</span>
+                            <div class="col-lg-7 col-xs-7 flex-center">
+                                <span id="app-ActualStart" style="min-width:65px" class="value-info">11:28am</span>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-xs-12 padding-0 flex">
+                            <span class="col-lg-5 col-xs-5 value-info">Actual Duration</span>
+                            <span id="app-ActualDuration" class="col-lg-7 col-xs-7 flex-center value-info">27m 10s</span>
+                        </div>
+                        <div class="col-lg-12 col-xs-12 padding-0 flex" style="padding-bottom:20px">
+                            <span class="col-lg-5 col-xs-5 value-info">Actual Fee</span>
+                            <span id="app-ActualFee" class="col-lg-7 col-xs-7 flex-center value-info">$100</span>
+                        </div>
+                        <!--<div class="col-lg-12 col-xs-12 text-right" style="background-color: rgba(50, 50, 50, 0.05);">
+                            <span id="btn-call-log" class="btn-finish">Call log</span>
+                        </div>-->
+                    </div>
+                    
+                <!--End appointment info-->
+            </div>
+            <!--Start message-->
+            <div id="message-patient" style="display: none;height:100%;">
+                <div class="isLogin">
+                    <div id="content-msg">
+                    </div>
+                    <div class="clearfix"></div>
+                    <!--Is login and show info conversation-->
+                    <div class="chat-control">
+                        <div class="input-group">
+                            <input id="msg-value" type="text" class="form-control no-border-radius" placeholder="Type a message here">
+                            <span class="input-group-btn">
+                                <button class="btn btn-success no-border-radius" id="btn-send" type="button"><i class="glyphicon glyphicon-send"></i></button>
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="not-login">
+                    <p class="text-center">
+                        You need to sign in with Microsoft Office 365
+                        <br />
+                        to use this feature.
+                    </p>
+                    <p class="text-center">
+                        <a class="btn-login" href="@string.Format(GlobalConstant.SignInOffice365Url, Request.Url.GetLeftPart(UriPartial.Authority))">
+                            <span>Login with</span>
+                            <img src="~/static/images/logo_office365.png" />
+                        </a>
+                    </p>
+
+                </div>
+            </div>
+            <!--End message-->
+        </div>
+    </div>
+    </div>
+        @Scripts.Render("~/js")
+        @Scripts.Render("~/js/datatable")
+        @Scripts.Render("~/validate")
+        @Scripts.Render("~/static/plugin/bootstrap-datetimepicker/js/moment.js",
+    "~/static/plugin/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js")
+        <script src="//swx.cdn.skype.com/shared/v/1.2.15/SkypeBootstrap.min.js"></script>
+        <script src="~/static/js/config.js"></script>
+        <script>
+            var errorTemp = '@TempData[GlobalConstant.ErrorTemp]';
+            var isUpdate = false;
+            if (errorTemp !== '') {
+                alert(errorTemp);
+            }
+            var baseUrl = window.location.origin;
+            window.baseUrl = baseUrl;
+            window.window_1020_1279 = false;
+            window.window_820_1019 = false;
+            window.window_680_819 = false;
+            window.window_480_679 = false;
+            window.window_320_479 = false;
+            var isLogin = false;
+            var showPopup = false;
+            var client;
+
+            function goSetting(url) {
+                window.location.href = document.location.origin + url;
+            }
+
+            function goBack() {
+                window.history.back();
+                return false;
+            }
+
+            function goHome() {
+                window.location.href = window.baseUrl;
+            }
+
+            $(document).ready(function () {
+                $(window)
+                    .resize(function () {
+                        getWindowHeight();
+                    });
+
+                function getWindowHeight() {
+                    if ($(window).width() >= 1020 && $(window).width() <= 1279) {
+                        window.window_1020_1279 = true;
+                    } else {
+                        window.window_1020_1279 = false;
+                    }
+                    if ($(window).width() >= 820 && $(window).width() <= 1019) {
+                        window.window_820_1019 = true;
+                    } else {
+                        window.window_820_1019 = false;
+                    }
+                    if ($(window).width() >= 680 && $(window).width() <= 819) {
+                        window.window_680_819 = true;
+                    } else {
+                        window.window_680_819 = false;
+                    }
+                    if ($(window).width() >= 480 && $(window).width() <= 679) {
+                        window.window_480_679 = true;
+                    } else {
+                        window.window_480_679 = false;
+                    }
+                    if ($(window).width() > 320 && $(window).width() <= 479) {
+                        window.window_320_479 = true;
+                    } else {
+                        window.window_320_479 = false;
+                    }
+                }
+
+                getWindowHeight();
+
+                var idSelected = '@(string.IsNullOrEmpty(ViewBag.idSelected) ? "none" : ViewBag.idSelected)';
+                $('#' + idSelected).parent().attr('style', 'background-color: #939598;');
+
+
+                $("#signout")
+                    .click(function () {
+                        console.log(baseUrl + "/User/SignOut");
+                        var rs = confirm("Are you sure you want to sign out?");
+                        if (rs) {
+                            var url = baseUrl + "/User/SignOut";
+                            window.location.href = url;
+                        }
+                    });
+                $('#datepicker').datetimepicker({
+                    format: 'DD/MM/YYYY'
+                });
+                $('#timepicker').datetimepicker({
+                    format: 'LT'
+                });
+
+                $('#input-search').on('blur', function () {
+                    $('#div-fill-date-appointment').removeClass('hide-320-1019');
+                    $('#div-fill-doctor-appointment').removeClass('hide-320-1019');
+                    $('#div-fill-search-appointment').removeClass('fill-width-320-1019');
+                    $('#tblAppointment_wrapper').removeClass('padding-top-32');
+                });
+                $('#input-search').on('focus', function () {
+                    $('#div-fill-date-appointment').addClass('hide-320-1019');
+                    $('#div-fill-doctor-appointment').addClass('hide-320-1019');
+                    $('#div-fill-search-appointment').addClass('fill-width-320-1019');
+                    $('#tblAppointment_wrapper').addClass('padding-top-32');
+                });
+
+
+                $('#user-name').click(function () {
+                    window.location.href = baseUrl + '/User/MyProfile';
+                });
+
+                var slideneg = '34vw';
+                var toggler = '#slide-menu';
+                var menuneg = '0vw';
+                $('#btn-toggle-menu').on('click', function (e) {
+                    $('#slide-menu, #col-details, #btn-toggle-menu').toggleClass('slide-active');
+                    var selected = $(this).hasClass('slide-active');
+                    console.log(selected);
+                    $('#slide-menu').stop().animate({
+                        left: selected ? menuneg : '-34vw'
+                    });
+                    $('#col-details').stop().animate({
+                        left: selected ? slideneg : '0vw'
+                        //width: selected ? '66vw' : '100vw'
+                    });
+                });
+
+                /* Start some function for skype for business - Long*/
+                function configAndSignIn(options) {
+                    window.Skype.initialize({
+                        apiKey: config.apiKeyCC
+                    }, function (api) {
+                        window.skypeWebApp = api.UIApplicationInstance;
+                        window.skypeApi = api;
+                        window.skypeWebAppCtor = api.application;
+                        signin(options);
+                    }, function (err) {
+                        console.log(err);
+                        disableWhenLogin(false);
+                        disableWhenLogin(false);
+                    });
+                }
+
+                function disableWhenLogin(isDisable) {
+                    if (isDisable) {
+                        console.log('Start Disable');
+                        $('.overlay-div').show();
+                    } else {
+                        console.log('Stop Disable');
+                        $('.overlay-div').hide();
+                    }
+                }
+
+                function signin(options) {
+                    disableWhenLogin(true);
+                    window.skypeWebApp.signInManager.signIn(options).then(function () {
+                        console.log('Signed in as ' + window.skypeWebApp.personsAndGroupsManager.mePerson.displayName());
+                        client = window.skypeWebApp;
+                        isLogin = true;
+                        disableWhenLogin(false);
+                        if (showPopup)
+                            $('#createAppointmentModal').modal();
+                        if (!window.skypeWebApp.personsAndGroupsManager.mePerson.id()
+                            && !window.skypeWebApp.personsAndGroupsManager.mePerson.avatarUrl()
+                            && !window.skypeWebApp.personsAndGroupsManager.mePerson.email()
+                            && !window.skypeWebApp.personsAndGroupsManager.mePerson.displayName()
+                            && !window.skypeWebApp.personsAndGroupsManager.mePerson.title()) {
+                            window['noMeResource'] = true;
+                        }
+                    }, function (error) {
+                        $('#btn-new-appointment-header').removeAttr('data-toggle');
+                        $('#add-appointment').removeAttr('data-toggle');
+                        isLogin = false;
+                        console.log('Can not sign in: ' + error);
+                        var forbiden = error.toString().indexOf("Forbidden");
+                        var serverError = error.toString().indexOf("Internal Server Error");
+                        if (forbiden > -1 || serverError > -1) {
+                            @if (Session["auth_info"] != null)
+                        {
+                            <text>
+                            var lu = confirm('The Microsoft account that you\'re using does not have permission to access Welio. Please sign out and sign in with another Microsoft account. Press [OK] to sign out.');
+                            if (lu) {
+                                window.location.href = "https://login.microsoftonline.com/logout.srf";
+                            }
+                            </text>
+                        }
+
+                        }
+                        var oAuthFailed = error.toString().indexOf("OAuthFailed");
+                        disableWhenLogin(false);
+                    });
+                }
+
+                configAndSignIn({
+                    "client_id": "2bd937f8-d693-4e38-8718-2f53deed2dff",
+                    "origins": ["https://webdir.online.lync.com/autodiscover/autodiscoverservice.svc/root"],
+                    "cors": true,
+                    "version": 'skype for business Welio/1.0.0',
+                    "redirect_uri": '/token.html'
+                });
+                $('#overlay-new-app')
+                    .click(function () {
+                        var child = $(this);
+                        showPopup = true;
+                        child.children().removeClass("hidden");
+                    });
+                /*End Skype for business*/
+            });
+
+            jQuery.fn.ForceNumericOnly =
+                function () {
+                    return this.each(function () {
+                        $(this).keydown(function (e) {
+                            var key = e.charCode || e.keyCode || 0;
+                            // allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
+                            // home, end, period, and numpad decimal
+                            return (
+                                key === 8 ||
+                                    key === 9 ||
+                                    key === 13 ||
+                                    key === 46 ||
+                                    (key >= 35 && key <= 40) ||
+                                    (key >= 48 && key <= 57) ||
+                                    (key >= 96 && key <= 105));
+                        });
+                    });
+                };
+
+            $('#btn-change-clinic').on('click', function () {
+                $('#divOverlay').show();
+                var id = $('#listHospital').val();
+                $.ajax({
+                    url: baseUrl + "/User/SelectHospital?id=" + id,
+                    type: "GET",
+                    success: function (data, textStatus, jqXhr) {
+                        if (data === true) {
+                            location.href = baseUrl + "/Appointment";
+                        } else {
+                            $('#errorSelect').text(data.Value);
+                            $('#divOverlay').hide();
+                        }
+                    },
+                    error: function (jqXhr, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                        $('#divOverlay').hide();
+                        window.location.href = '@Url.Action("SignOut","User")';
+                    }
+                });
+            });
+
+            $("#menu-toggle").click(function (e) {
+                e.preventDefault();
+                $("#wrapper").toggleClass("toggled");
+            });
+            $('.j-close-sidebar').click(function () {
+                $("#wrapper").toggleClass("toggled");
+                $('#sidebar-wrapper').hide();
+            })
+        </script>
+        @Html.Partial("_AppointmentModalPartial")
+
+        @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,178 @@
+﻿@font-face {
+  font-family: "OpenSans-Light";
+  src: url(../fonts/OpenSans-Light.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "OpenSans-Bold";
+  src: url(../fonts/OpenSans-Bold.ttf) format("truetype");
+}
+
+body {
+    padding: 0;
+    height: 100%;
+}
+
+.fill{
+    padding: 0;
+}
+
+.height-100{
+    height: 100%;
+}
+
+.nopadding{
+    padding: 0;
+}
+
+.f-left{
+    float: left;
+}
+
+.f-right{
+    float: right;
+}
+
+/* Homepage*/
+.btn-home{
+    display: block;
+    width: 100%;
+    color: #fff;
+    background-color: #5cc7d1;
+    text-align: center;
+    padding: 13px;
+    border: 1px solid #fff;
+    margin-top: 15px;
+    border-radius: 5px;
+    font-family: OpenSans-Light;
+    font-weight: bold;
+}
+
+.btn-home:hover
+{
+    color:#fff;
+    text-decoration: none;
+}
+
+.block-intro{
+    text-align: left;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 52%;
+}
+
+.home-left .block-intro {
+    text-align: center;
+}
+
+.home-left .btn-home{
+    margin-top: 102px;
+}
+
+.home-left .signin-bottom{
+    margin-top: 10px;
+}
+
+.home-left .signin-bottom a{
+    text-decoration: underline;
+    color: #9b9b9b;
+    font-family: "OpenSans-Light";
+    font-size: 13px;
+}
+
+.home-right{
+    height: 100%;
+    /*background-position: -110px -135px;
+    background-size: 130%;*/
+    background-position: -150px;
+    background-size: 115%;
+    background-image: url(../images/home_right_bg.jpg);
+    background-repeat: no-repeat;
+    padding: 0;
+}
+
+.home-right .wrapper{
+    height: 100%;
+    padding: 0;
+}
+
+.home-right .content-intro,
+.home-right .title-intro{
+    color: #fff;
+}
+
+.home-right .title-intro {
+    font-family: "OpenSans-Bold";
+}
+
+.home-right .content-intro{
+    padding-right: 0;
+    font-family: "OpenSans-Light";
+}
+@media screen and (max-width: 1440px) {
+    .home-right{
+        background-position: -350px -45px;
+        background-size: 140%;
+    }
+
+   .block-intro{
+        width: 85%;
+        position: relative;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    .home-right{
+        background-position: -330px 15px;
+        background-size: 140%;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .home-right{
+        background-position: -250px -30px;
+        background-size: 140%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .home-right{
+        background-size: 600%;
+        height: auto;
+        background-position: center;
+    }
+
+    .block-intro{
+        width: 100%;
+        position: inherit;
+        top: auto;
+        left: auto;
+        transform: none;
+        padding: 0 120px;
+        margin-top: 50%;
+    }
+
+    .home-right .wrapper {
+        background: none;
+    }
+
+    .home-right .wrapper .height-100{
+        background: rgba(117,109,237,0.5); /* Old browsers */
+        background: -moz-linear-gradient(left, rgba(117,109,237,0.5) 0%, rgba(147,121,231,0.5) 35%, rgba(147,121,231,0.5) 35%, rgba(222,161,224,0.5) 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(left, rgba(117,109,237,0.5) 0%,rgba(147,121,231,0.5) 35%,rgba(147,121,231,0.5) 35%,rgba(222,161,224,0.5) 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to right, rgba(133, 127, 228, 0.69) 0%, rgba(147, 121, 231, 0.498039) 35%, rgba(147, 121, 231, 0.498039) 35%, rgba(233, 68, 239, 0.35) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='rgba(117,109,237,0.5)', endColorstr='rgba(222,161,224,0.5)',GradientType=1 );
+    }
+}
+
+@media screen and (max-width: 414px) {
+    .block-intro{
+        padding: 0;
+    }
+
+    .home-left .btn-home {
+        margin-top: 40px;
+    }
+}

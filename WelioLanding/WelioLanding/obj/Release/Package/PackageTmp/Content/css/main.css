@@ -1,0 +1,470 @@
+@font-face {
+    font-family: OpenSansSemiBold;
+    src: url(../fonts/OpenSans-Semibold.ttf);
+}
+@font-face {
+    font-family: OpenSansLight;
+    src: url(../fonts/OpenSans-Light.ttf);
+}
+@font-face {
+    font-family: OpenSansBold;
+    src: url(../fonts/OpenSans-Bold.ttf);
+}
+body{
+    background: #f9f9fb;
+    position: relative;
+}
+header {
+    background: url(../images/landing-background.jpg) no-repeat;
+    width: 100%;
+    height: 1200px;
+    overflow: hidden;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    max-width: 1920px;
+}
+.footer {
+    margin-top: 80px;
+    padding: 1rem;
+}
+hr{
+    background-color: #dbdbdb;
+    border: 0 none;
+    color: #dbdbdb;
+    height: 2px;
+}
+.logo-image{
+    width: 100%;
+}
+.logo-text{
+    width: 100%;
+    font-family: OpenSansLight;
+    font-size: 26px;
+    color:white;
+    text-align: center;
+    margin:auto;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+.logo-text-bold {
+    width: 100%;
+    font-family: OpenSansBold;
+    font-size: 26px;
+    color: white;
+    text-align: center;
+    margin: auto;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+.left-header{
+    transform: translate(0, -50%);
+    top: 50%;
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+@media (max-width: 1366px) {
+    header {
+        background: url(../images/landing-background.jpg) no-repeat;
+        width: 100%;
+        height: 1000px;
+        overflow: hidden;
+    }
+    .logo-text{
+        width: 100%;
+        font-family: OpenSansLight;
+        font-size: 20px;
+        color:white;
+        text-align: center;
+        margin:auto;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+    }
+    .logo-text-bold {
+        width: 100%;
+        font-family: OpenSansBold;
+        font-size: 20px;
+        color: white;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .left-header{
+    margin-top: 100px;
+    }
+}
+
+@media screen and (max-width: 990px){
+    header {
+        background: url(../images/landing-background.jpg) no-repeat;
+        width: 100%;
+        height: 2000px;
+        overflow: hidden;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+    }
+    .left-header{
+        margin-top: 300px;
+    }
+    .footer {
+        margin-top: 200px;
+    }
+}
+
+.link-menu{
+    margin-right: 100px;
+    margin-top: 50px;
+    color: white;
+    font-size: 24px;
+    font-family: "OpenSansSemiBold";
+    letter-spacing: 1px;
+}
+.link-menu a{
+    color: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    text-decoration: none;
+}
+
+.link-menu a:hover, a:focus {
+    text-decoration: none;
+    color: white;
+}
+
+
+.link-menu .icon-register{
+    margin-bottom: 8px;
+    height: 26px;
+    margin-right: 10px;
+}
+.link-menu .icon-contact{
+    margin-bottom: 5px;
+    height: 24px;
+    margin-right: 10px;
+}
+.link-menu .break{
+    margin-left: 40px;
+    margin-right: 40px;
+    position: relative;
+    top:-5px;
+    font-family: "OpenSansLight";
+    font-size: 26px;
+}
+
+@media (max-width: 1366px) {
+    .link-menu{
+        margin-right: 70px;
+        margin-top: 30px;
+        color: white;
+        font-size: 18px;
+        font-family: "OpenSansSemiBold";
+        letter-spacing: 1px;
+    }
+    .link-menu .icon-register{
+        margin-bottom: 8px;
+        height: 20px;
+        margin-right: 10px;
+    }
+    .link-menu .icon-contact{
+        margin-bottom: 5px;
+        height: 18px;
+        margin-right: 10px;
+    }
+    .link-menu .break{
+        margin-left: 40px;
+        margin-right: 40px;
+        position: relative;
+        top:-5px;
+        font-family: "OpenSansLight";
+        font-size: 20px;
+    }
+}
+
+/*@media screen and (max-width: 990px){
+    .link-menu{
+        margin-right: 50px;
+        margin-top: 70px;
+        color: white;
+        font-size: 24px;
+        font-family: "OpenSansSemiBold";
+        letter-spacing: 1px;
+    }
+    .link-menu .icon-register{
+        margin-bottom: 8px;
+        height: 26px;
+        margin-right: 10px;
+    }
+    .link-menu .icon-contact{
+        margin-bottom: 5px;
+        height: 24px;
+        margin-right: 10px;
+    }
+    .link-menu .break{
+        margin-left: 40px;
+        margin-right: 40px;
+        position: relative;
+        top:-5px;
+        font-family: "OpenSansLight";
+        font-size: 26px;
+    }
+}*/
+
+
+.logo{
+    width:475px;
+    height: 200px;
+    margin-top:220px;
+    margin-left:198px;
+}
+
+content {
+    background: url(../images/register-background.png) no-repeat;
+    width: 100%;
+    overflow: hidden;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    position: absolute;
+    margin-top: -270px;
+    top: 100vh;
+    max-width: 1920px;
+}
+@media (max-width: 1800px) {
+    content{
+        background-size: cover;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+    }
+}
+@media (max-width: 1366px) {
+    content {
+        background: url(../images/register-background.png) center no-repeat;
+        width: 100%;
+        height: 100%;
+        margin-bottom: -210px;
+        margin-top: 76px;
+        overflow: hidden;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        position: absolute;
+        top : 700px;
+    }
+}
+@media (max-width: 991px) {
+    content {
+        background: url(../images/register-background.png) no-repeat;
+        width: 100%;
+        overflow: hidden;
+        margin-bottom: -1115px;
+        background-size: contain;
+        -webkit-background-size: contain;
+        -moz-background-size: contain;
+        -o-background-size: contain;
+        position: absolute;
+        top:1785px;
+    }
+
+    .footer-message-custom {
+        margin-left: 8%;
+    }
+
+    .footer-logo-right-custom {
+        margin-left: -8%;
+    }
+}
+
+.input{
+    width: 100%;
+    height: 65px;
+    border: 2px solid #ecf6f8;
+    font-size: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-family: "OpenSansSemiBold";
+}
+.content-body{
+    margin-top:320px;
+
+}
+@media (max-width: 1366px){
+    .content-body{
+        margin-top:250px;
+    }
+    .row{
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+	.input{
+    width: 100%;
+    height: 50px;
+    border: 2px solid #ecf6f8;
+    font-size: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-family: "OpenSansSemiBold";
+}
+}
+@media (max-width: 991px){
+    .content-body{
+        margin-top:150px;
+    }
+}
+.strong-label{
+    font-family: "OpenSansSemiBold";
+    font-size: 20px;
+}
+.small-label{
+    font-family: "OpenSansSemiBold";
+    font-size: 14px;
+    color: gray;
+    margin-bottom: 15px;
+}
+label.error {
+    display: block;
+    font-family: "OpenSansSemiBold";
+    color: red;
+    font-size: 14px;
+    margin-top:5px;
+}
+
+@media (max-width: 1366px) {
+    .strong-label{
+    font-size: 16px;
+    }
+.small-label{
+    font-size: 10px;
+    }
+    label.error {
+        font-size: 10px;
+    }
+}
+.s-label{
+    margin-top: 20px;
+}
+.submit{
+    width: 100%;
+    height: 78px;
+    font-family:"OpenSansSemiBold";
+    color:white;
+    background:#96d8e3;
+    border:0;
+    font-size: 24px;
+}
+.s-submit{
+    margin-top:50px;
+}
+.footer-message{
+    width: 100%;
+    font-family: OpenSansSemiBold;
+    color:gray;
+    font-size: 18px;
+    margin-bottom: 0px;
+}
+@media (min-width: 992px){
+    .col-md-2 {
+        width: 22%;
+    }
+}
+
+
+@media (min-width: 990px) and (max-width: 1800px){
+    .g-recaptcha{
+        transform:scale(0.77);
+        transform-origin:0 0;
+    }
+    .submit{
+        transform:scale(0.77);
+        transform-origin:0 0;
+    }
+}
+@media(max-width: 1265px) and (min-width: 991px){
+    .row{
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+    content {
+        background: url(../images/register-background.png) no-repeat;
+        width: 100%;
+        overflow: hidden;
+        background-size: contain;
+        -webkit-background-size: contain;
+        -moz-background-size: contain;
+        -o-background-size: contain;
+        position: absolute;
+        top : 750px;
+    }
+}
+.main-body {
+    width: 100%;
+    margin: auto;
+    max-width: 1920px;
+}
+
+.overlay-div-single {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 9999997;
+}
+
+    .overlay-div-single .div-over {
+        background-color: #e9e9e9;
+        -ms-opacity: 0.5;
+        opacity: 0.5;
+        z-index: 9999998;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+
+    .overlay-div-single img {
+        width: 100px;
+        display: block;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        margin: auto;
+        z-index: 9999999;
+    }
+
+    .overlay-div-single .img-small {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+@media screen and (max-width: 720px) {
+    content {
+        background: url(../images/register-background.png) no-repeat;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        margin-bottom: -1115px !important;
+        background-size: contain;
+        -webkit-background-size: contain;
+        -moz-background-size: contain;
+        -o-background-size: contain;
+        position: absolute;
+        top:1785px;
+    }
+
+    .footer-message-custom {
+        margin-left: 8%;
+    }
+
+    .footer-logo-right-custom {
+        margin-left: -8%;
+    }
+
+    .content-body{
+        margin-top:150px;
+    }
+}

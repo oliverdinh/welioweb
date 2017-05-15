@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Report";
+}
+<div class="row fill">
+    <div class="col-lg-2 col-sm-3 col-xs-3 fill">@Html.Partial("_MenuList")</div>
+    <div id="col-details" class="col-lg-10 col-sm-9 col-xs-9 fill padding-0">
+        <div class="header-action-body show-mob"></div>
+        <div class="col-sm-12 col-xs-12 content-body padding-0">
+            <h2>Export records</h2>
+        </div>
+        <div class="col-lg-8 col-sm-12 col-xs-12 padding-0">
+            <div class="col-lg-3 col-sm-6 col-xs-6 padding-left-0">
+                <small class="label-details">Start date</small>
+                <input id="input-start-date-report" class="custom-select pointer datepicker"/>
+            </div>
+            <div class="col-lg-3 col-sm-6 col-xs-6">
+                <small class="label-details">End date</small>
+                <input id="input-end-date-report" class="custom-select pointer datepicker"/>
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12 padding-0 padding-top-3">
+            <div class="col-md-2 col-sm-3 col-xs-4 padding-left-0">
+                <button class="custom-btn action-btn" onclick="exportExcel()">Export</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $(function() {
+            $('.datepicker')
+                .datetimepicker({
+                    format: 'DD MMM YYYY',
+                    defaultDate: new Date()
+                });
+            $("#input-start-date-report")
+                .on("dp.change",
+                    function(e) {
+                        $('#input-end-date-report').data("DateTimePicker").minDate(e.date);
+                    });
+        });
+
+        function exportExcel() {
+            var startDate = $('#input-start-date-report').val();
+            var endDate = $('#input-end-date-report').val();
+            var url = '/Report/Export?startDate=' + startDate + '&endDate=' + endDate;
+            window.location.href = url;
+        }
+    </script>
+}
